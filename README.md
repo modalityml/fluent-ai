@@ -1,5 +1,8 @@
 # fluent-ai
 
+![NPM Version](https://img.shields.io/npm/v/fluent-ai)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/modalityml/fluent-ai/test.yml)
+
 > [!WARNING]
 > This project is in beta. The API is subject to changes and may break.
 
