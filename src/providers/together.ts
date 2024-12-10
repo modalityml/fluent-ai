@@ -1,10 +1,7 @@
+import type { AIProviderOptions } from "../jobs/job";
 import { OpenAIChatJob } from "./openai";
 
-interface ProviderOptions {
-  apiKey?: string;
-}
-
-export function together(options?: ProviderOptions) {
+export function together(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.TOGETHER_API_KEY;
 

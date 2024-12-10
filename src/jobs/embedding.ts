@@ -26,4 +26,9 @@ export class EmbeddingJob extends Job {
     this.params.encodingFormat = _encodingFormat;
     return this;
   }
+
+  dump() {
+    const obj = super.dump();
+    return { ...obj, embedding: { model: this.model, params: this.params } };
+  }
 }

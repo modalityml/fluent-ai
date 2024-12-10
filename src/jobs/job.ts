@@ -1,8 +1,31 @@
-import { version } from "../../package.json";
+export type AIJobProvider =
+  | "anthropic"
+  | "fal"
+  | "fireworks"
+  | "google"
+  | "ollama"
+  | "openai"
+  | "perplexity"
+  | "voyageai";
+
+export interface AIJob {
+  provider: AIJobProvider;
+  options?: any;
+  chat?: any;
+  embedding?: any;
+  image?: any;
+}
+
+export interface AIProviderOptions {
+  apiKey?: string;
+  baseURL?: string;
+}
 
 export class Job {
-  params?: object;
-  model?: string;
+  provider!: AIJobProvider;
+  options!: AIProviderOptions;
+  model!: string;
+  params: any;
 
   makeRequest?: () => Request;
   handleResponse?: (response: Response) => any;
@@ -18,11 +41,10 @@ export class Job {
     return await this.handleResponse!(response);
   }
 
-  async dump() {
+  dump(): AIJob {
     return {
-      version: version,
-      model: this.model,
-      params: this.params,
+      provider: this.provider!,
+      options: this.options,
     };
   }
 }

@@ -1,10 +1,7 @@
 import { ChatJob, convertMessages } from "../jobs/chat";
+import type { AIProviderOptions } from "../jobs/job";
 
-interface ProviderOptions {
-  apiKey?: string;
-}
-
-export function google(options?: ProviderOptions) {
+export function google(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.GOOGLE_API_KEY;
 
@@ -16,10 +13,7 @@ export function google(options?: ProviderOptions) {
 }
 
 class GoogleChatJob extends ChatJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
     this.options = options;
     this.model = model;

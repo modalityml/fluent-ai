@@ -89,4 +89,9 @@ export class ImageJob extends Job {
     this.params.enableSafetyChecker = _enableSafetyChecker;
     return this;
   }
+
+  dump() {
+    const obj = super.dump();
+    return { ...obj, image: { model: this.model, params: this.params } };
+  }
 }

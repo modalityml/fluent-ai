@@ -2,29 +2,6 @@
 
 exports[`chat 1`] = `
 {
-  "body": "{"messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}],"model":"gpt-4o-mini","temperature":0.5}",
-  "headers": {
-    "authorization": "Bearer <key>",
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://api.openai.com/v1/chat/completions",
-}
-`;
-
-exports[`chat 2`] = `
-{
-  "body": "{"contents":[{"role":"model","parts":[{"text":"you are a helpful assistant"}]},{"role":"user","parts":[{"text":"hi"}]}]}",
-  "headers": {
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=%3Ckey%3E",
-}
-`;
-
-exports[`chat 3`] = `
-{
   "body": "{"model":"claude-3-5-sonnet-20241022","messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}]}",
   "headers": {
     "anthropic-version": "2023-06-01",
@@ -36,24 +13,103 @@ exports[`chat 3`] = `
 }
 `;
 
-exports[`chat 4`] = `
+exports[`chat 2`] = `
 {
-  "body": "{"model":"llama3.2","messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}],"tools":[],"stream":false}",
+  "body": "{"model":"llama3.2","messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}],"stream":false}",
   "headers": {},
   "method": "POST",
   "url": "http://localhost:11434/api/chat",
 }
 `;
 
-exports[`chat 5`] = `
+exports[`chat 3`] = `
 {
-  "body": "{"messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}],"model":"accounts/fireworks/models/llama-v3p1-70b-instruct","temperature":0.5}",
+  "body": "{"messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}],"model":"gpt-4o-mini","temperature":0.5}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",
   },
   "method": "POST",
-  "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+  "url": "https://api.openai.com/v1/chat/completions",
+}
+`;
+
+exports[`dump 1`] = `
+{
+  "chat": {
+    "model": "claude-3-5-sonnet-20241022",
+    "params": {
+      "messages": [
+        {
+          "content": "you are a helpful assistant",
+          "role": "system",
+        },
+        {
+          "content": [
+            "hi",
+          ],
+          "role": "user",
+        },
+      ],
+      "temperature": 0.5,
+    },
+  },
+  "options": {
+    "apiKey": "<key>",
+  },
+  "provider": "anthropic",
+}
+`;
+
+exports[`dump 2`] = `
+{
+  "chat": {
+    "model": "llama3.2",
+    "params": {
+      "messages": [
+        {
+          "content": "you are a helpful assistant",
+          "role": "system",
+        },
+        {
+          "content": [
+            "hi",
+          ],
+          "role": "user",
+        },
+      ],
+      "temperature": 0.5,
+    },
+  },
+  "options": {},
+  "provider": "ollama",
+}
+`;
+
+exports[`dump 3`] = `
+{
+  "chat": {
+    "model": "gpt-4o-mini",
+    "params": {
+      "messages": [
+        {
+          "content": "you are a helpful assistant",
+          "role": "system",
+        },
+        {
+          "content": [
+            "hi",
+          ],
+          "role": "user",
+        },
+      ],
+      "temperature": 0.5,
+    },
+  },
+  "options": {
+    "apiKey": "<key>",
+  },
+  "provider": "openai",
 }
 `;
 
@@ -71,29 +127,6 @@ exports[`json_object 1`] = `
 
 exports[`function calling 1`] = `
 {
-  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"gpt-4o-mini","temperature":0.5,"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}}]}",
-  "headers": {
-    "authorization": "Bearer <key>",
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://api.openai.com/v1/chat/completions",
-}
-`;
-
-exports[`function calling 2`] = `
-{
-  "body": "{"contents":[{"role":"user","parts":[{"text":"What's the weather like in Boston today?"}]}]}",
-  "headers": {
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=%3Ckey%3E",
-}
-`;
-
-exports[`function calling 3`] = `
-{
   "body": "{"model":"claude-3-5-sonnet-20241022","messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"tools":[{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}]}",
   "headers": {
     "anthropic-version": "2023-06-01",
@@ -105,7 +138,7 @@ exports[`function calling 3`] = `
 }
 `;
 
-exports[`function calling 4`] = `
+exports[`function calling 2`] = `
 {
   "body": "{"model":"llama3.2","messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}}],"stream":false}",
   "headers": {},
@@ -114,21 +147,9 @@ exports[`function calling 4`] = `
 }
 `;
 
-exports[`function calling 5`] = `
+exports[`function calling 3`] = `
 {
-  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"accounts/fireworks/models/llama-v3p1-70b-instruct","temperature":0.5,"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}}]}",
-  "headers": {
-    "authorization": "Bearer <key>",
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://api.fireworks.ai/inference/v1/chat/completions",
-}
-`;
-
-exports[`zod 1`] = `
-{
-  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"gpt-4o-mini","temperature":0.5,"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
+  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"gpt-4o-mini","temperature":0.5,"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}}]}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",
@@ -138,18 +159,7 @@ exports[`zod 1`] = `
 }
 `;
 
-exports[`zod 2`] = `
-{
-  "body": "{"contents":[{"role":"user","parts":[{"text":"What's the weather like in Boston today?"}]}]}",
-  "headers": {
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=%3Ckey%3E",
-}
-`;
-
-exports[`zod 3`] = `
+exports[`zod 1`] = `
 {
   "body": "{"model":"claude-3-5-sonnet-20241022","messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"tools":[{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}},{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}]}",
   "headers": {
@@ -162,7 +172,7 @@ exports[`zod 3`] = `
 }
 `;
 
-exports[`zod 4`] = `
+exports[`zod 2`] = `
 {
   "body": "{"model":"llama3.2","messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}],"stream":false}",
   "headers": {},
@@ -171,21 +181,9 @@ exports[`zod 4`] = `
 }
 `;
 
-exports[`zod 5`] = `
+exports[`zod 3`] = `
 {
-  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"accounts/fireworks/models/llama-v3p1-70b-instruct","temperature":0.5,"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
-  "headers": {
-    "authorization": "Bearer <key>",
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://api.fireworks.ai/inference/v1/chat/completions",
-}
-`;
-
-exports[`jsonSchema 1`] = `
-{
-  "body": "{"messages":[{"role":"user","content":"generate a person with name and age in json format"}],"model":"gpt-4o-mini","temperature":0.5,"response_format":{"type":"json_schema","json_schema":{"schema":{"type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}},"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
+  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"gpt-4o-mini","temperature":0.5,"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",
@@ -195,18 +193,7 @@ exports[`jsonSchema 1`] = `
 }
 `;
 
-exports[`jsonSchema 2`] = `
-{
-  "body": "{"contents":[{"role":"user","parts":[{"text":"generate a person with name and age in json format"}]}]}",
-  "headers": {
-    "content-type": "application/json",
-  },
-  "method": "POST",
-  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=%3Ckey%3E",
-}
-`;
-
-exports[`jsonSchema 3`] = `
+exports[`jsonSchema 1`] = `
 {
   "body": "{"model":"claude-3-5-sonnet-20241022","messages":[{"role":"user","content":"generate a person with name and age in json format"}],"tools":[{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}},{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}]}",
   "headers": {
@@ -219,7 +206,7 @@ exports[`jsonSchema 3`] = `
 }
 `;
 
-exports[`jsonSchema 4`] = `
+exports[`jsonSchema 2`] = `
 {
   "body": "{"model":"llama3.2","messages":[{"role":"user","content":"generate a person with name and age in json format"}],"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}],"stream":false}",
   "headers": {},
@@ -228,14 +215,14 @@ exports[`jsonSchema 4`] = `
 }
 `;
 
-exports[`jsonSchema 5`] = `
+exports[`jsonSchema 3`] = `
 {
-  "body": "{"messages":[{"role":"user","content":"generate a person with name and age in json format"}],"model":"accounts/fireworks/models/llama-v3p1-70b-instruct","temperature":0.5,"response_format":{"type":"json_schema","json_schema":{"schema":{"type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}},"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
+  "body": "{"messages":[{"role":"user","content":"generate a person with name and age in json format"}],"model":"gpt-4o-mini","temperature":0.5,"response_format":{"type":"json_schema","json_schema":{"schema":{"type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}},"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string","description":"The city and state, e.g. San Francisco, CA"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"]}}},{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",
   },
   "method": "POST",
-  "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+  "url": "https://api.openai.com/v1/chat/completions",
 }
 `;

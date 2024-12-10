@@ -127,6 +127,7 @@ export type MessageContent =
         media_type: "image/jpeg" | "image/png" | "image/webp" | "image/gif";
       };
     }[];
+
 export interface Message {
   role: "system" | "user" | "assistant";
   content: MessageContent;
@@ -139,7 +140,7 @@ export class ChatJob extends Job {
     streamOptions?: StreamOptions;
     maxTokens?: number;
     messages: Message[];
-    tools: ChatTool[];
+    tools?: ChatTool[];
     toolChoice?: string;
     responseFormat?: ResponseFormat;
     topP?: number;
@@ -155,7 +156,6 @@ export class ChatJob extends Job {
   constructor() {
     super();
     this.params = {
-      tools: [],
       messages: [],
     };
   }
@@ -196,6 +196,9 @@ export class ChatJob extends Job {
   }
 
   tool(tool: ChatTool) {
+    if (!this.params.tools) {
+      this.params.tools = [];
+    }
     this.params.tools.push(tool);
     return this;
   }
@@ -238,5 +241,10 @@ export class ChatJob extends Job {
       this.params.streamOptions = streamOptions;
     }
     return this;
+  }
+
+  dump() {
+    const obj = super.dump();
+    return { ...obj, chat: { model: this.model, params: this.params } };
   }
 }

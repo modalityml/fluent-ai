@@ -3,15 +3,11 @@ import { EmbeddingJob } from "../jobs/embedding";
 import { ImageJob } from "../jobs/image";
 import { EventSourceParserStream } from "eventsource-parser/stream";
 import { parse } from "partial-json";
+import type { AIProviderOptions } from "../jobs/job";
 
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
 
-interface ProviderOptions {
-  apiKey?: string;
-  baseURL?: string;
-}
-
-export function openai(options?: ProviderOptions) {
+export function openai(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.OPENAI_API_KEY;
 
@@ -33,11 +29,9 @@ export function openai(options?: ProviderOptions) {
 }
 
 export class OpenAIChatJob extends ChatJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "openai";
     this.options = options;
     this.model = model;
   }
@@ -52,7 +46,7 @@ export class OpenAIChatJob extends ChatJob {
       response_format: this.params.responseFormat,
     } as any;
 
-    if (this.params.tools.length) {
+    if (this.params.tools && this.params.tools.length) {
       requestParams.tools = this.params.tools.map((tool) => ({
         type: "function",
         function: tool.params,
@@ -204,7 +198,7 @@ export class OpenAIChatJob extends ChatJob {
 
     const chatCompletion = await response.json();
 
-    if (this.params.tools.length) {
+    if (this.params.tools && this.params.tools.length) {
       return {
         text: chatCompletion.choices[0].message.content,
         toolCalls: chatCompletion.choices[0].message.tool_calls,
@@ -221,11 +215,9 @@ export class OpenAIChatJob extends ChatJob {
 }
 
 export class OpenAIImageJob extends ImageJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "openai";
     this.options = options;
     this.model = model;
   }
@@ -258,11 +250,9 @@ export class OpenAIImageJob extends ImageJob {
 }
 
 export class OpenAIEmbeddingJob extends EmbeddingJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "openai";
     this.options = options || {};
     this.model = model;
   }

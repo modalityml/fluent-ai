@@ -1,27 +1,9 @@
-import type { Job } from "./job";
-import { openai, OpenAIChatJob, OpenAIEmbeddingJob } from "../providers/openai";
+import type { AIJob, Job } from "./job";
+import { openai } from "../providers/openai";
 import { anthropic } from "../providers/anthropic";
 import { fal } from "../providers/fal";
 import { ollama } from "../providers/ollama";
 import { voyageai } from "../providers/voyageai";
-
-export type AIJobProvider =
-  | "anthropic"
-  | "fal"
-  | "fireworks"
-  | "google"
-  | "ollama"
-  | "openai"
-  | "perplexity"
-  | "voyageai";
-
-export interface AIJob {
-  provider: AIJobProvider;
-  options?: any;
-  chat?: any;
-  embedding?: any;
-  image?: any;
-}
 
 export function load(obj: AIJob): Job {
   let provider = null;
@@ -39,7 +21,7 @@ export function load(obj: AIJob): Job {
   }
 
   if (!provider) {
-    throw new Error("Unknown provider");
+    throw new Error("Unknown provider " + obj.provider);
   }
 
   if (obj.chat && "chat" in provider) {

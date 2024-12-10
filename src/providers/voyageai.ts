@@ -1,10 +1,7 @@
 import { EmbeddingJob } from "../jobs/embedding";
+import type { AIProviderOptions } from "../jobs/job";
 
-interface ProviderOptions {
-  apiKey?: string;
-}
-
-export function voyageai(options?: ProviderOptions) {
+export function voyageai(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.VOYAGEAI_API_KEY;
 
@@ -16,11 +13,9 @@ export function voyageai(options?: ProviderOptions) {
 }
 
 export class VoyageaiEmbeddingJob extends EmbeddingJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "voyageai";
     this.options = options;
     this.model = model;
   }

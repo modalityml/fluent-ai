@@ -1,11 +1,7 @@
 import { ImageJob } from "../jobs/image";
+import type { AIProviderOptions } from "../jobs/job";
 
-interface ProviderOptions {
-  apiKey?: string;
-  baseURL?: string;
-}
-
-export function luma(options?: ProviderOptions) {
+export function luma(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.LUMA_API_KEY;
 
@@ -21,10 +17,7 @@ export function luma(options?: ProviderOptions) {
 }
 
 export class LumaImageJob extends ImageJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
     this.options = options;
     this.model = model;

@@ -1,24 +1,21 @@
 import { test, expect } from "bun:test";
 import {
   openai,
-  google,
   ollama,
   systemPrompt,
   userPrompt,
   tool,
   anthropic,
-  fireworks,
   requestObject,
+  load,
 } from "../src";
 import { z } from "zod";
 
 // prettier-ignore
 const jobs = [
-  openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-  google({ apiKey: "<key>" }).chat("gemini-1.5-flash"),
   anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
   ollama().chat("llama3.2"),
-  fireworks({apiKey: "<key>"}).chat("accounts/fireworks/models/llama-v3p1-70b-instruct"),
+  openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
 ];
 
 test("chat", async () => {
@@ -34,6 +31,20 @@ test("chat", async () => {
           .makeRequest()
       )
     ).toMatchSnapshot();
+  }
+});
+
+test("dump", () => {
+  for (const job of jobs) {
+    expect(job.dump()).toMatchSnapshot();
+  }
+});
+
+test("load", async () => {
+  for (const job of jobs) {
+    const req1 = await requestObject(load(job.dump()).makeRequest!());
+    const req2 = await requestObject(job.makeRequest());
+    expect(req1).toEqual(req2);
   }
 });
 

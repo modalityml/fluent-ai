@@ -1,10 +1,7 @@
+import type { AIProviderOptions } from "../jobs/job";
 import { OpenAIChatJob } from "./openai";
 
-interface ProviderOptions {
-  apiKey?: string;
-}
-
-export function fireworks(options?: ProviderOptions) {
+export function fireworks(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.FIREWORKS_API_KEY;
 

@@ -2,6 +2,18 @@
 
 exports[`image 1`] = `
 {
+  "body": "{"prompt":"A cute baby sea otter","num_images":3}",
+  "headers": {
+    "authorization": "Key <key>",
+    "content-type": "application/json",
+  },
+  "method": "POST",
+  "url": "https://queue.fal.run/fal-ai/flux/dev",
+}
+`;
+
+exports[`image 2`] = `
+{
   "body": "{"prompt":"A cute baby sea otter","model":"dall-e-2","n":3}",
   "headers": {
     "authorization": "Bearer <key>",
@@ -12,14 +24,34 @@ exports[`image 1`] = `
 }
 `;
 
-exports[`image 2`] = `
+exports[`dump 1`] = `
 {
-  "body": "{"prompt":"A cute baby sea otter","num_images":3}",
-  "headers": {
-    "authorization": "Key <key>",
-    "content-type": "application/json",
+  "image": {
+    "model": "fal-ai/flux/dev",
+    "params": {
+      "n": 3,
+      "prompt": "A cute baby sea otter",
+    },
   },
-  "method": "POST",
-  "url": "https://queue.fal.run/fal-ai/flux/dev",
+  "options": {
+    "apiKey": "<key>",
+  },
+  "provider": "fal",
+}
+`;
+
+exports[`dump 2`] = `
+{
+  "image": {
+    "model": "dall-e-2",
+    "params": {
+      "n": 3,
+      "prompt": "A cute baby sea otter",
+    },
+  },
+  "options": {
+    "apiKey": "<key>",
+  },
+  "provider": "openai",
 }
 `;

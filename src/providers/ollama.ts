@@ -1,22 +1,25 @@
 import { ChatJob, convertMessages } from "../jobs/chat";
 import { EmbeddingJob } from "../jobs/embedding";
+import type { AIProviderOptions } from "../jobs/job";
 
-export function ollama() {
+export function ollama(options?: AIProviderOptions) {
+  options = options || {};
+
   return {
     chat(model: string) {
-      return new OllamaChatJob(model);
+      return new OllamaChatJob(options, model);
     },
     embedding(model: string) {
-      return new OllamaEmbeddingJob(model);
+      return new OllamaEmbeddingJob(options, model);
     },
   };
 }
 
 export class OllamaChatJob extends ChatJob {
-  model: string;
-
-  constructor(model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "ollama";
+    this.options = options;
     this.model = model;
   }
 
@@ -39,10 +42,10 @@ export class OllamaChatJob extends ChatJob {
 }
 
 export class OllamaEmbeddingJob extends EmbeddingJob {
-  model: string;
-
-  constructor(model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "ollama";
+    this.options = options;
     this.model = model;
   }
 

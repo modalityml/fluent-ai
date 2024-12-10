@@ -1,10 +1,7 @@
 import { ImageJob } from "../jobs/image";
+import type { AIProviderOptions } from "../jobs/job";
 
-interface ProviderOptions {
-  apiKey?: string;
-}
-
-export function fal(options?: ProviderOptions) {
+export function fal(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.FAL_API_KEY;
 
@@ -23,11 +20,9 @@ export type FalImage = {
 };
 
 export class FalImageJob extends ImageJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "fal";
     this.options = options;
     this.model = model;
     this.params = {};

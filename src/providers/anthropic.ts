@@ -1,11 +1,7 @@
 import { ChatJob, convertMessages } from "../jobs/chat";
+import type { AIProviderOptions } from "../jobs/job";
 
-type ProviderOptions = {
-  apiKey?: string;
-  beta?: string[];
-};
-
-export function anthropic(options?: ProviderOptions) {
+export function anthropic(options?: AIProviderOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.ANTHROPIC_API_KEY;
 
@@ -17,11 +13,9 @@ export function anthropic(options?: ProviderOptions) {
 }
 
 export class AnthropicChatJob extends ChatJob {
-  options: ProviderOptions;
-  model: string;
-
-  constructor(options: ProviderOptions, model: string) {
+  constructor(options: AIProviderOptions, model: string) {
     super();
+    this.provider = "anthropic";
     this.options = options;
     this.model = model;
   }
@@ -33,7 +27,7 @@ export class AnthropicChatJob extends ChatJob {
       messages: convertMessages(this.params.messages),
     } as any;
 
-    if (this.params.tools.length) {
+    if (this.params.tools && this.params.tools.length) {
       requestParams.tools = this.params.tools.map((tool) => tool.params);
       requestParams.tool_choice = this.params.toolChoice;
     }
@@ -43,10 +37,6 @@ export class AnthropicChatJob extends ChatJob {
       "x-api-key": this.options.apiKey!,
       "Content-Type": "application/json",
     } as any;
-
-    if (this.options.beta) {
-      headers["anthropic-beta"] = this.options.beta.join(",");
-    }
 
     return new Request("https://api.anthropic.com/v1/messages", {
       method: "POST",
