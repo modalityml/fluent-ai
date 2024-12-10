@@ -1,0 +1,48 @@
+{
+  "name": "fluent-ai",
+  "description": "A lightweight AI toolkit for multiple platforms",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "scripts": {
+    "build": "bun run build.ts",
+    "prepublishOnly": "bun run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "eventsource-parser": "^3.0.0",
+    "partial-json": "^0.1.7",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "keywords": [
+    "ai",
+    "openai",
+    "llm",
+    "bun",
+    "ollama",
+    "authropic",
+    "zod"
+  ],
+  "devDependencies": {
+    "@types/bun": "latest",
+    "bun-plugin-dts": "^0.3.0",
+    "zod": "^3.23.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modalityml/fluent-ai.git"
+  }
+}

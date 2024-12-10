@@ -1,0 +1,25 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`image 1`] = `
+{
+  "body": "{"prompt":"A cute baby sea otter","model":"dall-e-2","n":3}",
+  "headers": {
+    "authorization": "Bearer <key>",
+    "content-type": "application/json",
+  },
+  "method": "POST",
+  "url": "https://api.openai.com/v1/image/generations",
+}
+`;
+
+exports[`image 2`] = `
+{
+  "body": "{"prompt":"A cute baby sea otter","num_images":3}",
+  "headers": {
+    "authorization": "Key <key>",
+    "content-type": "application/json",
+  },
+  "method": "POST",
+  "url": "https://queue.fal.run/fal-ai/flux/dev",
+}
+`;
