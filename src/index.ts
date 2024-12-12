@@ -12,6 +12,5 @@ export * from "./providers/google";
 export * from "./providers/luma";
 export * from "./providers/ollama";
 export * from "./providers/openai";
-export * from "./providers/perplexity";
 export * from "./providers/together";
 export * from "./providers/voyageai";
