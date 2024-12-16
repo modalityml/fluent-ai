@@ -1,10 +1,12 @@
-# Structured outputs in Chat completions
+# Guide to Structured Outputs in Chat Completions
 
-Prompt engineering has been a incresing demand skillset on the market. One of the most importance skills in prompt engineering is to instruct language model to generate a structure object for given prompt. Compared to text (mostly in chatbot), generating a structure object, especially based on predfined schema, is essential to integrate language model to real-world applications, such as information extraction, dynamic, user interface generation etc.
+Structured outputs are crucial when working with Language Models (LLMs) in real-world applications. Rather than generating plain text responses, structured outputs enable you to receive data in predefined formats that are easier to process and integrate into applications.
 
-In this docs, we compared different approaches in generateing structed outputs from chat compleetionts with lanaguage models providers.
+As demand for prompt engineering continues to grow, one of the most important skills in this field is instructing a language model to generate structured data. While traditional text-based outputs (like those used in chatbots) are useful, structured outputs—especially those based on predefined schemas—are essential for real-world applications such as information extraction, dynamic user interface generation, and more.
 
-## response_format: json_schema
+This guide explores different approaches for generating structured outputs from chat completions across various language model providers.
+
+## 1. JSON Schema Response Format
 
 ```ts
 import { openai } from "fluent-ai";
