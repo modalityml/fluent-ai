@@ -125,7 +125,7 @@ test("jsonSchema", async () => {
           .messages([
             userPrompt("generate a person with name and age in json format"),
           ])
-          .jsonSchema(personSchema)
+          .jsonSchema(personSchema, "person")
           .makeRequest()
       )
     ).toMatchSnapshot();
