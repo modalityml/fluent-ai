@@ -1,6 +1,6 @@
-import { ZodType } from "zod";
+import { ZodSchema } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
 import { Job } from "./job";
-import zodToJsonSchema, { type JsonSchema7Type } from "zod-to-json-schema";
 
 export function systemPrompt(content: string) {
   return { role: "system", content };
@@ -10,6 +10,10 @@ export type UserPromptContent = string | { image: { url: string } };
 
 export function userPrompt(...content: UserPromptContent[]) {
   return { role: "user", content };
+}
+
+export function assistantPrompt(content: string) {
+  return { role: "assistant", content };
 }
 
 export function convertMessages(messages: any[]) {
@@ -51,10 +55,6 @@ export function image() {
   throw new Error("Not implemented");
 }
 
-export function assistant(content: string) {
-  return { role: "assistant", content };
-}
-
 export function tool(name: string) {
   return new ChatTool(name);
 }
@@ -63,30 +63,31 @@ export class ChatTool {
   public params: {
     name: string;
     description?: string;
-    parameters?: JsonSchema7Type;
+    parameters?: ZodSchema<any>;
   };
 
   constructor(name: string) {
     this.params = { name };
   }
 
-  description(_description: string) {
-    this.params.description = _description;
+  description(description: string) {
+    this.params.description = description;
     return this;
   }
 
-  parameters(_parameters: JsonSchema7Type | ZodType<any>) {
-    this.params.parameters =
-      _parameters instanceof ZodType
-        ? zodToJsonSchema(_parameters)
-        : _parameters;
+  parameters(parameters: ZodSchema<any>) {
+    this.params.parameters = parameters;
     return this;
   }
 
   toJSON() {
     return {
       type: "function",
-      function: this.params,
+      function: {
+        name: this.params.name,
+        description: this.params.description,
+        parameters: zodToJsonSchema(this.params.parameters!),
+      },
     };
   }
 }
@@ -112,7 +113,7 @@ export interface StreamOptions {
 
 export interface ResponseFormat {
   type: "json_object" | "json_schema";
-  json_schema?: JsonSchema7Type | ZodType<any>;
+  json_schema?: ZodSchema<any>;
 }
 
 export type MessageContent =
@@ -149,7 +150,7 @@ export class ChatJob extends Job {
     jsonSchema?: {
       name: string;
       description?: string;
-      schema: JsonSchema7Type;
+      schema: ZodSchema<any>;
     };
   };
 
@@ -209,27 +210,15 @@ export class ChatJob extends Job {
   }
 
   responseFormat(_responseFormat: ResponseFormat) {
-    if (
-      _responseFormat.json_schema &&
-      _responseFormat.json_schema instanceof ZodType
-    ) {
-      _responseFormat.json_schema = zodToJsonSchema(
-        _responseFormat.json_schema
-      );
-    }
     this.params.responseFormat = _responseFormat;
     return this;
   }
 
-  jsonSchema(
-    schema: JsonSchema7Type | ZodType<any>,
-    name: string,
-    description?: string
-  ) {
+  jsonSchema(schema: ZodSchema<any>, name: string, description?: string) {
     this.params.jsonSchema = {
       name,
       description,
-      schema: schema instanceof ZodType ? zodToJsonSchema(schema) : schema,
+      schema,
     };
 
     return this;

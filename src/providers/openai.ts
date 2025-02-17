@@ -1,8 +1,9 @@
+import { EventSourceParserStream } from "eventsource-parser/stream";
+import { parse } from "partial-json";
+import zodToJsonSchema from "zod-to-json-schema";
 import { ChatJob, convertMessages } from "../jobs/chat";
 import { EmbeddingJob } from "../jobs/embedding";
 import { ImageJob } from "../jobs/image";
-import { EventSourceParserStream } from "eventsource-parser/stream";
-import { parse } from "partial-json";
 import type { AIProviderOptions } from "../jobs/job";
 
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
@@ -47,10 +48,7 @@ export class OpenAIChatJob extends ChatJob {
     } as any;
 
     if (this.params.tools && this.params.tools.length) {
-      requestParams.tools = this.params.tools.map((tool) => ({
-        type: "function",
-        function: tool.params,
-      }));
+      requestParams.tools = this.params.tools.map((tool) => tool.toJSON());
       requestParams.tool_choice = this.params.toolChoice;
     }
 
@@ -60,7 +58,7 @@ export class OpenAIChatJob extends ChatJob {
         json_schema: {
           name: this.params.jsonSchema.name,
           description: this.params.jsonSchema.description,
-          schema: this.params.jsonSchema.schema,
+          schema: zodToJsonSchema(this.params.jsonSchema.schema),
         },
       };
     }

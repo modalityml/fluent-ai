@@ -29,7 +29,7 @@ export class OllamaChatJob extends ChatJob {
       body: JSON.stringify({
         model: this.model,
         messages: convertMessages(this.params.messages),
-        tools: this.params.tools,
+        tools: this.params.tools?.map((tool) => tool.toJSON()),
         stream: false,
       }),
     });
