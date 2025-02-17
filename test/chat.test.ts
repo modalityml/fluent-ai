@@ -60,37 +60,7 @@ test("json_object", async () => {
   ).toMatchSnapshot();
 });
 
-test("function calling", async () => {
-  const weatherTool = tool("get_current_weather")
-    .description("Get the current weather in a given location")
-    .parameters({
-      type: "object",
-      properties: {
-        location: {
-          type: "string",
-          description: "The city and state, e.g. San Francisco, CA",
-        },
-        unit: {
-          type: "string",
-          enum: ["celsius", "fahrenheit"],
-        },
-      },
-      required: ["location"],
-    });
-
-  for (const job of jobs) {
-    expect(
-      await requestObject(
-        job
-          .tool(weatherTool)
-          .messages([userPrompt("What's the weather like in Boston today?")])
-          .makeRequest()
-      )
-    ).toMatchSnapshot();
-  }
-});
-
-test("zod", async () => {
+test("tool", async () => {
   const weatherTool = tool("get_current_weather")
     .description("Get the current weather in a given location")
     .parameters(

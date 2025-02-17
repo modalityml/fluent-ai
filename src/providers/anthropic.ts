@@ -28,7 +28,7 @@ export class AnthropicChatJob extends ChatJob {
     } as any;
 
     if (this.params.tools && this.params.tools.length) {
-      requestParams.tools = this.params.tools.map((tool) => tool.params);
+      requestParams.tools = this.params.tools.map((tool) => tool.toJSON());
       requestParams.tool_choice = this.params.toolChoice;
     }
 
