@@ -63,7 +63,7 @@ export class ChatTool {
   public params: {
     name: string;
     description?: string;
-    parameters?: ZodSchema<any>;
+    parameters?: ZodSchema;
   };
 
   constructor(name: string) {
@@ -75,7 +75,7 @@ export class ChatTool {
     return this;
   }
 
-  parameters(parameters: ZodSchema<any>) {
+  parameters(parameters: ZodSchema) {
     this.params.parameters = parameters;
     return this;
   }
@@ -113,7 +113,7 @@ export interface StreamOptions {
 
 export interface ResponseFormat {
   type: "json_object" | "json_schema";
-  json_schema?: ZodSchema<any>;
+  json_schema?: ZodSchema;
 }
 
 export type MessageContent =
@@ -150,7 +150,7 @@ export class ChatJob extends Job {
     jsonSchema?: {
       name: string;
       description?: string;
-      schema: ZodSchema<any>;
+      schema: ZodSchema;
     };
   };
 
@@ -214,7 +214,7 @@ export class ChatJob extends Job {
     return this;
   }
 
-  jsonSchema(schema: ZodSchema<any>, name: string, description?: string) {
+  jsonSchema(schema: ZodSchema, name: string, description?: string) {
     this.params.jsonSchema = {
       name,
       description,

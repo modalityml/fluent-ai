@@ -39,8 +39,16 @@ export class OpenAIChatJob extends ChatJob {
 
   makeRequest = () => {
     const baseURL = this.options.baseURL || OPENAI_BASE_URL;
-    const requestParams = {
-      messages: convertMessages(this.params.messages),
+    const messages = convertMessages(this.params.messages);
+
+    if (this.params.systemPrompt) {
+      messages.unshift({
+        role: "system",
+        content: this.params.systemPrompt,
+      });
+    }
+    const requestBody = {
+      messages: messages,
       model: this.model,
       temperature: this.params.temperature,
       stream: this.params.stream,
@@ -48,17 +56,18 @@ export class OpenAIChatJob extends ChatJob {
     } as any;
 
     if (this.params.tools && this.params.tools.length) {
-      requestParams.tools = this.params.tools.map((tool) => tool.toJSON());
-      requestParams.tool_choice = this.params.toolChoice;
+      requestBody.tools = this.params.tools.map((tool) => tool.toJSON());
+      requestBody.tool_choice = this.params.toolChoice;
     }
 
     if (this.params.jsonSchema) {
-      requestParams.response_format = {
+      const schema = zodToJsonSchema(this.params.jsonSchema.schema);
+      requestBody.response_format = {
         type: "json_schema",
         json_schema: {
           name: this.params.jsonSchema.name,
           description: this.params.jsonSchema.description,
-          schema: zodToJsonSchema(this.params.jsonSchema.schema),
+          schema: schema,
         },
       };
     }
@@ -69,7 +78,7 @@ export class OpenAIChatJob extends ChatJob {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify(requestParams),
+      body: JSON.stringify(requestBody),
     });
   };
 
