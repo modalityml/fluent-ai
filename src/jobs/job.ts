@@ -12,6 +12,7 @@ export interface AIJob {
   provider: AIJobProvider;
   options?: any;
   chat?: any;
+  models?: any;
   embedding?: any;
   image?: any;
 }
@@ -24,7 +25,7 @@ export interface AIProviderOptions {
 export class Job {
   provider!: AIJobProvider;
   options!: AIProviderOptions;
-  model!: string;
+  model?: string;
   params: any;
 
   makeRequest?: () => Request;

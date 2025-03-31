@@ -26,6 +26,8 @@ export function load(obj: AIJob): Job {
 
   if (obj.chat && "chat" in provider) {
     return provider.chat(obj.chat.model)._setParams(obj.chat.params);
+  } else if (obj.models && "listModels" in provider) {
+	return provider.listModels()._setParams(obj.models.params);
   } else if (obj.image && "image" in provider) {
     return provider.image(obj.image.model)._setParams(obj.image.params);
   } else if (obj.embedding && "embedding" in provider) {
