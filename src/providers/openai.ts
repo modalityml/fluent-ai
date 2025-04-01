@@ -26,6 +26,19 @@ export function openai(options?: AIProviderOptions) {
     embedding(model: string) {
       return new OpenAIEmbeddingJob(options, model);
     },
+
+    async models() {
+      const baseURL = options.baseURL || OPENAI_BASE_URL;
+      const request = new Request(`${baseURL}/models`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${options.apiKey}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await fetch(request);
+      return await response.json();
+    },
   };
 }
 

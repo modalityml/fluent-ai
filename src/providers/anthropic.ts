@@ -9,6 +9,19 @@ export function anthropic(options?: AIProviderOptions) {
     chat(model: string) {
       return new AnthropicChatJob(options, model);
     },
+
+    async models() {
+      const request = new Request("https://api.anthropic.com/v1/models", {
+        method: "GET",
+        headers: {
+          "anthropic-version": "2023-06-01",
+          "x-api-key": options.apiKey!,
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await fetch(request);
+      return await response.json();
+    },
   };
 }
 

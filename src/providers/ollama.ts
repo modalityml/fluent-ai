@@ -12,6 +12,13 @@ export function ollama(options?: AIProviderOptions) {
     embedding(model: string) {
       return new OllamaEmbeddingJob(options, model);
     },
+    async models() {
+      const request = new Request("http://localhost:11434/api/tags", {
+        method: "GET",
+      });
+      const response = await fetch(request);
+      return await response.json();
+    },
   };
 }
 
