@@ -218,6 +218,16 @@ const job = openai().image("dalle-2").prompt("a cat").n(1).size("512x512");
 const result = await job.run();
 ```
 
+## List models
+
+fluent-ai provides an easy way to retrieve all available models from supported providers (openai, anthropic, ollama).
+
+```ts
+import { openai } from "fluent-ai";
+
+const models = await openai().models();
+```
+
 ## Support
 
 Feel free to [open an issue](https://github.com/modalityml/fluent-ai/issues) or [start a discussion](https://github.com/modalityml/fluent-ai/discussions) if you have any questions. [Join our Discord community](https://discord.gg/HzGZWbY8Fx)
