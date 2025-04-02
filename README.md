@@ -18,13 +18,13 @@ npm install fluent-ai
 
 fluent-ai includes support for multiple AI providers and modalities.
 
-| Provider  | chat               | embedding          | image              |
-| --------- | ------------------ | ------------------ | ------------------ |
-| anthropic | :white_check_mark: |                    |                    |
-| fal       |                    |                    | :white_check_mark: |
-| ollama    | :white_check_mark: | :white_check_mark: |
-| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| voyageai  |                    | :white_check_mark: |                    |
+| Provider  | chat               | embedding          | image              | listModels         |
+| --------- | ------------------ | ------------------ | ------------------ | ------------------ |
+| anthropic | :white_check_mark: |                    |                    | :white_check_mark:	|
+| fal       |                    |                    | :white_check_mark: |					|
+| ollama    | :white_check_mark: | :white_check_mark: |					   | :white_check_mark:	|
+| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:	|
+| voyageai  |                    | :white_check_mark: |                    |					|
 
 By default, API keys for providers are read from environment variable (`process.env`) following the format `<PROVIDER>_API_KEY` (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`).
 

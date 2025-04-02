@@ -4,6 +4,7 @@ import zodToJsonSchema from "zod-to-json-schema";
 import { ChatJob, convertMessages } from "../jobs/chat";
 import { EmbeddingJob } from "../jobs/embedding";
 import { ImageJob } from "../jobs/image";
+import { ListModelsJob } from "../jobs/models";
 import type { AIProviderOptions } from "../jobs/job";
 
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
@@ -19,6 +20,9 @@ export function openai(options?: AIProviderOptions) {
   return {
     chat(model: string) {
       return new OpenAIChatJob(options, model);
+    },
+    listModels() {
+      return new OpenAIListModelsJob(options);
     },
     image(model: string) {
       return new OpenAIImageJob(options, model);
@@ -218,6 +222,30 @@ export class OpenAIChatJob extends ChatJob {
       }
       return { text: content };
     }
+  };
+}
+
+
+export class OpenAIListModelsJob extends ListModelsJob {
+  constructor(options: AIProviderOptions) {
+    super();
+    this.provider = "openai";
+    this.options = options
+  }
+
+  makeRequest = () => {
+    const baseURL = this.options.baseURL || OPENAI_BASE_URL;
+    return new Request(`${baseURL}/models`, {
+      headers: {
+        Authorization: `Bearer ${this.options.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      method: "GET"
+    });
+  };
+
+  handleResponse = async (response: Response) => {
+    return await response.json();
   };
 }
 
