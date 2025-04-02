@@ -14,7 +14,7 @@ export function anthropic(options?: AIProviderOptions) {
 
 export class AnthropicChatJob extends ChatJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "anthropic";
     this.options = options;
     this.model = model;

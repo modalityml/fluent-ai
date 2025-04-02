@@ -18,7 +18,7 @@ export function luma(options?: AIProviderOptions) {
 
 export class LumaImageJob extends ImageJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.options = options;
     this.model = model;
   }

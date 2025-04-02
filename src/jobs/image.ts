@@ -10,6 +10,7 @@ export type ImageSize =
   | { width: number; height: number };
 
 export class ImageJob extends Job {
+  model: string;
   params: {
     prompt?: string;
     n?: number;
@@ -25,8 +26,9 @@ export class ImageJob extends Job {
     enableSafetyChecker?: boolean;
   };
 
-  constructor() {
+  constructor(model: string) {
     super();
+    this.model = model;
     this.params = {};
   }
 
@@ -92,6 +94,6 @@ export class ImageJob extends Job {
 
   dump() {
     const obj = super.dump();
-    return { ...obj, image: { model: this.model, params: this.params } };
+    return { ...obj, type: "image", model: this.model, params: this.params };
   }
 }

@@ -1,30 +1,59 @@
-export type AIJobProvider =
-  | "anthropic"
-  | "fal"
-  | "fireworks"
-  | "google"
-  | "ollama"
-  | "openai"
-  | "perplexity"
-  | "voyageai";
+import { z } from "zod";
+import { version } from "../../package.json";
 
-export interface AIJob {
-  provider: AIJobProvider;
-  options?: any;
-  chat?: any;
-  embedding?: any;
-  image?: any;
-}
+const jobProviderSchema = z.enum([
+  "anthropic",
+  "fal",
+  "fireworks",
+  "google",
+  "ollama",
+  "openai",
+  "perplexity",
+  "voyageai",
+]);
 
-export interface AIProviderOptions {
-  apiKey?: string;
-  baseURL?: string;
-}
+const jobOptionsSchema = z.object({
+  apiKey: z.string().optional(),
+  baseURL: z.string().optional(),
+});
+
+export type AIProviderOptions = z.infer<typeof jobOptionsSchema>;
+
+const baseJobSchema = z.object({
+  version: z.string().optional(),
+  provider: jobProviderSchema,
+  options: z.any().optional(),
+});
+
+const chatJobSchema = baseJobSchema.extend({
+  type: z.literal("chat"),
+  model: z.string(),
+  params: z.any(),
+});
+
+const embeddingJobSchema = baseJobSchema.extend({
+  type: z.literal("embedding"),
+  model: z.string(),
+  params: z.any(),
+});
+
+const imageJobSchema = baseJobSchema.extend({
+  type: z.literal("image"),
+  model: z.string(),
+  params: z.any(),
+});
+
+const jobSchema = z.discriminatedUnion("type", [
+  chatJobSchema,
+  embeddingJobSchema,
+  imageJobSchema,
+]);
+
+export type AIJob = z.infer<typeof jobSchema>;
 
 export class Job {
-  provider!: AIJobProvider;
-  options!: AIProviderOptions;
-  model!: string;
+  provider!: z.infer<typeof jobProviderSchema>;
+  options!: z.infer<typeof jobOptionsSchema>;
   params: any;
 
   makeRequest?: () => Request;
@@ -41,8 +70,9 @@ export class Job {
     return await this.handleResponse!(response);
   }
 
-  dump(): AIJob {
+  dump() {
     return {
+      version: version,
       provider: this.provider!,
       options: this.options,
     };

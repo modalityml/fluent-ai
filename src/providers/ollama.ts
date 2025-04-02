@@ -17,7 +17,7 @@ export function ollama(options?: AIProviderOptions) {
 
 export class OllamaChatJob extends ChatJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "ollama";
     this.options = options;
     this.model = model;
@@ -43,7 +43,7 @@ export class OllamaChatJob extends ChatJob {
 
 export class OllamaEmbeddingJob extends EmbeddingJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "ollama";
     this.options = options;
     this.model = model;

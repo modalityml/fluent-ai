@@ -24,14 +24,16 @@ export function load(obj: AIJob): Job {
     throw new Error("Unknown provider " + obj.provider);
   }
 
-  if (obj.chat && "chat" in provider) {
-    return provider.chat(obj.chat.model)._setParams(obj.chat.params);
-  } else if (obj.image && "image" in provider) {
-    return provider.image(obj.image.model)._setParams(obj.image.params);
-  } else if (obj.embedding && "embedding" in provider) {
-    return provider
-      .embedding(obj.embedding.model)
-      ._setParams(obj.embedding.params);
+  if (obj.type === "chat" && "chat" in provider) {
+    return provider.chat(obj.model)._setParams(obj.params);
+  }
+
+  if (obj.type === "embedding" && "embedding" in provider) {
+    return provider.embedding(obj.model)._setParams(obj.params);
+  }
+
+  if (obj.type === "image" && "image" in provider) {
+    return provider.image(obj.model)._setParams(obj.params);
   }
 
   throw new Error("Failed to load job");

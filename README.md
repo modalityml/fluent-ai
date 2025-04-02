@@ -11,7 +11,7 @@ fluent-ai is a lightweight, type-safe AI toolkit that seamlessly integrates mult
 ## Installation
 
 ```sh
-npm install fluent-ai
+npm install fluent-ai zod
 ```
 
 ## AI Service provider support
@@ -114,10 +114,6 @@ const { text } = await job.run();
 Structured output from AI chat completions involves formatting the responses based on predefined json schema. This feature is essential when building applications with chat completions.
 
 [Zod](https://zod.dev/) is a popular type of validation library for TypeScript and JavaScript that allows developers to define and validate data schemas in a concise and type-safe manner. fluent-ai provides built-in integration for declare json-schema with zod. To use zod integration, first install `zod` from npm. Any parameter in fluent-ai that accepts a JSON schema will also work with a Zod schema.
-
-```sh
-npm install zod
-```
 
 fluent-ai provides a consistent `jsonSchema()` function for all providers to generate structured output. For more details, refer to the [structured output docs](/docs/chat-structured-outputs.md)
 

@@ -14,7 +14,7 @@ export function voyageai(options?: AIProviderOptions) {
 
 export class VoyageaiEmbeddingJob extends EmbeddingJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "voyageai";
     this.options = options;
     this.model = model;

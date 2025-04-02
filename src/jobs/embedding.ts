@@ -1,14 +1,16 @@
 import { Job } from "./job";
 
 export class EmbeddingJob extends Job {
+  model: string;
   params: {
     input?: string;
     dimensions?: number;
     encodingFormat?: string;
   };
 
-  constructor() {
+  constructor(model: string) {
     super();
+    this.model = model;
     this.params = {};
   }
 
@@ -29,6 +31,11 @@ export class EmbeddingJob extends Job {
 
   dump() {
     const obj = super.dump();
-    return { ...obj, embedding: { model: this.model, params: this.params } };
+    return {
+      ...obj,
+      type: "embedding",
+      model: this.model,
+      params: this.params,
+    };
   }
 }

@@ -31,7 +31,7 @@ export function openai(options?: AIProviderOptions) {
 
 export class OpenAIChatJob extends ChatJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "openai";
     this.options = options;
     this.model = model;
@@ -223,7 +223,7 @@ export class OpenAIChatJob extends ChatJob {
 
 export class OpenAIImageJob extends ImageJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "openai";
     this.options = options;
     this.model = model;
@@ -258,10 +258,9 @@ export class OpenAIImageJob extends ImageJob {
 
 export class OpenAIEmbeddingJob extends EmbeddingJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "openai";
     this.options = options || {};
-    this.model = model;
   }
 
   makeRequest = () => {
