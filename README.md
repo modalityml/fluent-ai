@@ -18,13 +18,13 @@ npm install fluent-ai zod
 
 fluent-ai includes support for multiple AI providers and modalities.
 
-| Provider  | chat               | embedding          | image              | listModels         |
+| Provider  | chat               | embedding          | image              | models             |
 | --------- | ------------------ | ------------------ | ------------------ | ------------------ |
-| anthropic | :white_check_mark: |                    |                    | :white_check_mark:	|
-| fal       |                    |                    | :white_check_mark: |					|
-| ollama    | :white_check_mark: | :white_check_mark: |					   | :white_check_mark:	|
-| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:	|
-| voyageai  |                    | :white_check_mark: |                    |					|
+| anthropic | :white_check_mark: |                    |                    | :white_check_mark: |
+| fal       |                    |                    | :white_check_mark: |                    |
+| ollama    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| voyageai  |                    | :white_check_mark: |                    |                    |
 
 By default, API keys for providers are read from environment variable (`process.env`) following the format `<PROVIDER>_API_KEY` (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`).
 
@@ -212,6 +212,16 @@ import { openai } from "fluent-ai";
 
 const job = openai().image("dalle-2").prompt("a cat").n(1).size("512x512");
 const result = await job.run();
+```
+
+## List models
+
+fluent-ai provides an easy way to retrieve all available models from supported providers (openai, anthropic, ollama).
+
+```ts
+import { openai } from "fluent-ai";
+
+const models = await openai().models().run();
 ```
 
 ## Support
