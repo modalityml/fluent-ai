@@ -21,7 +21,7 @@ const optionsSchema = z.object({
 const baseJobSchema = z.object({
   version: z.string().optional(),
   provider: providerSchema,
-  options: optionsSchema,
+  options: optionsSchema.optional(),
 });
 
 const messageContentSchema = z.union([
