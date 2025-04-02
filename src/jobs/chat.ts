@@ -1,6 +1,6 @@
 import { ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import { Job, type AIJob } from "./job";
+import { Job, type ChatJobParams } from "./job";
 
 export function systemPrompt(content: string) {
   return { role: "system", content };
@@ -136,24 +136,7 @@ export interface Message {
 
 export class ChatJob extends Job {
   model: string;
-  params: {
-    temperature?: number;
-    stream?: boolean;
-    streamOptions?: StreamOptions;
-    maxTokens?: number;
-    messages: Message[];
-    tools?: ChatTool[];
-    toolChoice?: string;
-    responseFormat?: ResponseFormat;
-    topP?: number;
-    topK?: number;
-    systemPrompt?: string;
-    jsonSchema?: {
-      name: string;
-      description?: string;
-      schema: ZodSchema;
-    };
-  };
+  params: ChatJobParams;
 
   constructor(model: string) {
     super();

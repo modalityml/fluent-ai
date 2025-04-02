@@ -1,30 +1,8 @@
-import { Job } from "./job";
-
-export type ImageSize =
-  | "square_hd"
-  | "square"
-  | "portrait_4_3"
-  | "portrait_16_9"
-  | "landscape_4_3"
-  | "landscape_16_9"
-  | { width: number; height: number };
+import { Job, type ImageJobParams, type ImageSize } from "./job";
 
 export class ImageJob extends Job {
   model: string;
-  params: {
-    prompt?: string;
-    n?: number;
-    quality?: string;
-    responseFormat?: string;
-    size?: ImageSize;
-    style?: string;
-    user?: string;
-    numInferenceSteps?: number;
-    seed?: number;
-    guidanceScale?: number;
-    syncMode?: boolean;
-    enableSafetyChecker?: boolean;
-  };
+  params: ImageJobParams;
 
   constructor(model: string) {
     super();

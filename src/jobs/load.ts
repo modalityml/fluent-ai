@@ -1,4 +1,4 @@
-import type { AIJob, Job } from "./job";
+import { jobSchema, type AIJob, type Job } from "./job";
 import { openai } from "../providers/openai";
 import { anthropic } from "../providers/anthropic";
 import { fal } from "../providers/fal";
@@ -6,8 +6,9 @@ import { ollama } from "../providers/ollama";
 import { voyageai } from "../providers/voyageai";
 
 export function load(obj: AIJob): Job {
-  let provider = null;
+  obj = jobSchema.parse(obj);
 
+  let provider = null;
   if (obj.provider === "anthropic") {
     provider = anthropic(obj.options);
   } else if (obj.provider === "fal") {
@@ -27,11 +28,9 @@ export function load(obj: AIJob): Job {
   if (obj.type === "chat" && "chat" in provider) {
     return provider.chat(obj.model)._setParams(obj.params);
   }
-
   if (obj.type === "embedding" && "embedding" in provider) {
     return provider.embedding(obj.model)._setParams(obj.params);
   }
-
   if (obj.type === "image" && "image" in provider) {
     return provider.image(obj.model)._setParams(obj.params);
   }
