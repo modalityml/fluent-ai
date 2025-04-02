@@ -1,4 +1,5 @@
 import { ChatJob, convertMessages } from "../jobs/chat";
+import { ListModelsJob } from "../jobs/models";
 import type { AIProviderOptions } from "../jobs/job";
 
 export function anthropic(options?: AIProviderOptions) {
@@ -9,6 +10,9 @@ export function anthropic(options?: AIProviderOptions) {
     chat(model: string) {
       return new AnthropicChatJob(options, model);
     },
+    listModels() {
+      return new AnthropicListModelsJob(options);
+    }
   };
 }
 
@@ -42,6 +46,32 @@ export class AnthropicChatJob extends ChatJob {
       method: "POST",
       headers: headers,
       body: JSON.stringify(requestParams),
+    });
+  };
+
+  handleResponse = async (response: Response) => {
+    const json = await response.json();
+    return json;
+  };
+}
+
+export class AnthropicListModelsJob extends ListModelsJob {
+  constructor(options: AIProviderOptions) {
+    super();
+    this.provider = "anthropic";
+    this.options = options;
+  }
+
+  makeRequest = () => {
+    const headers = {
+      "anthropic-version": "2023-06-01",
+      "x-api-key": this.options.apiKey!,
+      "Content-Type": "application/json",
+    } as any;
+
+    return new Request("https://api.anthropic.com/v1/models", {
+      method: "GET",
+      headers: headers,
     });
   };
 

@@ -4,6 +4,7 @@ export * from "./jobs/utils";
 export * from "./jobs/chat";
 export * from "./jobs/embedding";
 export * from "./jobs/image";
+export * from "./jobs/models";
 
 export * from "./providers/anthropic";
 export * from "./providers/fal";
