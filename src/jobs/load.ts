@@ -34,6 +34,9 @@ export function load(obj: AIJob): Job {
   if (obj.type === "image" && "image" in provider) {
     return provider.image(obj.model)._setParams(obj.params);
   }
+  if (obj.type === "models" && "models" in provider) {
+    return provider.models();
+  }
 
   throw new Error("Failed to load job");
 }

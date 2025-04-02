@@ -21,14 +21,14 @@ export function openai(options?: AIProviderOptions) {
     chat(model: string) {
       return new OpenAIChatJob(options, model);
     },
-    listModels() {
-      return new OpenAIListModelsJob(options);
-    },
     image(model: string) {
       return new OpenAIImageJob(options, model);
     },
     embedding(model: string) {
       return new OpenAIEmbeddingJob(options, model);
+    },
+    models() {
+      return new OpenAIListModelsJob(options);
     },
   };
 }
@@ -225,12 +225,11 @@ export class OpenAIChatJob extends ChatJob {
   };
 }
 
-
 export class OpenAIListModelsJob extends ListModelsJob {
   constructor(options: AIProviderOptions) {
     super();
     this.provider = "openai";
-    this.options = options
+    this.options = options;
   }
 
   makeRequest = () => {
@@ -240,7 +239,7 @@ export class OpenAIListModelsJob extends ListModelsJob {
         Authorization: `Bearer ${this.options.apiKey}`,
         "Content-Type": "application/json",
       },
-      method: "GET"
+      method: "GET",
     });
   };
 

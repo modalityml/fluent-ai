@@ -1,4 +1,5 @@
 import { z } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
 import { version } from "../../package.json";
 
 const providerSchema = z.enum([
@@ -146,10 +147,15 @@ const imageJobSchema = baseJobSchema.extend({
   params: imageJobParamsSchema,
 });
 
+const modelsJobSchema = baseJobSchema.extend({ type: z.literal("models") });
+const modelJobSchema = baseJobSchema.extend({ type: z.literal("model") });
+
 export const jobSchema = z.discriminatedUnion("type", [
   chatJobSchema,
   embeddingJobSchema,
   imageJobSchema,
+  modelsJobSchema,
+  modelJobSchema,
 ]);
 
 export class Job {
@@ -180,6 +186,7 @@ export class Job {
   }
 }
 
+export const jsonSchema = zodToJsonSchema(jobSchema);
 export type AIProviderOptions = z.infer<typeof optionsSchema>;
 export type ChatJobParams = z.infer<typeof chatJobParamsSchema>;
 export type EmbeddingJobParams = z.infer<typeof embeddedJobParamsSchema>;

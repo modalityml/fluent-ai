@@ -10,11 +10,11 @@ export function ollama(options?: AIProviderOptions) {
     chat(model: string) {
       return new OllamaChatJob(options, model);
     },
-    listModels() {
-      return new OllamaListModelsJob(options);
-    },
     embedding(model: string) {
       return new OllamaEmbeddingJob(options, model);
+    },
+    models() {
+      return new OllamaListModelsJob(options);
     },
   };
 }

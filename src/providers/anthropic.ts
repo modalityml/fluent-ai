@@ -10,9 +10,9 @@ export function anthropic(options?: AIProviderOptions) {
     chat(model: string) {
       return new AnthropicChatJob(options, model);
     },
-    listModels() {
+    models() {
       return new AnthropicListModelsJob(options);
-    }
+    },
   };
 }
 

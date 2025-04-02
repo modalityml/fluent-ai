@@ -1,6 +1,15 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`listModels 1`] = `
+exports[`models 1`] = `
+{
+  "body": "",
+  "headers": {},
+  "method": "GET",
+  "url": "http://localhost:11434/api/tags",
+}
+`;
+
+exports[`models 2`] = `
 {
   "body": "",
   "headers": {
@@ -12,7 +21,7 @@ exports[`listModels 1`] = `
 }
 `;
 
-exports[`listModels 2`] = `
+exports[`models 3`] = `
 {
   "body": "",
   "headers": {
@@ -27,24 +36,34 @@ exports[`listModels 2`] = `
 
 exports[`dump 1`] = `
 {
-  "models": {
-    "params": {},
-  },
-  "options": {
-    "apiKey": "<key>",
-  },
-  "provider": "openai",
+  "options": {},
+  "params": {},
+  "provider": "ollama",
+  "type": "models",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 2`] = `
 {
-  "models": {
-    "params": {},
-  },
   "options": {
     "apiKey": "<key>",
   },
+  "params": {},
+  "provider": "openai",
+  "type": "models",
+  "version": "0.2.4",
+}
+`;
+
+exports[`dump 3`] = `
+{
+  "options": {
+    "apiKey": "<key>",
+  },
+  "params": {},
   "provider": "anthropic",
+  "type": "models",
+  "version": "0.2.4",
 }
 `;
