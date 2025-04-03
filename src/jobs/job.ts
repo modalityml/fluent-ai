@@ -20,7 +20,6 @@ const optionsSchema = z.object({
 
 const baseJobSchema = z.object({
   version: z.string().optional(),
-  provider: providerSchema,
   options: optionsSchema.optional(),
 });
 
@@ -150,12 +149,56 @@ const imageJobSchema = baseJobSchema.extend({
 const modelsJobSchema = baseJobSchema.extend({ type: z.literal("models") });
 const modelJobSchema = baseJobSchema.extend({ type: z.literal("model") });
 
-export const jobSchema = z.discriminatedUnion("type", [
-  chatJobSchema,
-  embeddingJobSchema,
-  imageJobSchema,
-  modelsJobSchema,
-  modelJobSchema,
+const anthropicJobSchema = z
+  .object({
+    provider: z.literal("anthropic"),
+  })
+  .and(z.discriminatedUnion("type", [chatJobSchema, modelsJobSchema]));
+
+const falJobSchema = z
+  .object({
+    provider: z.literal("fal"),
+  })
+  .and(z.discriminatedUnion("type", [imageJobSchema]));
+
+const ollamaJobSchema = z
+  .object({
+    provider: z.literal("ollama"),
+  })
+  .and(
+    z.discriminatedUnion("type", [
+      chatJobSchema,
+      embeddingJobSchema,
+      modelsJobSchema,
+      modelJobSchema,
+    ])
+  );
+
+const openaiJobSchema = z
+  .object({
+    provider: z.literal("openai"),
+  })
+  .and(
+    z.discriminatedUnion("type", [
+      chatJobSchema,
+      embeddingJobSchema,
+      imageJobSchema,
+      modelsJobSchema,
+    ])
+  );
+
+const voyageaiJobSchema = z
+  .object({
+    provider: z.literal("voyageai"),
+  })
+  .and(z.discriminatedUnion("type", [embeddingJobSchema]));
+
+export const jobSchema = z.union([
+  anthropicJobSchema,
+  falJobSchema,
+  ollamaJobSchema,
+  openaiJobSchema,
+  voyageaiJobSchema,
 ]);
 
 export class Job {
