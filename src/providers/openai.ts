@@ -1,5 +1,4 @@
 import { EventSourceParserStream } from "eventsource-parser/stream";
-import { parse } from "partial-json";
 import zodToJsonSchema from "zod-to-json-schema";
 import { ChatJob, convertMessages } from "../jobs/chat";
 import { EmbeddingJob } from "../jobs/embedding";
@@ -88,123 +87,27 @@ export class OpenAIChatJob extends ChatJob {
 
   handleResponse = async (response: Response) => {
     if (this.params.stream) {
-      return {
-        stream: (async function* () {
-          const eventStream = response
-            .body!.pipeThrough(new TextDecoderStream())
-            .pipeThrough(new EventSourceParserStream());
-          const reader = eventStream.getReader();
-          for (;;) {
-            const { done, value } = await reader.read();
-            if (done) {
-              break;
-            }
-            if (value.data === "[DONE]") {
-              break;
-            }
-
-            const chunk = JSON.parse(value.data);
-            if (chunk.choices[0].finish_reason) {
-            } else {
-              yield chunk;
-            }
+      return (async function* () {
+        const eventStream = response
+          .body!.pipeThrough(new TextDecoderStream())
+          .pipeThrough(new EventSourceParserStream());
+        const reader = eventStream.getReader();
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
           }
-        })(),
-
-        textStream: (async function* () {
-          const eventStream = response
-            .body!.pipeThrough(new TextDecoderStream())
-            .pipeThrough(new EventSourceParserStream());
-          const reader = eventStream.getReader();
-          for (;;) {
-            const { done, value } = await reader.read();
-            if (done) {
-              break;
-            }
-            if (value.data === "[DONE]") {
-              break;
-            }
-
-            const chunk = JSON.parse(value.data);
-            if (chunk.choices[0].finish_reason) {
-            } else {
-              const chunkText = chunk.choices[0].delta.content;
-              if (chunkText) {
-                yield chunkText;
-              }
-            }
+          if (value.data === "[DONE]") {
+            break;
           }
-        })(),
 
-        objectStream: (async function* () {
-          const eventStream = response
-            .body!.pipeThrough(new TextDecoderStream())
-            .pipeThrough(new EventSourceParserStream());
-          const reader = eventStream.getReader();
-          let text = "";
-          for (;;) {
-            const { done, value } = await reader.read();
-            if (done) {
-              break;
-            }
-            if (value.data === "[DONE]") {
-              break;
-            }
-
-            const chunk = JSON.parse(value.data);
-            if (chunk.choices[0].finish_reason) {
-            } else {
-              const chunkText = chunk.choices[0].delta.content;
-              text += chunkText;
-              if (text) {
-                const result = parse(text);
-                yield result;
-              }
-            }
+          const chunk = JSON.parse(value.data);
+          if (chunk.choices[0].finish_reason) {
+          } else {
+            yield chunk;
           }
-        })(),
-
-        toolCallStream: (async function* () {
-          const eventStream = response
-            .body!.pipeThrough(new TextDecoderStream())
-            .pipeThrough(new EventSourceParserStream());
-          const reader = eventStream.getReader();
-
-          let toolCalls = [];
-          for (;;) {
-            const { done, value } = await reader.read();
-            if (done) {
-              break;
-            }
-            if (value.data === "[DONE]") {
-              break;
-            }
-
-            const chunk = JSON.parse(value.data);
-            if (chunk.choices[0].finish_reason) {
-            } else {
-              const { delta } = chunk.choices[0];
-              if (delta.tool_calls) {
-                for (const tool_call of delta.tool_calls) {
-                  if (!toolCalls[tool_call.index]) {
-                    toolCalls[tool_call.index] = tool_call;
-                  } else {
-                    toolCalls[tool_call.index].function.arguments +=
-                      tool_call.function.arguments;
-                  }
-                }
-              } else if (delta.content) {
-              }
-              const partials = toolCalls.map((toolCall) => {
-                if (toolCall.function.arguments) {
-                  return parse(toolCall.function.arguments);
-                }
-              });
-              yield partials;
-            }
-          }
-        })(),
-      };
+        }
+      })();
     }
 
     const chatCompletion = await response.json();
