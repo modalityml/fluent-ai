@@ -1,6 +1,6 @@
-import { ZodSchema } from "zod";
+import { z, ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import { Job, type ChatJobParams } from "./job";
+import { chatResultSchema, Job, type ChatJobParams } from "./job";
 
 export function systemPrompt(content: string) {
   return { role: "system", content };
@@ -144,6 +144,10 @@ export class ChatJob extends Job {
     this.params = {
       messages: [],
     };
+  }
+
+  async run(): Promise<z.infer<typeof chatResultSchema>> {
+    return await super.run();
   }
 
   systemPrompt(_systemPrompt: string) {

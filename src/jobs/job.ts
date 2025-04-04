@@ -94,10 +94,33 @@ const chatJobParamsSchema = z.object({
   jsonSchema: jsonSchemaDefSchema.optional(),
 });
 
+export const chatResultSchema = z.object({
+  message: z.object({
+    role: z.literal("assistant"),
+    content: z.string().nullable(),
+  }),
+  usage: z
+    .object({
+      prompt_tokens: z.number(),
+      completion_tokens: z.number(),
+      total_tokens: z.number(),
+    })
+    .optional(),
+  tool_calls: z
+    .array(
+      z.object({
+        name: z.string(),
+        arguments: z.record(z.any()),
+      })
+    )
+    .optional(),
+});
+
 const chatJobSchema = baseJobSchema.extend({
   type: z.literal("chat"),
   model: z.string(),
   params: chatJobParamsSchema,
+  result: chatResultSchema.optional(),
 });
 
 const embeddedJobParamsSchema = z.object({
@@ -106,10 +129,21 @@ const embeddedJobParamsSchema = z.object({
   encodingFormat: z.string().optional(),
 });
 
+const embeddingResultSchema = z.object({
+  embedding: z.array(z.number()),
+  usage: z
+    .object({
+      prompt_tokens: z.number(),
+      total_tokens: z.number(),
+    })
+    .optional(),
+});
+
 const embeddingJobSchema = baseJobSchema.extend({
   type: z.literal("embedding"),
   model: z.string(),
   params: embeddedJobParamsSchema,
+  result: embeddingResultSchema.optional(),
 });
 
 const imageSizeSchema = z.union([
@@ -140,10 +174,31 @@ const imageJobParamsSchema = z.object({
   enableSafetyChecker: z.boolean().optional(),
 });
 
+const imageResultSchema = z.object({
+  images: z.array(
+    z.union([
+      z.object({
+        url: z.string(),
+      }),
+      z.object({
+        base64: z.string(),
+      }),
+    ])
+  ),
+  metadata: z
+    .object({
+      prompt: z.string(),
+      size: imageSizeSchema,
+      seed: z.number().optional(),
+    })
+    .optional(),
+});
+
 const imageJobSchema = baseJobSchema.extend({
   type: z.literal("image"),
   model: z.string(),
   params: imageJobParamsSchema,
+  result: imageResultSchema.optional(),
 });
 
 const modelsJobSchema = baseJobSchema.extend({ type: z.literal("models") });
