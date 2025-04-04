@@ -41,19 +41,7 @@ exports[`dump 1`] = `
     "apiKey": "<key>",
   },
   "params": {
-    "messages": [
-      {
-        "content": "you are a helpful assistant",
-        "role": "system",
-      },
-      {
-        "content": [
-          "hi",
-        ],
-        "role": "user",
-      },
-    ],
-    "temperature": 0.5,
+    "messages": [],
   },
   "provider": "anthropic",
   "type": "chat",
@@ -66,19 +54,7 @@ exports[`dump 2`] = `
   "model": "llama3.2",
   "options": {},
   "params": {
-    "messages": [
-      {
-        "content": "you are a helpful assistant",
-        "role": "system",
-      },
-      {
-        "content": [
-          "hi",
-        ],
-        "role": "user",
-      },
-    ],
-    "temperature": 0.5,
+    "messages": [],
   },
   "provider": "ollama",
   "type": "chat",
@@ -93,19 +69,7 @@ exports[`dump 3`] = `
     "apiKey": "<key>",
   },
   "params": {
-    "messages": [
-      {
-        "content": "you are a helpful assistant",
-        "role": "system",
-      },
-      {
-        "content": [
-          "hi",
-        ],
-        "role": "user",
-      },
-    ],
-    "temperature": 0.5,
+    "messages": [],
   },
   "provider": "openai",
   "type": "chat",
@@ -149,7 +113,7 @@ exports[`tool 2`] = `
 
 exports[`tool 3`] = `
 {
-  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"gpt-4o-mini","temperature":0.5,"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
+  "body": "{"messages":[{"role":"user","content":"What's the weather like in Boston today?"}],"model":"gpt-4o-mini","tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",
@@ -161,7 +125,7 @@ exports[`tool 3`] = `
 
 exports[`jsonSchema 1`] = `
 {
-  "body": "{"model":"claude-3-5-sonnet-20241022","messages":[{"role":"user","content":"generate a person with name and age in json format"}],"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
+  "body": "{"model":"claude-3-5-sonnet-20241022","messages":[{"role":"user","content":"generate a person with name and age in json format"}]}",
   "headers": {
     "anthropic-version": "2023-06-01",
     "content-type": "application/json",
@@ -174,7 +138,7 @@ exports[`jsonSchema 1`] = `
 
 exports[`jsonSchema 2`] = `
 {
-  "body": "{"model":"llama3.2","messages":[{"role":"user","content":"generate a person with name and age in json format"}],"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}],"stream":false}",
+  "body": "{"model":"llama3.2","messages":[{"role":"user","content":"generate a person with name and age in json format"}],"stream":false}",
   "headers": {},
   "method": "POST",
   "url": "http://localhost:11434/api/chat",
@@ -183,7 +147,7 @@ exports[`jsonSchema 2`] = `
 
 exports[`jsonSchema 3`] = `
 {
-  "body": "{"messages":[{"role":"user","content":"generate a person with name and age in json format"}],"model":"gpt-4o-mini","temperature":0.5,"response_format":{"type":"json_schema","json_schema":{"name":"person","schema":{"type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}},"tools":[{"type":"function","function":{"name":"get_current_weather","description":"Get the current weather in a given location","parameters":{"type":"object","properties":{"location":{"type":"string"},"unit":{"type":"string","enum":["celsius","fahrenheit"]}},"required":["location"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}]}",
+  "body": "{"messages":[{"role":"user","content":"generate a person with name and age in json format"}],"model":"gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"person","schema":{"type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"],"additionalProperties":false,"$schema":"http://json-schema.org/draft-07/schema#"}}}}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",

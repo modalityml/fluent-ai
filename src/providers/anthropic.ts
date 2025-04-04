@@ -1,8 +1,29 @@
-import { ChatJob, convertMessages } from "../jobs/chat";
-import { ListModelsJob } from "../jobs/models";
-import type { AIProviderOptions } from "../jobs/job";
+import { ChatJob, ChatJobSchema, convertMessages } from "../jobs/chat";
+import { ListModelsJob, ModelsJobSchema } from "../jobs/models";
+import { type ProviderOptionsType } from "../jobs/schema";
+import { z } from "zod";
 
-export function anthropic(options?: AIProviderOptions) {
+export const BaseAnthropicJobSchema = z.object({
+  provider: z.literal("anthropic"),
+});
+
+export const AnthropicChatJobSchema = ChatJobSchema.merge(
+  BaseAnthropicJobSchema
+);
+export type AnthropicChatJobSchemaType = z.infer<typeof AnthropicChatJobSchema>;
+export const AnthropicListModelsJobSchema = ModelsJobSchema.merge(
+  BaseAnthropicJobSchema
+);
+export type AnthropicListModelsJobSchemaType = z.infer<
+  typeof AnthropicListModelsJobSchema
+>;
+export const AnthropicJobSchema = z.discriminatedUnion("type", [
+  AnthropicChatJobSchema,
+  AnthropicListModelsJobSchema,
+]);
+export type AnthropicJobSchemaType = z.infer<typeof AnthropicJobSchema>;
+
+export function anthropic(options?: ProviderOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.ANTHROPIC_API_KEY;
 
@@ -16,8 +37,8 @@ export function anthropic(options?: AIProviderOptions) {
   };
 }
 
-export class AnthropicChatJob extends ChatJob {
-  constructor(options: AIProviderOptions, model: string) {
+export class AnthropicChatJob extends ChatJob<AnthropicChatJobSchemaType> {
+  constructor(options: ProviderOptionsType, model: string) {
     super(model);
     this.provider = "anthropic";
     this.options = options;
@@ -32,7 +53,7 @@ export class AnthropicChatJob extends ChatJob {
     } as any;
 
     if (this.params.tools && this.params.tools.length) {
-      requestParams.tools = this.params.tools.map((tool) => tool.toJSON());
+      requestParams.tools = this.params.tools.map((tool) => tool.toJSON?.());
       requestParams.tool_choice = this.params.toolChoice;
     }
 
@@ -40,7 +61,7 @@ export class AnthropicChatJob extends ChatJob {
       "anthropic-version": "2023-06-01",
       "x-api-key": this.options.apiKey!,
       "Content-Type": "application/json",
-    } as any;
+    };
 
     return new Request("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -53,10 +74,17 @@ export class AnthropicChatJob extends ChatJob {
     const json = await response.json();
     return json;
   };
+
+  dump() {
+    const obj = super.dump();
+    return {
+      ...obj,
+    };
+  }
 }
 
-export class AnthropicListModelsJob extends ListModelsJob {
-  constructor(options: AIProviderOptions) {
+export class AnthropicListModelsJob extends ListModelsJob<AnthropicListModelsJobSchemaType> {
+  constructor(options: ProviderOptionsType) {
     super();
     this.provider = "anthropic";
     this.options = options;
@@ -67,7 +95,7 @@ export class AnthropicListModelsJob extends ListModelsJob {
       "anthropic-version": "2023-06-01",
       "x-api-key": this.options.apiKey!,
       "Content-Type": "application/json",
-    } as any;
+    };
 
     return new Request("https://api.anthropic.com/v1/models", {
       method: "GET",

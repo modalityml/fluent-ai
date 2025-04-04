@@ -1,9 +1,36 @@
-import { ChatJob, convertMessages } from "../jobs/chat";
-import { ListModelsJob } from "../jobs/models";
-import { EmbeddingJob } from "../jobs/embedding";
-import type { AIProviderOptions } from "../jobs/job";
+import { ChatJob, ChatJobSchema, convertMessages } from "../jobs/chat";
+import { ListModelsJob, ModelsJobSchema } from "../jobs/models";
+import { EmbeddingJob, EmbeddingJobSchema } from "../jobs/embedding";
+import { type ProviderOptionsType } from "../jobs/schema";
+import { z } from "zod";
 
-export function ollama(options?: AIProviderOptions) {
+export const BaseOllamaJobSchema = z.object({
+  provider: z.literal("ollama"),
+});
+
+export const OllamaChatJobSchema = ChatJobSchema.merge(BaseOllamaJobSchema);
+export type OllamaChatJobSchemaType = z.infer<typeof OllamaChatJobSchema>;
+
+export const OllamaEmbeddingJobSchema = EmbeddingJobSchema.merge(
+  BaseOllamaJobSchema
+);
+export type OllamaEmbeddingJobSchemaType = z.infer<typeof OllamaEmbeddingJobSchema>;
+
+export const OllamaListModelsJobSchema = ModelsJobSchema.merge(
+  BaseOllamaJobSchema
+);
+export type OllamaListModelsJobSchemaType = z.infer<
+  typeof OllamaListModelsJobSchema
+>;
+
+export const OllamaJobSchema = z.discriminatedUnion("type", [
+  OllamaChatJobSchema,
+  OllamaEmbeddingJobSchema,
+  OllamaListModelsJobSchema,
+]);
+export type OllamaJobSchemaType = z.infer<typeof OllamaJobSchema>;
+
+export function ollama(options?: ProviderOptionsType) {
   options = options || {};
 
   return {
@@ -19,8 +46,8 @@ export function ollama(options?: AIProviderOptions) {
   };
 }
 
-export class OllamaChatJob extends ChatJob {
-  constructor(options: AIProviderOptions, model: string) {
+export class OllamaChatJob extends ChatJob<OllamaChatJobSchemaType> {
+  constructor(options: ProviderOptionsType, model: string) {
     super(model);
     this.provider = "ollama";
     this.options = options;
@@ -33,7 +60,7 @@ export class OllamaChatJob extends ChatJob {
       body: JSON.stringify({
         model: this.model,
         messages: convertMessages(this.params.messages),
-        tools: this.params.tools?.map((tool) => tool.toJSON()),
+        tools: this.params.tools?.map((tool) => tool.toJSON?.()),
         stream: false,
       }),
     });
@@ -45,8 +72,8 @@ export class OllamaChatJob extends ChatJob {
   };
 }
 
-export class OllamaListModelsJob extends ListModelsJob {
-  constructor(options: AIProviderOptions) {
+export class OllamaListModelsJob extends ListModelsJob<OllamaListModelsJobSchemaType> {
+  constructor(options: ProviderOptionsType) {
     super();
     this.provider = "ollama";
     this.options = options;
@@ -62,8 +89,8 @@ export class OllamaListModelsJob extends ListModelsJob {
   };
 }
 
-export class OllamaEmbeddingJob extends EmbeddingJob {
-  constructor(options: AIProviderOptions, model: string) {
+export class OllamaEmbeddingJob extends EmbeddingJob<OllamaEmbeddingJobSchemaType> {
+  constructor(options: ProviderOptionsType, model: string) {
     super(model);
     this.provider = "ollama";
     this.options = options;

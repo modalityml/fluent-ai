@@ -1,6 +1,35 @@
-import { Job, type EmbeddingJobParams } from "./job";
+import { z } from "zod";
+import { BaseJobSchema } from "./schema";
+import { Job } from "./job";
 
-export class EmbeddingJob extends Job {
+export const EmbeddedJobParamsSchema = z.object({
+  input: z.string().optional(),
+  dimensions: z.number().optional(),
+  encodingFormat: z.string().optional(),
+});
+
+export type EmbeddingJobParams = z.infer<typeof EmbeddedJobParamsSchema>;
+
+
+const EmbeddingResultSchema = z.object({
+  embedding: z.array(z.number()),
+  usage: z
+    .object({
+      prompt_tokens: z.number(),
+      total_tokens: z.number(),
+    })
+    .optional(),
+});
+
+export const EmbeddingJobSchema = BaseJobSchema.extend({
+  type: z.literal("embedding"),
+  model: z.string(),
+  params: EmbeddedJobParamsSchema,
+  result: EmbeddingResultSchema.optional(),
+});
+export type EmbeddingJobSchemaType = z.infer<typeof EmbeddingJobSchema>;
+
+export class EmbeddingJob<T extends EmbeddingJobSchemaType> extends Job<T> {
   model: string;
   params: EmbeddingJobParams;
 
@@ -29,9 +58,10 @@ export class EmbeddingJob extends Job {
     const obj = super.dump();
     return {
       ...obj,
-      type: "embedding",
+      type: "embedding" as const,
       model: this.model,
       params: this.params,
+      provider: this.provider,
     };
   }
 }

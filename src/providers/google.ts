@@ -1,7 +1,8 @@
-import { ChatJob, convertMessages } from "../jobs/chat";
-import type { AIProviderOptions } from "../jobs/job";
+import { ChatJob, ChatJobSchema, convertMessages } from "../jobs/chat";
+import type { ProviderOptionsType } from "../jobs/schema";
+import { z } from "zod";
 
-export function google(options?: AIProviderOptions) {
+export function google(options?: ProviderOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.GOOGLE_API_KEY;
 
@@ -12,8 +13,15 @@ export function google(options?: AIProviderOptions) {
   };
 }
 
-class GoogleChatJob extends ChatJob {
-  constructor(options: AIProviderOptions, model: string) {
+export const BaseGoogleJobSchema = z.object({
+  provider: z.literal("google"),
+});
+
+export const GoogleChatJobSchema = ChatJobSchema.merge(BaseGoogleJobSchema);
+export type GoogleChatJobSchemaType = z.infer<typeof GoogleChatJobSchema>;
+
+class GoogleChatJob extends ChatJob<GoogleChatJobSchemaType> {
+  constructor(options: ProviderOptionsType, model: string) {
     super(model);
     this.options = options;
     this.model = model;

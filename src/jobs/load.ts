@@ -1,12 +1,25 @@
-import { jobSchema, type AIJob, type Job } from "./job";
-import { openai } from "../providers/openai";
-import { anthropic } from "../providers/anthropic";
-import { fal } from "../providers/fal";
-import { ollama } from "../providers/ollama";
-import { voyageai } from "../providers/voyageai";
+import { type Job } from "./job";
+import { openai, OpenaiJobSchema } from "../providers/openai";
+import { anthropic, AnthropicJobSchema } from "../providers/anthropic";
+import { fal, FalJobSchema } from "../providers/fal";
+import { ollama, OllamaJobSchema } from "../providers/ollama";
+import { voyageai, VoyageaiJobSchema } from "../providers/voyageai";
+import { z } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
 
-export function load(obj: AIJob): Job {
-  obj = jobSchema.parse(obj);
+export const JobSchema = z.union([
+  ...AnthropicJobSchema.options,
+  ...FalJobSchema.options,
+  ...OllamaJobSchema.options,
+  ...OpenaiJobSchema.options,
+  ...VoyageaiJobSchema.options,
+]);
+
+export const jsonSchema = zodToJsonSchema(JobSchema);
+export type JobSchemaType = z.infer<typeof JobSchema>;
+
+export function load(obj: JobSchemaType): Job<JobSchemaType> {
+  obj = JobSchema.parse(obj);
 
   let provider = null;
   if (obj.provider === "anthropic") {

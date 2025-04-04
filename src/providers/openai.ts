@@ -1,14 +1,45 @@
 import { EventSourceParserStream } from "eventsource-parser/stream";
 import zodToJsonSchema from "zod-to-json-schema";
-import { ChatJob, convertMessages } from "../jobs/chat";
-import { EmbeddingJob } from "../jobs/embedding";
-import { ImageJob } from "../jobs/image";
-import { ListModelsJob } from "../jobs/models";
-import type { AIProviderOptions } from "../jobs/job";
+import { ChatJob, ChatJobSchema, convertMessages } from "../jobs/chat";
+import { EmbeddingJob, EmbeddingJobSchema } from "../jobs/embedding";
+import { ImageJob, ImageJobSchema } from "../jobs/image";
+import { ListModelsJob, ModelsJobSchema } from "../jobs/models";
+import { type ProviderOptionsType } from "../jobs/schema";
+import { z } from "zod";
 
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
 
-export function openai(options?: AIProviderOptions) {
+export const BaseOpenaiJobSchema = z.object({
+  provider: z.literal("openai"),
+});
+
+export const OpenaiChatJobSchema = ChatJobSchema.merge(BaseOpenaiJobSchema);
+export type OpenaiChatJobSchemaType = z.infer<typeof OpenaiChatJobSchema>;
+
+export const OpenaiEmbeddingJobSchema =
+  EmbeddingJobSchema.merge(BaseOpenaiJobSchema);
+export type OpenaiEmbeddingJobSchemaType = z.infer<
+  typeof OpenaiEmbeddingJobSchema
+>;
+
+export const OpenaiImageJobSchema = ImageJobSchema.merge(BaseOpenaiJobSchema);
+export type OpenaiImageJobSchemaType = z.infer<typeof OpenaiImageJobSchema>;
+
+export const OpenaiListModelsJobSchema =
+  ModelsJobSchema.merge(BaseOpenaiJobSchema);
+export type OpenaiListModelsJobSchemaType = z.infer<
+  typeof OpenaiListModelsJobSchema
+>;
+
+export const OpenaiJobSchema = z.discriminatedUnion("type", [
+  OpenaiChatJobSchema,
+  OpenaiEmbeddingJobSchema,
+  OpenaiImageJobSchema,
+  OpenaiListModelsJobSchema,
+]);
+
+export type OpenaiJobSchemaType = z.infer<typeof OpenaiJobSchema>;
+export function openai(options?: ProviderOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.OPENAI_API_KEY;
 
@@ -32,8 +63,8 @@ export function openai(options?: AIProviderOptions) {
   };
 }
 
-export class OpenAIChatJob extends ChatJob {
-  constructor(options: AIProviderOptions, model: string) {
+export class OpenAIChatJob extends ChatJob<OpenaiChatJobSchemaType> {
+  constructor(options: ProviderOptionsType, model: string) {
     super(model);
     this.provider = "openai";
     this.options = options;
@@ -59,7 +90,7 @@ export class OpenAIChatJob extends ChatJob {
     } as any;
 
     if (this.params.tools && this.params.tools.length) {
-      requestBody.tools = this.params.tools.map((tool) => tool.toJSON());
+      requestBody.tools = this.params.tools.map((tool) => tool.toJSON?.());
       requestBody.tool_choice = this.params.toolChoice;
     }
 
@@ -128,8 +159,8 @@ export class OpenAIChatJob extends ChatJob {
   };
 }
 
-export class OpenAIListModelsJob extends ListModelsJob {
-  constructor(options: AIProviderOptions) {
+export class OpenAIListModelsJob extends ListModelsJob<OpenaiListModelsJobSchemaType> {
+  constructor(options: ProviderOptionsType) {
     super();
     this.provider = "openai";
     this.options = options;
@@ -151,8 +182,8 @@ export class OpenAIListModelsJob extends ListModelsJob {
   };
 }
 
-export class OpenAIImageJob extends ImageJob {
-  constructor(options: AIProviderOptions, model: string) {
+export class OpenAIImageJob extends ImageJob<OpenaiImageJobSchemaType> {
+  constructor(options: ProviderOptionsType, model: string) {
     super(model);
     this.provider = "openai";
     this.options = options;
@@ -186,8 +217,8 @@ export class OpenAIImageJob extends ImageJob {
   };
 }
 
-export class OpenAIEmbeddingJob extends EmbeddingJob {
-  constructor(options: AIProviderOptions, model: string) {
+export class OpenAIEmbeddingJob extends EmbeddingJob<OpenaiEmbeddingJobSchemaType> {
+  constructor(options: ProviderOptionsType, model: string) {
     super(model);
     this.provider = "openai";
     this.options = options || {};

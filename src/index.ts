@@ -1,5 +1,4 @@
 export * from "./jobs/job";
-export * from "./jobs/load";
 export * from "./jobs/utils";
 export * from "./jobs/chat";
 export * from "./jobs/embedding";
@@ -15,3 +14,6 @@ export * from "./providers/ollama";
 export * from "./providers/openai";
 export * from "./providers/together";
 export * from "./providers/voyageai";
+export * from "./jobs/schema";
+export * from "./jobs/load";
+
