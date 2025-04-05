@@ -227,7 +227,7 @@ const models = await openai().models().run();
 
 ## Support
 
-Feel free to [open an issue](https://github.com/modalityml/fluent-ai/issues) or [start a discussion](https://github.com/modalityml/fluent-ai/discussions) if you have any questions. [Join our Discord community](https://discord.gg/HzGZWbY8Fx)
+Feel free to [open an issue](https://github.com/modalityml/fluent-ai/issues) or [start a discussion](https://github.com/modalityml/fluent-ai/discussions) if you have any questions. If you would like to request support for a new AI provider, please create an issue with details about the provider's API. [Join our Discord community](https://discord.gg/HzGZWbY8Fx) for help and updates.
 
 ## License
 
