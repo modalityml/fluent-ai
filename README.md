@@ -22,6 +22,7 @@ fluent-ai includes support for multiple AI providers and modalities.
 | --------- | ------------------ | ------------------ | ------------------ | ------------------ |
 | anthropic | :white_check_mark: |                    |                    | :white_check_mark: |
 | fal       |                    |                    | :white_check_mark: |                    |
+| google    | :white_check_mark: |                    |                    |                    |
 | ollama    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | voyageai  |                    | :white_check_mark: |                    |                    |

@@ -216,6 +216,12 @@ const falJobSchema = z
   })
   .and(z.discriminatedUnion("type", [imageJobSchema]));
 
+const googleJobSchema = z
+  .object({
+    provider: z.literal("google"),
+  })
+  .and(z.discriminatedUnion("type", [chatJobSchema]));
+
 const ollamaJobSchema = z
   .object({
     provider: z.literal("ollama"),
@@ -251,6 +257,7 @@ const voyageaiJobSchema = z
 export const jobSchema = z.union([
   anthropicJobSchema,
   falJobSchema,
+  googleJobSchema,
   ollamaJobSchema,
   openaiJobSchema,
   voyageaiJobSchema,
