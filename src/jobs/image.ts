@@ -1,32 +1,12 @@
-import { Job } from "./job";
-
-export type ImageSize =
-  | "square_hd"
-  | "square"
-  | "portrait_4_3"
-  | "portrait_16_9"
-  | "landscape_4_3"
-  | "landscape_16_9"
-  | { width: number; height: number };
+import { Job, type ImageJobParams, type ImageSize } from "./job";
 
 export class ImageJob extends Job {
-  params: {
-    prompt?: string;
-    n?: number;
-    quality?: string;
-    responseFormat?: string;
-    size?: ImageSize;
-    style?: string;
-    user?: string;
-    numInferenceSteps?: number;
-    seed?: number;
-    guidanceScale?: number;
-    syncMode?: boolean;
-    enableSafetyChecker?: boolean;
-  };
+  model: string;
+  params: ImageJobParams;
 
-  constructor() {
+  constructor(model: string) {
     super();
+    this.model = model;
     this.params = {};
   }
 
@@ -92,6 +72,6 @@ export class ImageJob extends Job {
 
   dump() {
     const obj = super.dump();
-    return { ...obj, image: { model: this.model, params: this.params } };
+    return { ...obj, type: "image", model: this.model, params: this.params };
   }
 }

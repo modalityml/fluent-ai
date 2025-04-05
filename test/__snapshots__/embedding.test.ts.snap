@@ -35,43 +35,43 @@ exports[`embeddings 3`] = `
 
 exports[`dump 1`] = `
 {
-  "embedding": {
-    "model": "nomic-embed-text",
-    "params": {
-      "input": "hi",
-    },
-  },
+  "model": "nomic-embed-text",
   "options": {},
+  "params": {
+    "input": "hi",
+  },
   "provider": "ollama",
+  "type": "embedding",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 2`] = `
 {
-  "embedding": {
-    "model": "text-embedding-ada-002",
-    "params": {
-      "input": "hi",
-    },
-  },
+  "model": "text-embedding-ada-002",
   "options": {
     "apiKey": "<key>",
   },
+  "params": {
+    "input": "hi",
+  },
   "provider": "openai",
+  "type": "embedding",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 3`] = `
 {
-  "embedding": {
-    "model": "voyage-3-lite",
-    "params": {
-      "input": "hi",
-    },
-  },
+  "model": "voyage-3-lite",
   "options": {
     "apiKey": "<key>",
   },
+  "params": {
+    "input": "hi",
+  },
   "provider": "voyageai",
+  "type": "embedding",
+  "version": "0.2.4",
 }
 `;

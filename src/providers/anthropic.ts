@@ -10,15 +10,15 @@ export function anthropic(options?: AIProviderOptions) {
     chat(model: string) {
       return new AnthropicChatJob(options, model);
     },
-    listModels() {
+    models() {
       return new AnthropicListModelsJob(options);
-    }
+    },
   };
 }
 
 export class AnthropicChatJob extends ChatJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "anthropic";
     this.options = options;
     this.model = model;

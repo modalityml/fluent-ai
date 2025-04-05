@@ -11,20 +11,21 @@ fluent-ai is a lightweight, type-safe AI toolkit that seamlessly integrates mult
 ## Installation
 
 ```sh
-npm install fluent-ai
+npm install fluent-ai zod
 ```
 
 ## AI Service provider support
 
 fluent-ai includes support for multiple AI providers and modalities.
 
-| Provider  | chat               | embedding          | image              | listModels         |
+| Provider  | chat               | embedding          | image              | models             |
 | --------- | ------------------ | ------------------ | ------------------ | ------------------ |
-| anthropic | :white_check_mark: |                    |                    | :white_check_mark:	|
-| fal       |                    |                    | :white_check_mark: |					|
-| ollama    | :white_check_mark: | :white_check_mark: |					   | :white_check_mark:	|
-| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark:	|
-| voyageai  |                    | :white_check_mark: |                    |					|
+| anthropic | :white_check_mark: |                    |                    | :white_check_mark: |
+| fal       |                    |                    | :white_check_mark: |                    |
+| google    | :white_check_mark: |                    |                    |                    |
+| ollama    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| voyageai  |                    | :white_check_mark: |                    |                    |
 
 By default, API keys for providers are read from environment variable (`process.env`) following the format `<PROVIDER>_API_KEY` (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`).
 
@@ -114,10 +115,6 @@ const { text } = await job.run();
 Structured output from AI chat completions involves formatting the responses based on predefined json schema. This feature is essential when building applications with chat completions.
 
 [Zod](https://zod.dev/) is a popular type of validation library for TypeScript and JavaScript that allows developers to define and validate data schemas in a concise and type-safe manner. fluent-ai provides built-in integration for declare json-schema with zod. To use zod integration, first install `zod` from npm. Any parameter in fluent-ai that accepts a JSON schema will also work with a Zod schema.
-
-```sh
-npm install zod
-```
 
 fluent-ai provides a consistent `jsonSchema()` function for all providers to generate structured output. For more details, refer to the [structured output docs](/docs/chat-structured-outputs.md)
 
@@ -218,9 +215,19 @@ const job = openai().image("dalle-2").prompt("a cat").n(1).size("512x512");
 const result = await job.run();
 ```
 
+## List models
+
+fluent-ai provides an easy way to retrieve all available models from supported providers (openai, anthropic, ollama).
+
+```ts
+import { openai } from "fluent-ai";
+
+const models = await openai().models().run();
+```
+
 ## Support
 
-Feel free to [open an issue](https://github.com/modalityml/fluent-ai/issues) or [start a discussion](https://github.com/modalityml/fluent-ai/discussions) if you have any questions. [Join our Discord community](https://discord.gg/HzGZWbY8Fx)
+Feel free to [open an issue](https://github.com/modalityml/fluent-ai/issues) or [start a discussion](https://github.com/modalityml/fluent-ai/discussions) if you have any questions. If you would like to request support for a new AI provider, please create an issue with details about the provider's API. [Join our Discord community](https://discord.gg/HzGZWbY8Fx) for help and updates.
 
 ## License
 

@@ -14,7 +14,7 @@ export function google(options?: AIProviderOptions) {
 
 class GoogleChatJob extends ChatJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.options = options;
     this.model = model;
   }

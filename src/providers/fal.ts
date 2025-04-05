@@ -21,7 +21,7 @@ export type FalImage = {
 
 export class FalImageJob extends ImageJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "fal";
     this.options = options;
     this.model = model;

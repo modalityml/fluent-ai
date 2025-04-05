@@ -36,80 +36,80 @@ exports[`chat 3`] = `
 
 exports[`dump 1`] = `
 {
-  "chat": {
-    "model": "claude-3-5-sonnet-20241022",
-    "params": {
-      "messages": [
-        {
-          "content": "you are a helpful assistant",
-          "role": "system",
-        },
-        {
-          "content": [
-            "hi",
-          ],
-          "role": "user",
-        },
-      ],
-      "temperature": 0.5,
-    },
-  },
+  "model": "claude-3-5-sonnet-20241022",
   "options": {
     "apiKey": "<key>",
   },
+  "params": {
+    "messages": [
+      {
+        "content": "you are a helpful assistant",
+        "role": "system",
+      },
+      {
+        "content": [
+          "hi",
+        ],
+        "role": "user",
+      },
+    ],
+    "temperature": 0.5,
+  },
   "provider": "anthropic",
+  "type": "chat",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 2`] = `
 {
-  "chat": {
-    "model": "llama3.2",
-    "params": {
-      "messages": [
-        {
-          "content": "you are a helpful assistant",
-          "role": "system",
-        },
-        {
-          "content": [
-            "hi",
-          ],
-          "role": "user",
-        },
-      ],
-      "temperature": 0.5,
-    },
-  },
+  "model": "llama3.2",
   "options": {},
+  "params": {
+    "messages": [
+      {
+        "content": "you are a helpful assistant",
+        "role": "system",
+      },
+      {
+        "content": [
+          "hi",
+        ],
+        "role": "user",
+      },
+    ],
+    "temperature": 0.5,
+  },
   "provider": "ollama",
+  "type": "chat",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 3`] = `
 {
-  "chat": {
-    "model": "gpt-4o-mini",
-    "params": {
-      "messages": [
-        {
-          "content": "you are a helpful assistant",
-          "role": "system",
-        },
-        {
-          "content": [
-            "hi",
-          ],
-          "role": "user",
-        },
-      ],
-      "temperature": 0.5,
-    },
-  },
+  "model": "gpt-4o-mini",
   "options": {
     "apiKey": "<key>",
   },
+  "params": {
+    "messages": [
+      {
+        "content": "you are a helpful assistant",
+        "role": "system",
+      },
+      {
+        "content": [
+          "hi",
+        ],
+        "role": "user",
+      },
+    ],
+    "temperature": 0.5,
+  },
   "provider": "openai",
+  "type": "chat",
+  "version": "0.2.4",
 }
 `;
 

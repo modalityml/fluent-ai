@@ -10,18 +10,18 @@ export function ollama(options?: AIProviderOptions) {
     chat(model: string) {
       return new OllamaChatJob(options, model);
     },
-    listModels() {
-      return new OllamaListModelsJob(options);
-    },
     embedding(model: string) {
       return new OllamaEmbeddingJob(options, model);
+    },
+    models() {
+      return new OllamaListModelsJob(options);
     },
   };
 }
 
 export class OllamaChatJob extends ChatJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "ollama";
     this.options = options;
     this.model = model;
@@ -64,7 +64,7 @@ export class OllamaListModelsJob extends ListModelsJob {
 
 export class OllamaEmbeddingJob extends EmbeddingJob {
   constructor(options: AIProviderOptions, model: string) {
-    super();
+    super(model);
     this.provider = "ollama";
     this.options = options;
     this.model = model;

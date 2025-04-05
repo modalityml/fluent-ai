@@ -1,6 +1,6 @@
-import { ZodSchema } from "zod";
+import { z, ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import { Job } from "./job";
+import { chatResultSchema, Job, type ChatJobParams } from "./job";
 
 export function systemPrompt(content: string) {
   return { role: "system", content };
@@ -135,30 +135,19 @@ export interface Message {
 }
 
 export class ChatJob extends Job {
-  params: {
-    temperature?: number;
-    stream?: boolean;
-    streamOptions?: StreamOptions;
-    maxTokens?: number;
-    messages: Message[];
-    tools?: ChatTool[];
-    toolChoice?: string;
-    responseFormat?: ResponseFormat;
-    topP?: number;
-    topK?: number;
-    systemPrompt?: string;
-    jsonSchema?: {
-      name: string;
-      description?: string;
-      schema: ZodSchema;
-    };
-  };
+  model: string;
+  params: ChatJobParams;
 
-  constructor() {
+  constructor(model: string) {
     super();
+    this.model = model;
     this.params = {
       messages: [],
     };
+  }
+
+  async run(): Promise<z.infer<typeof chatResultSchema>> {
+    return await super.run();
   }
 
   systemPrompt(_systemPrompt: string) {
@@ -234,6 +223,6 @@ export class ChatJob extends Job {
 
   dump() {
     const obj = super.dump();
-    return { ...obj, chat: { model: this.model, params: this.params } };
+    return { ...obj, type: "chat", model: this.model, params: this.params };
   }
 }
