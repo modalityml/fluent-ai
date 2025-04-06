@@ -81,7 +81,7 @@ const job = load({
 To serialize a job to a JSON object, use the `dump` method:
 
 ```ts
-const obj = await job.dump();
+const payload = job.dump();
 ```
 
 This allows you to save the job's state for later use, such as storing it in a queue or database.
@@ -90,7 +90,7 @@ To recreate and execute a job from the JSON object, use the `load` function:
 ```ts
 import { load } from "fluent-ai";
 
-const job = load(obj);
+const job = load(payload);
 await job.run();
 ```
 

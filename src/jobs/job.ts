@@ -1,6 +1,7 @@
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 import { version } from "../../package.json";
+import { runRemoteJob, type JobRemoteOptions } from "./remote";
 
 export const providerSchema = z.enum([
   "anthropic",
@@ -280,6 +281,11 @@ export class Job {
     const request = this.makeRequest!();
     const response = await fetch(request);
     return await this.handleResponse!(response);
+  }
+
+  async remote(options?: JobRemoteOptions) {
+    const payload = this.dump() as AIJob;
+    return runRemoteJob(payload, options);
   }
 
   dump() {
