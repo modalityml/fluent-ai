@@ -2,7 +2,7 @@ import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 import { version } from "../../package.json";
 
-const providerSchema = z.enum([
+export const providerSchema = z.enum([
   "anthropic",
   "fal",
   "fireworks",
