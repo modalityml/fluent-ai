@@ -1,7 +1,7 @@
 import { z, ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 import { Job } from "./job";
-import { BaseJobSchema } from "./schema";
+import { JobBaseSchema } from "./schema";
 
 export const MessageContentSchema = z.union([
   z.string(),
@@ -97,14 +97,14 @@ export const ChatResultSchema = z.object({
     .optional(),
 });
 
-export const ChatJobSchema = BaseJobSchema.extend({
+export const ChatJobSchema = JobBaseSchema.extend({
   type: z.literal("chat"),
   model: z.string(),
   params: ChatJobParamsSchema,
   result: ChatResultSchema.optional(),
 });
-export type ChatJobSchemaType = z.infer<typeof ChatJobSchema>;
 
+export type ChatJobSchemaType = z.infer<typeof ChatJobSchema>;
 export type ChatJobParams = z.infer<typeof ChatJobParamsSchema>;
 
 export function systemPrompt(content: string) {

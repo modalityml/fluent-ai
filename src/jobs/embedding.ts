@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseJobSchema } from "./schema";
+import { JobBaseSchema } from "./schema";
 import { Job } from "./job";
 
 export const EmbeddedJobParamsSchema = z.object({
@@ -20,7 +20,7 @@ const EmbeddingResultSchema = z.object({
     .optional(),
 });
 
-export const EmbeddingJobSchema = BaseJobSchema.extend({
+export const EmbeddingJobSchema = JobBaseSchema.extend({
   type: z.literal("embedding"),
   model: z.string(),
   params: EmbeddedJobParamsSchema,

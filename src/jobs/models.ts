@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { BaseJobSchema } from "./schema";
+import { JobBaseSchema } from "./schema";
 import { Job } from "./job";
 
-export const ModelsJobSchema = BaseJobSchema.extend({
+export const ModelsJobSchema = JobBaseSchema.extend({
   type: z.literal("models"),
 });
 

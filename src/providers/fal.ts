@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ImageJob, ImageJobSchema } from "../jobs/image";
-import type { ProviderOptionsType } from "../jobs/schema";
+import type { JobOptionsType } from "../jobs/schema";
 
 export type FalImage = {
   url: string;
@@ -20,7 +20,7 @@ export const FalJobSchema = z.discriminatedUnion("type", [FalImageJobSchema]);
 export type FalJobSchemaType = z.infer<typeof FalJobSchema>;
 
 export class FalImageJob extends ImageJob<FalImageJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.provider = "fal";
     this.options = options;
@@ -61,7 +61,7 @@ export class FalImageJob extends ImageJob<FalImageJobSchemaType> {
   }
 }
 
-export function fal(options?: ProviderOptionsType) {
+export function fal(options?: JobOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.FAL_API_KEY;
 

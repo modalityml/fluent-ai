@@ -4,7 +4,7 @@ import { ChatJob, ChatJobSchema, convertMessages } from "../jobs/chat";
 import { EmbeddingJob, EmbeddingJobSchema } from "../jobs/embedding";
 import { ImageJob, ImageJobSchema } from "../jobs/image";
 import { ListModelsJob, ModelsJobSchema } from "../jobs/models";
-import { type ProviderOptionsType } from "../jobs/schema";
+import { type JobOptionsType } from "../jobs/schema";
 import { z } from "zod";
 
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
@@ -39,7 +39,7 @@ export const OpenaiJobSchema = z.discriminatedUnion("type", [
 ]);
 
 export type OpenaiJobSchemaType = z.infer<typeof OpenaiJobSchema>;
-export function openai(options?: ProviderOptionsType) {
+export function openai(options?: JobOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.OPENAI_API_KEY;
 
@@ -64,7 +64,7 @@ export function openai(options?: ProviderOptionsType) {
 }
 
 export class OpenAIChatJob extends ChatJob<OpenaiChatJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.provider = "openai";
     this.options = options;
@@ -160,7 +160,7 @@ export class OpenAIChatJob extends ChatJob<OpenaiChatJobSchemaType> {
 }
 
 export class OpenAIListModelsJob extends ListModelsJob<OpenaiListModelsJobSchemaType> {
-  constructor(options: ProviderOptionsType) {
+  constructor(options: JobOptionsType) {
     super();
     this.provider = "openai";
     this.options = options;
@@ -183,7 +183,7 @@ export class OpenAIListModelsJob extends ListModelsJob<OpenaiListModelsJobSchema
 }
 
 export class OpenAIImageJob extends ImageJob<OpenaiImageJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.provider = "openai";
     this.options = options;
@@ -218,7 +218,7 @@ export class OpenAIImageJob extends ImageJob<OpenaiImageJobSchemaType> {
 }
 
 export class OpenAIEmbeddingJob extends EmbeddingJob<OpenaiEmbeddingJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.provider = "openai";
     this.options = options || {};

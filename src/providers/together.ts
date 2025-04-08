@@ -1,7 +1,7 @@
-import type { ProviderOptionsType } from "../jobs/schema";
+import type { JobOptionsType } from "../jobs/schema";
 import { OpenAIChatJob } from "./openai";
 
-export function together(options?: ProviderOptionsType) {
+export function together(options?: JobOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.TOGETHER_API_KEY;
 

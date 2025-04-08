@@ -1,5 +1,5 @@
 import { ImageJob, ImageJobSchema } from "../jobs/image";
-import type { ProviderOptionsType } from "../jobs/schema";
+import type { JobOptionsType } from "../jobs/schema";
 import { z } from "zod";
 
 export const BaseLumaJobSchema = z.object({
@@ -12,7 +12,7 @@ export type LumaImageJobSchemaType = z.infer<typeof LumaImageJobSchema>;
 export const LumaJobSchema = z.discriminatedUnion("type", [LumaImageJobSchema]);
 export type LumaJobSchemaType = z.infer<typeof LumaJobSchema>;
 
-export function luma(options?: ProviderOptionsType) {
+export function luma(options?: JobOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.LUMA_API_KEY;
 
@@ -28,7 +28,7 @@ export function luma(options?: ProviderOptionsType) {
 }
 
 export class LumaImageJob extends ImageJob<LumaImageJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.options = options;
     this.model = model;

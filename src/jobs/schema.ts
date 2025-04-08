@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ProviderSchema = z.enum([
+export const JobProviderSchema = z.enum([
   "anthropic",
   "fal",
   "ollama",
@@ -14,15 +14,17 @@ export const ProviderSchema = z.enum([
 
 export const JobTypeSchema = z.enum(["chat", "image", "models", "embedding"]);
 
-export const OptionsSchema = z.object({
+export const JobOptionsSchema = z.object({
   apiKey: z.string().optional(),
   baseURL: z.string().optional(),
 });
 
-export const BaseJobSchema = z.object({
+export const JobBaseSchema = z.object({
   version: z.string().optional(),
-  options: OptionsSchema.optional(),
+  options: JobOptionsSchema.optional(),
 });
-export type BaseJobSchemaType = z.infer<typeof BaseJobSchema>;
 
-export type ProviderOptionsType = z.infer<typeof OptionsSchema>;
+export type JobProviderType = z.infer<typeof JobProviderSchema>;
+export type JobTypeType = z.infer<typeof JobTypeSchema>;
+export type JobBaseType = z.infer<typeof JobBaseSchema>;
+export type JobOptionsType = z.infer<typeof JobOptionsSchema>;

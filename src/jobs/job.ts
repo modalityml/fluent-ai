@@ -1,18 +1,16 @@
-import { z } from "zod";
 import { version } from "../../package.json";
-import { runRemoteJob, type JobRemoteOptions } from "./remote";
 import type {
-  OptionsSchema,
-  ProviderSchema,
-  JobTypeSchema,
-  BaseJobSchemaType,
+  JobBaseType,
+  JobOptionsType,
+  JobProviderType,
+  JobTypeType,
 } from "./schema";
 
-export class Job<T extends BaseJobSchemaType> {
-  options!: z.infer<typeof OptionsSchema>;
+export class Job<T extends JobBaseType> {
+  options!: JobOptionsType;
   params: any;
-  provider!: z.infer<typeof ProviderSchema>;
-  type!: z.infer<typeof JobTypeSchema>;
+  provider!: JobProviderType;
+  type!: JobTypeType;
   model!: string;
 
   makeRequest?: () => Request;

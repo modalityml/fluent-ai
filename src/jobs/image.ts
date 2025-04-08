@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseJobSchema } from "./schema";
+import { JobBaseSchema } from "./schema";
 import { Job } from "./job";
 
 export const ImageSizeSchema = z.union([
@@ -54,7 +54,7 @@ export const ImageJobParamsSchema = z.object({
 
 export type ImageJobParams = z.infer<typeof ImageJobParamsSchema>;
 
-export const ImageJobSchema = BaseJobSchema.extend({
+export const ImageJobSchema = JobBaseSchema.extend({
   type: z.literal("image"),
   model: z.string(),
   params: ImageJobParamsSchema,

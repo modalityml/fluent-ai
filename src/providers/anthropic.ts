@@ -1,6 +1,6 @@
 import { ChatJob, ChatJobSchema, convertMessages } from "../jobs/chat";
 import { ListModelsJob, ModelsJobSchema } from "../jobs/models";
-import { type ProviderOptionsType } from "../jobs/schema";
+import { type JobOptionsType } from "../jobs/schema";
 import { z } from "zod";
 
 export const BaseAnthropicJobSchema = z.object({
@@ -23,7 +23,7 @@ export const AnthropicJobSchema = z.discriminatedUnion("type", [
 ]);
 export type AnthropicJobSchemaType = z.infer<typeof AnthropicJobSchema>;
 
-export function anthropic(options?: ProviderOptionsType) {
+export function anthropic(options?: JobOptionsType) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.ANTHROPIC_API_KEY;
 
@@ -38,7 +38,7 @@ export function anthropic(options?: ProviderOptionsType) {
 }
 
 export class AnthropicChatJob extends ChatJob<AnthropicChatJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.provider = "anthropic";
     this.options = options;
@@ -84,7 +84,7 @@ export class AnthropicChatJob extends ChatJob<AnthropicChatJobSchemaType> {
 }
 
 export class AnthropicListModelsJob extends ListModelsJob<AnthropicListModelsJobSchemaType> {
-  constructor(options: ProviderOptionsType) {
+  constructor(options: JobOptionsType) {
     super();
     this.provider = "anthropic";
     this.options = options;

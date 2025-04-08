@@ -1,7 +1,7 @@
 import { ChatJob, ChatJobSchema, convertMessages } from "../jobs/chat";
 import { ListModelsJob, ModelsJobSchema } from "../jobs/models";
 import { EmbeddingJob, EmbeddingJobSchema } from "../jobs/embedding";
-import { type ProviderOptionsType } from "../jobs/schema";
+import { type JobOptionsType } from "../jobs/schema";
 import { z } from "zod";
 
 export const BaseOllamaJobSchema = z.object({
@@ -30,7 +30,7 @@ export const OllamaJobSchema = z.discriminatedUnion("type", [
 ]);
 export type OllamaJobSchemaType = z.infer<typeof OllamaJobSchema>;
 
-export function ollama(options?: ProviderOptionsType) {
+export function ollama(options?: JobOptionsType) {
   options = options || {};
 
   return {
@@ -47,7 +47,7 @@ export function ollama(options?: ProviderOptionsType) {
 }
 
 export class OllamaChatJob extends ChatJob<OllamaChatJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.provider = "ollama";
     this.options = options;
@@ -73,7 +73,7 @@ export class OllamaChatJob extends ChatJob<OllamaChatJobSchemaType> {
 }
 
 export class OllamaListModelsJob extends ListModelsJob<OllamaListModelsJobSchemaType> {
-  constructor(options: ProviderOptionsType) {
+  constructor(options: JobOptionsType) {
     super();
     this.provider = "ollama";
     this.options = options;
@@ -90,7 +90,7 @@ export class OllamaListModelsJob extends ListModelsJob<OllamaListModelsJobSchema
 }
 
 export class OllamaEmbeddingJob extends EmbeddingJob<OllamaEmbeddingJobSchemaType> {
-  constructor(options: ProviderOptionsType, model: string) {
+  constructor(options: JobOptionsType, model: string) {
     super(model);
     this.provider = "ollama";
     this.options = options;
