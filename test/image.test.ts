@@ -2,20 +2,17 @@ import { test, expect } from "bun:test";
 import { openai, fal, requestObject, load } from "../src";
 
 function createJobs() {
+  // prettier-ignore
   return [
-    fal({ apiKey: "<key>" }).image("fal-ai/flux/dev"),
-    openai({ apiKey: "<key>" }).image("dall-e-2"),
+    fal({ apiKey: "<key>" }).image("fal-ai/flux/dev").n(3).prompt("A cute baby sea otter"),
+    openai({ apiKey: "<key>" }).image("dall-e-2").n(3).prompt("A cute baby sea otter"),
   ];
 }
 
 test("image", async () => {
   const jobs = createJobs();
   for (const job of jobs) {
-    expect(
-      await requestObject(
-        job.n(3).prompt("A cute baby sea otter").makeRequest()
-      )
-    ).toMatchSnapshot();
+    expect(await requestObject(job.makeRequest())).toMatchSnapshot();
   }
 });
 

@@ -30,7 +30,10 @@ exports[`dump 1`] = `
   "options": {
     "apiKey": "<key>",
   },
-  "params": {},
+  "params": {
+    "n": 3,
+    "prompt": "A cute baby sea otter",
+  },
   "provider": "fal",
   "type": "image",
   "version": "0.2.4",
@@ -43,7 +46,10 @@ exports[`dump 2`] = `
   "options": {
     "apiKey": "<key>",
   },
-  "params": {},
+  "params": {
+    "n": 3,
+    "prompt": "A cute baby sea otter",
+  },
   "provider": "openai",
   "type": "image",
   "version": "0.2.4",

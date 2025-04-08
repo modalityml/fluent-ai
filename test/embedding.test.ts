@@ -3,18 +3,16 @@ import { openai, ollama, voyageai, requestObject, load } from "../src";
 
 function createJobs() {
   return [
-    ollama().embedding("nomic-embed-text"),
-    openai({ apiKey: "<key>" }).embedding("text-embedding-ada-002"),
-    voyageai({ apiKey: "<key>" }).embedding("voyage-3-lite"),
+    ollama().embedding("nomic-embed-text").input("hi"),
+    openai({ apiKey: "<key>" }).embedding("text-embedding-ada-002").input("hi"),
+    voyageai({ apiKey: "<key>" }).embedding("voyage-3-lite").input("hi"),
   ];
 }
 
 test("embeddings", async () => {
   const jobs = createJobs();
   for (const job of jobs) {
-    expect(
-      await requestObject(job.input("hi").makeRequest())
-    ).toMatchSnapshot();
+    expect(await requestObject(job.makeRequest())).toMatchSnapshot();
   }
 });
 
