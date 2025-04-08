@@ -29,11 +29,6 @@ export class Job<T extends BaseJobSchemaType> {
     return await this.handleResponse!(response);
   }
 
-  async remote(options?: JobRemoteOptions) {
-    const payload = this.dump();
-    return runRemoteJob(payload, options);
-  }
-
   dump(): T {
     return {
       version: version,
