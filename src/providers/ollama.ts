@@ -11,14 +11,14 @@ export const BaseOllamaJobSchema = z.object({
 export const OllamaChatJobSchema = ChatJobSchema.merge(BaseOllamaJobSchema);
 export type OllamaChatJobSchemaType = z.infer<typeof OllamaChatJobSchema>;
 
-export const OllamaEmbeddingJobSchema = EmbeddingJobSchema.merge(
-  BaseOllamaJobSchema
-);
-export type OllamaEmbeddingJobSchemaType = z.infer<typeof OllamaEmbeddingJobSchema>;
+export const OllamaEmbeddingJobSchema =
+  EmbeddingJobSchema.merge(BaseOllamaJobSchema);
+export type OllamaEmbeddingJobSchemaType = z.infer<
+  typeof OllamaEmbeddingJobSchema
+>;
 
-export const OllamaListModelsJobSchema = ModelsJobSchema.merge(
-  BaseOllamaJobSchema
-);
+export const OllamaListModelsJobSchema =
+  ModelsJobSchema.merge(BaseOllamaJobSchema);
 export type OllamaListModelsJobSchemaType = z.infer<
   typeof OllamaListModelsJobSchema
 >;

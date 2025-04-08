@@ -11,13 +11,16 @@ import {
 } from "../src";
 import { z } from "zod";
 
+function createJobs() {
+  return [
+    anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
+    ollama().chat("llama3.2"),
+    openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
+  ];
+}
+
 test("chat", async () => {
-  // prettier-ignore
-  const jobs = [
-  anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
-  ollama().chat("llama3.2"),
-  openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-];
+  const jobs = createJobs();
 
   for (const job of jobs) {
     expect(
@@ -35,11 +38,7 @@ test("chat", async () => {
 });
 
 test("dump", () => {
-  const jobs = [
-    anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
-    ollama().chat("llama3.2"),
-    openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-  ];
+  const jobs = createJobs();
 
   for (const job of jobs) {
     expect(job.dump()).toMatchSnapshot();
@@ -47,11 +46,7 @@ test("dump", () => {
 });
 
 test("load", async () => {
-  const jobs = [
-    anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
-    ollama().chat("llama3.2"),
-    openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-  ];
+  const jobs = createJobs();
 
   for (const job of jobs) {
     const req1 = await requestObject(load(job.dump()).makeRequest!());
@@ -73,12 +68,7 @@ test("json_object", async () => {
 });
 
 test("tool", async () => {
-  // prettier-ignore
-  const jobs = [
-    anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
-    ollama().chat("llama3.2"),
-    openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-  ];
+  const jobs = createJobs();
   const weatherTool = tool("get_current_weather")
     .description("Get the current weather in a given location")
     .parameters(
@@ -101,11 +91,7 @@ test("tool", async () => {
 });
 
 test("jsonSchema", async () => {
-  const jobs = [
-    anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
-    ollama().chat("llama3.2"),
-    openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-  ];
+  const jobs = createJobs();
   const personSchema = z.object({
     name: z.string(),
     age: z.number(),

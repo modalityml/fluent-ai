@@ -6,7 +6,6 @@ export const BaseVoyageaiJobSchema = z.object({
   provider: z.literal("voyageai"),
 });
 
-
 export type VoyageaiJobSchema = z.infer<typeof VoyageaiJobSchema>;
 
 export const VoyageaiEmbeddingJobSchema = EmbeddingJobSchema.merge(
@@ -30,7 +29,6 @@ export function voyageai(options?: ProviderOptionsType) {
     },
   };
 }
-
 
 export class VoyageaiEmbeddingJob extends EmbeddingJob<VoyageaiEmbeddingJobSchemaType> {
   constructor(options: ProviderOptionsType, model: string) {

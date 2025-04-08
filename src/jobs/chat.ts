@@ -105,11 +105,7 @@ export const ChatJobSchema = BaseJobSchema.extend({
 });
 export type ChatJobSchemaType = z.infer<typeof ChatJobSchema>;
 
-
-
-
 export type ChatJobParams = z.infer<typeof ChatJobParamsSchema>;
-
 
 export function systemPrompt(content: string) {
   return { role: "system", content };

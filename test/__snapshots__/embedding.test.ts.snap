@@ -37,9 +37,7 @@ exports[`dump 1`] = `
 {
   "model": "nomic-embed-text",
   "options": {},
-  "params": {
-    "input": "hi",
-  },
+  "params": {},
   "provider": "ollama",
   "type": "embedding",
   "version": "0.2.4",
@@ -52,9 +50,7 @@ exports[`dump 2`] = `
   "options": {
     "apiKey": "<key>",
   },
-  "params": {
-    "input": "hi",
-  },
+  "params": {},
   "provider": "openai",
   "type": "embedding",
   "version": "0.2.4",
@@ -67,9 +63,7 @@ exports[`dump 3`] = `
   "options": {
     "apiKey": "<key>",
   },
-  "params": {
-    "input": "hi",
-  },
+  "params": {},
   "provider": "voyageai",
   "type": "embedding",
   "version": "0.2.4",

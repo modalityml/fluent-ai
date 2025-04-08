@@ -10,7 +10,6 @@ export const EmbeddedJobParamsSchema = z.object({
 
 export type EmbeddingJobParams = z.infer<typeof EmbeddedJobParamsSchema>;
 
-
 const EmbeddingResultSchema = z.object({
   embedding: z.array(z.number()),
   usage: z

@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const ProviderSchema = z.enum([
   "anthropic",
   "fal",
@@ -25,6 +24,5 @@ export const BaseJobSchema = z.object({
   options: OptionsSchema.optional(),
 });
 export type BaseJobSchemaType = z.infer<typeof BaseJobSchema>;
-
 
 export type ProviderOptionsType = z.infer<typeof OptionsSchema>;
