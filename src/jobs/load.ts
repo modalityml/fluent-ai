@@ -15,10 +15,11 @@ export const JobSchema = z.union([
   ...VoyageaiJobSchema.options,
 ]);
 
-export const jsonSchema = zodToJsonSchema(JobSchema);
-export type JobSchemaType = z.infer<typeof JobSchema>;
+export type JobType = z.infer<typeof JobSchema>;
 
-export function load(obj: JobSchemaType): Job<JobSchemaType> {
+export const jobJsonSchema = zodToJsonSchema(JobSchema);
+
+export function load(obj: JobType): Job<JobType> {
   obj = JobSchema.parse(obj);
 
   let provider = null;
