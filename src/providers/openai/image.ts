@@ -1,13 +1,11 @@
-import { ImageJobBuilder } from "~/jobs/image";
-import { type JobOptions } from "~/jobs/schema";
+import { ImageJobBuilder, type JobOptions } from "~/jobs";
 import { OPENAI_BASE_URL } from "./schema";
 
-export class OpenAIImageJob extends ImageJobBuilder {
+export class OpenAIImageJobBuilder extends ImageJobBuilder {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "openai";
     this.options = options;
-    this.model = model;
   }
 
   makeRequest = () => {
@@ -20,7 +18,7 @@ export class OpenAIImageJob extends ImageJobBuilder {
       method: "POST",
       body: JSON.stringify({
         prompt: this.job.prompt,
-        model: this.model,
+        model: this.job.model,
         n: this.job.n,
         quality: this.job.quality,
         response_format: this.job.responseFormat,

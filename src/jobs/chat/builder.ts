@@ -1,14 +1,9 @@
 import { ZodSchema } from "zod";
-import { Job } from "../job";
-import type {
-  ChatJob,
-  ChatResult,
-  ChatStreamOptions,
-  ResponseFormat,
-} from "./schema";
+import { JobBuilder } from "~/jobs/builder";
+import type { ChatJob, ChatStreamOptions, ResponseFormat } from "./schema";
 import { ChatTool } from "./tool";
 
-export class ChatJobBuilder extends Job {
+export class ChatJobBuilder extends JobBuilder {
   job: ChatJob;
 
   constructor(model: string) {
@@ -18,10 +13,6 @@ export class ChatJobBuilder extends Job {
       model: model,
       messages: [],
     };
-  }
-
-  async run(): Promise<ChatResult> {
-    return await super.run();
   }
 
   systemPrompt(systemPrompt: string) {
@@ -96,9 +87,8 @@ export class ChatJobBuilder extends Job {
   }
 
   dump() {
-    const obj = super.dump();
     return {
-      ...obj,
+      ...super.dump(),
       ...this.job,
     };
   }

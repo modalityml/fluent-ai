@@ -5,7 +5,7 @@ export const JobProviderSchema = z.enum([
   "fal",
   "ollama",
   "openai",
-  "voyageai",
+  "voyage",
   "together",
   "fireworks",
   "luma",
@@ -24,7 +24,7 @@ export const BaseJobSchema = z.object({
   options: JobOptionsSchema.optional(),
 });
 
-export type JobProviderType = z.infer<typeof JobProviderSchema>;
-export type JobTypeType = z.infer<typeof JobTypeSchema>;
+export type JobProvider = z.infer<typeof JobProviderSchema>;
+export type JobType = z.infer<typeof JobTypeSchema>;
 export type BaseJob = z.infer<typeof BaseJobSchema>;
 export type JobOptions = z.infer<typeof JobOptionsSchema>;

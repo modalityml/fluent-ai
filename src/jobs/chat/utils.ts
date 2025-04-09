@@ -56,3 +56,13 @@ export function image() {
 export function tool(name: string) {
   return new ChatTool(name);
 }
+
+export function chunkText(chunk: any) {
+  return chunk.choices[0].delta.content;
+}
+
+// TODO:
+export function chunkObject(chunk: any) {}
+
+// TODO:
+export function chunkTools(chunk: any) {}

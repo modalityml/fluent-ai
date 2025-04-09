@@ -1,8 +1,7 @@
-import { ListModelsJob } from "~/jobs/models";
-import { type JobOptions } from "~/jobs/schema";
+import { ModelsJobBuilder, type JobOptions } from "~/jobs";
 import { OPENAI_BASE_URL } from "./schema";
 
-export class OpenAIListModelsJob extends ListModelsJob<OpenaiListModelsJobSchemaType> {
+export class OpenAIModelsJobBuilder extends ModelsJobBuilder {
   constructor(options: JobOptions) {
     super();
     this.provider = "openai";

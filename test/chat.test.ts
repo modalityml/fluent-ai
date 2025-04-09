@@ -6,10 +6,10 @@ import {
   userPrompt,
   tool,
   anthropic,
-  requestObject,
   load,
 } from "../src";
 import { z } from "zod";
+import { requestObject } from "./utils";
 
 function createJobs() {
   return [

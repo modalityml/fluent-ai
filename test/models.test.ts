@@ -1,5 +1,6 @@
 import { test, expect } from "bun:test";
-import { openai, ollama, anthropic, requestObject, load } from "../src";
+import { openai, ollama, anthropic, load } from "../src";
+import { requestObject } from "./utils";
 
 function createJobs() {
   return [

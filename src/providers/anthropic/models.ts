@@ -1,7 +1,7 @@
-import { ListModelsJob } from "~/jobs/models";
+import { ModelsJobBuilder } from "~/jobs/models";
 import { type JobOptions } from "~/jobs/schema";
 
-export class AnthropicListModelsJob extends ListModelsJob<AnthropicListModelsJobSchemaType> {
+export class AnthropicModelsJobBuilder extends ModelsJobBuilder {
   constructor(options: JobOptions) {
     super();
     this.provider = "anthropic";

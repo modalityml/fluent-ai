@@ -36,12 +36,10 @@ exports[`chat 3`] = `
 
 exports[`dump 1`] = `
 {
+  "messages": [],
   "model": "claude-3-5-sonnet-20241022",
   "options": {
     "apiKey": "<key>",
-  },
-  "params": {
-    "messages": [],
   },
   "provider": "anthropic",
   "type": "chat",
@@ -51,11 +49,9 @@ exports[`dump 1`] = `
 
 exports[`dump 2`] = `
 {
+  "messages": [],
   "model": "llama3.2",
   "options": {},
-  "params": {
-    "messages": [],
-  },
   "provider": "ollama",
   "type": "chat",
   "version": "0.2.4",
@@ -64,12 +60,10 @@ exports[`dump 2`] = `
 
 exports[`dump 3`] = `
 {
+  "messages": [],
   "model": "gpt-4o-mini",
   "options": {
     "apiKey": "<key>",
-  },
-  "params": {
-    "messages": [],
   },
   "provider": "openai",
   "type": "chat",

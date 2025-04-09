@@ -27,13 +27,11 @@ exports[`image 2`] = `
 exports[`dump 1`] = `
 {
   "model": "fal-ai/flux/dev",
+  "n": 3,
   "options": {
     "apiKey": "<key>",
   },
-  "params": {
-    "n": 3,
-    "prompt": "A cute baby sea otter",
-  },
+  "prompt": "A cute baby sea otter",
   "provider": "fal",
   "type": "image",
   "version": "0.2.4",
@@ -43,13 +41,11 @@ exports[`dump 1`] = `
 exports[`dump 2`] = `
 {
   "model": "dall-e-2",
+  "n": 3,
   "options": {
     "apiKey": "<key>",
   },
-  "params": {
-    "n": 3,
-    "prompt": "A cute baby sea otter",
-  },
+  "prompt": "A cute baby sea otter",
   "provider": "openai",
   "type": "image",
   "version": "0.2.4",

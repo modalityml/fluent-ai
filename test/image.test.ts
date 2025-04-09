@@ -1,5 +1,6 @@
 import { test, expect } from "bun:test";
-import { openai, fal, requestObject, load } from "../src";
+import { openai, fal, load } from "../src";
+import { requestObject } from "./utils";
 
 function createJobs() {
   // prettier-ignore

@@ -1,10 +1,6 @@
-import { z } from "zod";
-import { ChatJobBuilder, ChatJobSchema, convertMessages } from "~/jobs/chat";
-import { ListModelsJob, ModelsJobSchema } from "~/jobs/models";
-import { EmbeddingJobBuilder, EmbeddingJobSchema } from "~/jobs/embedding";
-import { type JobOptions } from "~/jobs/schema";
+import { ModelsJobBuilder, type JobOptions } from "~/jobs";
 
-export class OllamaListModelsJob extends ListModelsJob<OllamaListModelsJobSchemaType> {
+export class OllamaModelsJobBuilder extends ModelsJobBuilder {
   constructor(options: JobOptions) {
     super();
     this.provider = "ollama";

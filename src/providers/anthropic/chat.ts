@@ -1,24 +1,22 @@
-import { ChatJobBuilder, convertMessages } from "~/jobs/chat";
-import { type JobOptions } from "~/jobs/schema";
+import { ChatJobBuilder, convertMessages, type JobOptions } from "~/jobs";
 
-export class AnthropicChatJob extends ChatJobBuilder {
+export class AnthropicChatJobBuilder extends ChatJobBuilder {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "anthropic";
     this.options = options;
-    this.model = model;
   }
 
   makeRequest = () => {
     const requestParams = {
-      model: this.model,
-      max_tokens: this.params.maxTokens,
-      messages: convertMessages(this.params.messages),
+      model: this.job.model,
+      max_tokens: this.job.maxTokens,
+      messages: convertMessages(this.job.messages),
     } as any;
 
-    if (this.params.tools && this.params.tools.length) {
-      requestParams.tools = this.params.tools.map((tool) => tool.toJSON?.());
-      requestParams.tool_choice = this.params.toolChoice;
+    if (this.job.tools && this.job.tools.length) {
+      requestParams.tools = this.job.tools.map((tool) => tool.toJSON?.());
+      requestParams.tool_choice = this.job.toolChoice;
     }
 
     const headers = {
@@ -38,11 +36,4 @@ export class AnthropicChatJob extends ChatJobBuilder {
     const json = await response.json();
     return json;
   };
-
-  dump() {
-    const obj = super.dump();
-    return {
-      ...obj,
-    };
-  }
 }

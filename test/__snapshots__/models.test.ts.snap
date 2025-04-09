@@ -37,7 +37,6 @@ exports[`models 3`] = `
 exports[`dump 1`] = `
 {
   "options": {},
-  "params": {},
   "provider": "ollama",
   "type": "models",
   "version": "0.2.4",
@@ -49,7 +48,6 @@ exports[`dump 2`] = `
   "options": {
     "apiKey": "<key>",
   },
-  "params": {},
   "provider": "openai",
   "type": "models",
   "version": "0.2.4",
@@ -61,7 +59,6 @@ exports[`dump 3`] = `
   "options": {
     "apiKey": "<key>",
   },
-  "params": {},
   "provider": "anthropic",
   "type": "models",
   "version": "0.2.4",

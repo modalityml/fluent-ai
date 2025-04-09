@@ -1,31 +1,28 @@
-import { ImageJobBuilder } from "~/jobs/image";
-import type { JobOptions } from "~/jobs/schema";
+import { ImageJobBuilder, type JobOptions } from "~/jobs";
 
-export class FalImageJob extends ImageJobBuilder<FalImageJobSchemaType> {
+export class FalImageJobBuilder extends ImageJobBuilder {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "fal";
     this.options = options;
-    this.model = model;
-    this.params = {};
   }
 
   makeRequest = () => {
-    return new Request(`https://queue.fal.run/${this.model}`, {
+    return new Request(`https://queue.fal.run/${this.job.model}`, {
       method: "POST",
       headers: {
         Authorization: `Key ${this.options.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: this.params.prompt,
-        image_size: this.params.size,
-        num_inference_steps: this.params.numInferenceSteps,
-        seed: this.params.seed,
-        guidance_scale: this.params.guidanceScale,
-        sync_mode: this.params.syncMode,
-        num_images: this.params.n,
-        enable_safety_checker: this.params.enableSafetyChecker,
+        prompt: this.job.prompt,
+        image_size: this.job.size,
+        num_inference_steps: this.job.numInferenceSteps,
+        seed: this.job.seed,
+        guidance_scale: this.job.guidanceScale,
+        sync_mode: this.job.syncMode,
+        num_images: this.job.n,
+        enable_safety_checker: this.job.enableSafetyChecker,
       }),
     });
   };
@@ -33,12 +30,4 @@ export class FalImageJob extends ImageJobBuilder<FalImageJobSchemaType> {
   handleResponse = async (response: Response) => {
     return await response.json();
   };
-
-  dump() {
-    const obj = super.dump();
-    return {
-      ...obj,
-      provider: "fal" as const,
-    };
-  }
 }

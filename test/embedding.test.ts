@@ -1,11 +1,12 @@
 import { test, expect } from "bun:test";
-import { openai, ollama, voyageai, requestObject, load } from "../src";
+import { openai, ollama, voyage, load } from "../src";
+import { requestObject } from "./utils";
 
 function createJobs() {
   return [
     ollama().embedding("nomic-embed-text").input("hi"),
     openai({ apiKey: "<key>" }).embedding("text-embedding-ada-002").input("hi"),
-    voyageai({ apiKey: "<key>" }).embedding("voyage-3-lite").input("hi"),
+    voyage({ apiKey: "<key>" }).embedding("voyage-3-lite").input("hi"),
   ];
 }
 

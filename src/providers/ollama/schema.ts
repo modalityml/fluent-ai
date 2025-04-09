@@ -1,47 +1,23 @@
 import { z } from "zod";
-import { ChatJobSchema } from "~/jobs/chat";
-import { ModelsJobSchema } from "~/jobs/models";
-import { EmbeddingJobSchema } from "~/jobs/embedding";
-import { type JobOptions } from "~/jobs/schema";
+import { ChatJobSchema, ModelsJobSchema, EmbeddingJobSchema } from "~/jobs";
 
-export const BaseOllamaJobSchema = z.object({
+export const OllamaBaseJobSchema = z.object({
   provider: z.literal("ollama"),
 });
 
-export const OllamaChatJobSchema = ChatJobSchema.merge(BaseOllamaJobSchema);
-export type OllamaChatJobSchemaType = z.infer<typeof OllamaChatJobSchema>;
+export const OllamaChatJobSchema = ChatJobSchema.merge(OllamaBaseJobSchema);
+export type OllamaChatJob = z.infer<typeof OllamaChatJobSchema>;
 
 export const OllamaEmbeddingJobSchema =
-  EmbeddingJobSchema.merge(BaseOllamaJobSchema);
-export type OllamaEmbeddingJobSchemaType = z.infer<
-  typeof OllamaEmbeddingJobSchema
->;
+  EmbeddingJobSchema.merge(OllamaBaseJobSchema);
+export type OllamaEmbeddingJob = z.infer<typeof OllamaEmbeddingJobSchema>;
 
-export const OllamaListModelsJobSchema =
-  ModelsJobSchema.merge(BaseOllamaJobSchema);
-export type OllamaListModelsJobSchemaType = z.infer<
-  typeof OllamaListModelsJobSchema
->;
+export const OllamaModelsJobSchema = ModelsJobSchema.merge(OllamaBaseJobSchema);
+export type OllamaModelsJob = z.infer<typeof OllamaModelsJobSchema>;
 
 export const OllamaJobSchema = z.discriminatedUnion("type", [
   OllamaChatJobSchema,
   OllamaEmbeddingJobSchema,
-  OllamaListModelsJobSchema,
+  OllamaModelsJobSchema,
 ]);
-export type OllamaJobSchemaType = z.infer<typeof OllamaJobSchema>;
-
-export function ollama(options?: JobOptions) {
-  options = options || {};
-
-  return {
-    chat(model: string) {
-      return new OllamaChatJob(options, model);
-    },
-    embedding(model: string) {
-      return new OllamaEmbeddingJob(options, model);
-    },
-    models() {
-      return new OllamaListModelsJob(options);
-    },
-  };
-}
+export type OllamaJob = z.infer<typeof OllamaJobSchema>;

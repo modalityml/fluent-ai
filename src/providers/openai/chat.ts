@@ -1,15 +1,13 @@
 import { EventSourceParserStream } from "eventsource-parser/stream";
 import zodToJsonSchema from "zod-to-json-schema";
-import { ChatJobBuilder, convertMessages } from "~/jobs/chat";
-import { type JobOptions } from "~/jobs/schema";
+import { ChatJobBuilder, convertMessages, type JobOptions } from "~/jobs";
 import { OPENAI_BASE_URL } from "./schema";
 
-export class OpenAIChatJob extends ChatJobBuilder {
+export class OpenAIChatJobBuilder extends ChatJobBuilder {
   constructor(options: JobOptions, model: string) {
     super(model);
-    // this.provider = "openai";
-    // this.options = options;
-    // this.model = model;
+    this.provider = "openai";
+    this.options = options;
   }
 
   makeRequest = () => {
@@ -24,7 +22,7 @@ export class OpenAIChatJob extends ChatJobBuilder {
     }
     const requestBody = {
       messages: messages,
-      model: this.model,
+      model: this.job.model,
       temperature: this.job.temperature,
       stream: this.job.stream,
       response_format: this.job.responseFormat,

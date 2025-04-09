@@ -1,8 +1,7 @@
-import { EmbeddingJobBuilder } from "~/jobs/embedding";
-import { type JobOptions } from "~/jobs/schema";
+import { EmbeddingJobBuilder, type JobOptions } from "~/jobs";
 import { OPENAI_BASE_URL } from "./schema";
 
-export class OpenAIEmbeddingJob extends EmbeddingJobBuilder {
+export class OpenAIEmbeddingJobBuilder extends EmbeddingJobBuilder {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "openai";
@@ -18,7 +17,7 @@ export class OpenAIEmbeddingJob extends EmbeddingJobBuilder {
       },
       method: "POST",
       body: JSON.stringify({
-        model: this.model,
+        model: this.job.model,
         input: this.job.input,
         encoding_format: this.job.encodingFormat,
         dimensions: this.job.dimensions,

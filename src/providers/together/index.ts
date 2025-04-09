@@ -1,5 +1,5 @@
-import type { JobOptions } from "~/jobs/schema";
-import { OpenAIChatJobBuilder } from "./openai";
+import type { JobOptions } from "~/jobs";
+import { OpenAIChatJobBuilder } from "~/providers/openai";
 
 export function together(options?: JobOptions) {
   options = options || {};
@@ -7,7 +7,7 @@ export function together(options?: JobOptions) {
 
   return {
     chat(model: string) {
-      return new TogetherChatJob(
+      return new OpenAIChatJobBuilder(
         {
           ...options,
           baseURL: "https://api.together.xyz/v1",
@@ -17,5 +17,3 @@ export function together(options?: JobOptions) {
     },
   };
 }
-
-export class TogetherChatJob extends OpenAIChatJobBuilder {}

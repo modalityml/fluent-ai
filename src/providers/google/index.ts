@@ -1,6 +1,5 @@
-import { ChatJobBuilder, ChatJobSchema, convertMessages } from "~/jobs/chat";
-import type { JobOptions } from "~/jobs/schema";
-import { z } from "zod";
+import type { JobOptions } from "~/jobs";
+import { GoogleChatJobBuilder } from "./chat";
 
 export function google(options?: JobOptions) {
   options = options || {};
@@ -8,45 +7,10 @@ export function google(options?: JobOptions) {
 
   return {
     chat(model: string) {
-      return new GoogleChatJob(options, model);
+      return new GoogleChatJobBuilder(options, model);
     },
   };
 }
 
-export const BaseGoogleJobSchema = z.object({
-  provider: z.literal("google"),
-});
-
-export const GoogleChatJobSchema = ChatJobSchema.merge(BaseGoogleJobSchema);
-export type GoogleChatJobSchemaType = z.infer<typeof GoogleChatJobSchema>;
-
-class GoogleChatJob extends ChatJobBuilder<GoogleChatJobSchemaType> {
-  constructor(options: JobOptions, model: string) {
-    super(model);
-    this.options = options;
-    this.model = model;
-  }
-
-  makeRequest = () => {
-    return new Request(
-      `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.options.apiKey}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: convertMessages(this.params.messages).map((msg) => ({
-            role: msg.role === "user" ? "user" : "model",
-            parts: [{ text: msg.content }],
-          })),
-        }),
-      }
-    );
-  };
-
-  handleResponse = async (response: Response) => {
-    const json = await response.json();
-    return json;
-  };
-}
+export * from "./chat";
+export * from "./schema";

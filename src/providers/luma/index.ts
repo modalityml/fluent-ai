@@ -1,16 +1,14 @@
-import { ImageJobBuilder, ImageJobSchema } from "~/jobs/image";
-import type { JobOptions } from "~/jobs/schema";
+import { ImageJobBuilder, ImageJobSchema, type JobOptions } from "~/jobs";
 import { z } from "zod";
 
-export const BaseLumaJobSchema = z.object({
+export const LumaBaseJobSchema = z.object({
   provider: z.literal("luma"),
 });
 
-export const LumaImageJobSchema = ImageJobSchema.merge(BaseLumaJobSchema);
-export type LumaImageJobSchemaType = z.infer<typeof LumaImageJobSchema>;
+export const LumaImageJobSchema = ImageJobSchema.merge(LumaBaseJobSchema);
 
 export const LumaJobSchema = z.discriminatedUnion("type", [LumaImageJobSchema]);
-export type LumaJobSchemaType = z.infer<typeof LumaJobSchema>;
+export type LumaJob = z.infer<typeof LumaJobSchema>;
 
 export function luma(options?: JobOptions) {
   options = options || {};
@@ -22,16 +20,16 @@ export function luma(options?: JobOptions) {
 
   return {
     image(model: string) {
-      return new LumaImageJob(options, model);
+      return new LumaImageJobBuilder(options, model);
     },
   };
 }
 
-export class LumaImageJob extends ImageJobBuilder<LumaImageJobSchemaType> {
+export class LumaImageJobBuilder extends ImageJobBuilder {
   constructor(options: JobOptions, model: string) {
     super(model);
+    this.provider = "luma";
     this.options = options;
-    this.model = model;
   }
 
   makeRequest = () => {
@@ -43,7 +41,7 @@ export class LumaImageJob extends ImageJobBuilder<LumaImageJobSchemaType> {
       },
       body: JSON.stringify({
         generation_type: "image",
-        prompt: this.params.prompt,
+        prompt: this.job.prompt,
       }),
     });
   };

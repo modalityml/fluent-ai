@@ -1,7 +1,7 @@
-import { Job } from "../job";
+import { JobBuilder } from "../builder";
 import type { ImageJob, ImageSize } from "./schema";
 
-export class ImageJobBuilder extends Job<ImageJob> {
+export class ImageJobBuilder extends JobBuilder {
   job: ImageJob;
 
   constructor(model: string) {

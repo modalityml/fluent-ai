@@ -21,4 +21,5 @@ export const EmbeddingJobSchema = BaseJobSchema.extend({
 
   result: EmbeddingResultSchema.optional(),
 });
+
 export type EmbeddingJob = z.infer<typeof EmbeddingJobSchema>;

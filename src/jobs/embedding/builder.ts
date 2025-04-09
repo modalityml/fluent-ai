@@ -1,7 +1,7 @@
-import { Job } from "../job";
+import { JobBuilder } from "~/jobs/builder";
 import type { EmbeddingJob } from "./schema";
 
-export class EmbeddingJobBuilder extends Job<EmbeddingJob> {
+export class EmbeddingJobBuilder extends JobBuilder {
   job: EmbeddingJob;
 
   constructor(model: string) {

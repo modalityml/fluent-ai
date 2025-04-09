@@ -1,5 +1,5 @@
 import type { JobOptions } from "~/jobs/schema";
-import { OpenAIChatJobBuilder } from "~/providers/openai";
+import { OpenAIChatJobBuilder } from "../openai";
 
 export function fireworks(options?: JobOptions) {
   options = options || {};
