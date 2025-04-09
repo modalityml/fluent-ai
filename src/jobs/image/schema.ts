@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JobBaseSchema } from "../schema";
+import { BaseJobSchema } from "../schema";
 
 export const ImageSizeSchema = z.union([
   z.literal("square_hd"),
@@ -36,7 +36,10 @@ const ImageResultSchema = z.object({
     .optional(),
 });
 
-export const ImageJobParamsSchema = z.object({
+export const ImageJobSchema = BaseJobSchema.extend({
+  type: z.literal("image"),
+  model: z.string(),
+
   prompt: z.string().optional(),
   n: z.number().optional(),
   quality: z.string().optional(),
@@ -49,14 +52,9 @@ export const ImageJobParamsSchema = z.object({
   guidanceScale: z.number().optional(),
   syncMode: z.boolean().optional(),
   enableSafetyChecker: z.boolean().optional(),
-});
+  stream: z.boolean().optional(),
 
-export type ImageJobParams = z.infer<typeof ImageJobParamsSchema>;
-
-export const ImageJobSchema = JobBaseSchema.extend({
-  type: z.literal("image"),
-  model: z.string(),
-  params: ImageJobParamsSchema,
   result: ImageResultSchema.optional(),
 });
-export type ImageJobSchemaType = z.infer<typeof ImageJobSchema>;
+
+export type ImageJob = z.infer<typeof ImageJobSchema>;

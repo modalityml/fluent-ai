@@ -1,13 +1,5 @@
 import { z } from "zod";
-import { JobBaseSchema } from "../schema";
-
-export const EmbeddedJobParamsSchema = z.object({
-  input: z.string().optional(),
-  dimensions: z.number().optional(),
-  encodingFormat: z.string().optional(),
-});
-
-export type EmbeddingJobParams = z.infer<typeof EmbeddedJobParamsSchema>;
+import { BaseJobSchema } from "../schema";
 
 const EmbeddingResultSchema = z.object({
   embedding: z.array(z.number()),
@@ -19,10 +11,14 @@ const EmbeddingResultSchema = z.object({
     .optional(),
 });
 
-export const EmbeddingJobSchema = JobBaseSchema.extend({
+export const EmbeddingJobSchema = BaseJobSchema.extend({
   type: z.literal("embedding"),
   model: z.string(),
-  params: EmbeddedJobParamsSchema,
+
+  input: z.string().optional(),
+  dimensions: z.number().optional(),
+  encodingFormat: z.string().optional(),
+
   result: EmbeddingResultSchema.optional(),
 });
-export type EmbeddingJobSchemaType = z.infer<typeof EmbeddingJobSchema>;
+export type EmbeddingJob = z.infer<typeof EmbeddingJobSchema>;

@@ -1,26 +1,8 @@
-import { z } from "zod";
-import { ImageJob, ImageJobSchema } from "../jobs/image";
-import type { JobOptionsType } from "../jobs/schema";
+import { ImageJobBuilder } from "~/jobs/image";
+import type { JobOptions } from "~/jobs/schema";
 
-export type FalImage = {
-  url: string;
-  width: number;
-  height: number;
-  contentType: string;
-};
-
-export const BaseFalJobSchema = z.object({
-  provider: z.literal("fal"),
-});
-
-export const FalImageJobSchema = ImageJobSchema.merge(BaseFalJobSchema);
-export type FalImageJobSchemaType = z.infer<typeof FalImageJobSchema>;
-
-export const FalJobSchema = z.discriminatedUnion("type", [FalImageJobSchema]);
-export type FalJobSchemaType = z.infer<typeof FalJobSchema>;
-
-export class FalImageJob extends ImageJob<FalImageJobSchemaType> {
-  constructor(options: JobOptionsType, model: string) {
+export class FalImageJob extends ImageJobBuilder<FalImageJobSchemaType> {
+  constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "fal";
     this.options = options;
@@ -59,15 +41,4 @@ export class FalImageJob extends ImageJob<FalImageJobSchemaType> {
       provider: "fal" as const,
     };
   }
-}
-
-export function fal(options?: JobOptionsType) {
-  options = options || {};
-  options.apiKey = options.apiKey || process.env.FAL_API_KEY;
-
-  return {
-    image(model: string) {
-      return new FalImageJob(options, model);
-    },
-  };
 }

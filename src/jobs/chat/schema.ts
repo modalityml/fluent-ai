@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { JobBaseSchema } from "../schema";
+import { z, ZodSchema } from "zod";
+import { BaseJobSchema } from "../schema";
 
 export const MessageContentSchema = z.union([
   z.string(),
@@ -58,25 +58,16 @@ export const ChatToolSchema = z.object({
   toJSON: z.function().returns(z.any()).optional(),
 });
 
+export interface ChatToolParams {
+  name: string;
+  description?: string;
+  parameters?: ZodSchema;
+}
+
 export const JsonSchemaDefSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   schema: z.any(),
-});
-
-export const ChatJobParamsSchema = z.object({
-  temperature: z.number().optional(),
-  stream: z.boolean().optional(),
-  streamOptions: ChatStreamOptionsSchema.optional(),
-  maxTokens: z.number().optional(),
-  messages: z.array(MessageSchema),
-  tools: z.array(ChatToolSchema).optional(),
-  toolChoice: z.string().optional(),
-  responseFormat: ResponseFormatSchema.optional(),
-  topP: z.number().optional(),
-  topK: z.number().optional(),
-  systemPrompt: z.string().optional(),
-  jsonSchema: JsonSchemaDefSchema.optional(),
 });
 
 export const ChatResultSchema = z.object({
@@ -101,12 +92,24 @@ export const ChatResultSchema = z.object({
     .optional(),
 });
 
-export const ChatJobSchema = JobBaseSchema.extend({
+export const ChatJobSchema = BaseJobSchema.extend({
   type: z.literal("chat"),
   model: z.string(),
-  params: ChatJobParamsSchema,
+  temperature: z.number().optional(),
+  stream: z.boolean().optional(),
+  streamOptions: ChatStreamOptionsSchema.optional(),
+  maxTokens: z.number().optional(),
+  messages: z.array(MessageSchema),
+  tools: z.array(ChatToolSchema).optional(),
+  toolChoice: z.string().optional(),
+  responseFormat: ResponseFormatSchema.optional(),
+  topP: z.number().optional(),
+  topK: z.number().optional(),
+  systemPrompt: z.string().optional(),
+  jsonSchema: JsonSchemaDefSchema.optional(),
+
   result: ChatResultSchema.optional(),
 });
 
-export type ChatJobSchemaType = z.infer<typeof ChatJobSchema>;
-export type ChatJobParams = z.infer<typeof ChatJobParamsSchema>;
+export type ChatJob = z.infer<typeof ChatJobSchema>;
+export type ChatResult = z.infer<typeof ChatResultSchema>;

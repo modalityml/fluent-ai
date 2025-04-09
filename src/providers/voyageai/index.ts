@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { EmbeddingJob, EmbeddingJobSchema } from "../jobs/embedding";
-import type { JobOptionsType } from "../jobs/schema";
+import { EmbeddingJobBuilder, EmbeddingJobSchema } from "~/jobs/embedding";
+import type { JobOptions } from "~/jobs/schema";
 
 export const BaseVoyageaiJobSchema = z.object({
   provider: z.literal("voyageai"),
@@ -19,7 +19,7 @@ export const VoyageaiJobSchema = z.discriminatedUnion("type", [
   VoyageaiEmbeddingJobSchema,
 ]);
 
-export function voyageai(options?: JobOptionsType) {
+export function voyageai(options?: JobOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.VOYAGEAI_API_KEY;
 
@@ -30,8 +30,8 @@ export function voyageai(options?: JobOptionsType) {
   };
 }
 
-export class VoyageaiEmbeddingJob extends EmbeddingJob<VoyageaiEmbeddingJobSchemaType> {
-  constructor(options: JobOptionsType, model: string) {
+export class VoyageaiEmbeddingJob extends EmbeddingJobBuilder<VoyageaiEmbeddingJobSchemaType> {
+  constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "voyageai";
     this.options = options;

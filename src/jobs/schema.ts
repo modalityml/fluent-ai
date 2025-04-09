@@ -19,12 +19,12 @@ export const JobOptionsSchema = z.object({
   baseURL: z.string().optional(),
 });
 
-export const JobBaseSchema = z.object({
+export const BaseJobSchema = z.object({
   version: z.string().optional(),
   options: JobOptionsSchema.optional(),
 });
 
 export type JobProviderType = z.infer<typeof JobProviderSchema>;
 export type JobTypeType = z.infer<typeof JobTypeSchema>;
-export type JobBaseType = z.infer<typeof JobBaseSchema>;
-export type JobOptionsType = z.infer<typeof JobOptionsSchema>;
+export type BaseJob = z.infer<typeof BaseJobSchema>;
+export type JobOptions = z.infer<typeof JobOptionsSchema>;

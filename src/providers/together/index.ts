@@ -1,7 +1,7 @@
-import type { JobOptionsType } from "../jobs/schema";
-import { OpenAIChatJob } from "./openai";
+import type { JobOptions } from "~/jobs/schema";
+import { OpenAIChatJobBuilder } from "./openai";
 
-export function together(options?: JobOptionsType) {
+export function together(options?: JobOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.TOGETHER_API_KEY;
 
@@ -18,4 +18,4 @@ export function together(options?: JobOptionsType) {
   };
 }
 
-export class TogetherChatJob extends OpenAIChatJob {}
+export class TogetherChatJob extends OpenAIChatJobBuilder {}

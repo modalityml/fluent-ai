@@ -1,25 +1,20 @@
 import { version } from "../../package.json";
 import type {
-  JobBaseType,
-  JobOptionsType,
+  BaseJob,
+  JobOptions,
   JobProviderType,
   JobTypeType,
 } from "./schema";
 
-export class Job<T extends JobBaseType> {
-  options!: JobOptionsType;
-  params: any;
-  provider!: JobProviderType;
-  type!: JobTypeType;
-  model!: string;
+// export class Job<T extends BaseJob> {
+export class Job {
+  // options!: JobOptions;
+  // provider!: JobProviderType;
+  // type!: JobTypeType;
+  // model!: string;
 
   makeRequest?: () => Request;
   handleResponse?: (response: Response) => any;
-
-  _setParams(params: any) {
-    this.params = { ...this.params, ...params };
-    return this;
-  }
 
   async run() {
     const request = this.makeRequest!();
@@ -27,12 +22,19 @@ export class Job<T extends JobBaseType> {
     return await this.handleResponse!(response);
   }
 
-  dump(): T {
-    return {
-      version: version,
-      type: this.type,
-      options: this.options,
-      params: this.params,
-    } as unknown as T;
+  dump() {
+    // return {
+    //   version: version,
+    //   type: this.type,
+    //   options: this.options,
+    // };
   }
+
+  // dump(): T {
+  //   return {
+  //     version: version,
+  //     type: this.type,
+  //     options: this.options,
+  //   } as unknown as T;
+  // }
 }

@@ -1,12 +1,9 @@
 import { ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
+import type { ChatToolParams } from "./schema";
 
 export class ChatTool {
-  public params: {
-    name: string;
-    description?: string;
-    parameters?: ZodSchema;
-  };
+  public params: ChatToolParams;
 
   constructor(name: string) {
     this.params = { name };

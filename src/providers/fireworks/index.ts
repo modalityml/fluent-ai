@@ -1,13 +1,13 @@
-import type { JobOptionsType } from "../jobs/schema";
-import { OpenAIChatJob } from "./openai";
+import type { JobOptions } from "~/jobs/schema";
+import { OpenAIChatJobBuilder } from "~/providers/openai";
 
-export function fireworks(options?: JobOptionsType) {
+export function fireworks(options?: JobOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.FIREWORKS_API_KEY;
 
   return {
     chat(model: string) {
-      return new OpenAIChatJob(
+      return new OpenAIChatJobBuilder(
         {
           ...options,
           baseURL: "https://api.fireworks.ai/inference/v1",

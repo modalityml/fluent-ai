@@ -1,17 +1,17 @@
-import { type Job } from "./job";
-import { openai, OpenaiJobSchema } from "../providers/openai";
-import { anthropic, AnthropicJobSchema } from "../providers/anthropic";
-import { fal, FalJobSchema } from "../providers/fal";
-import { ollama, OllamaJobSchema } from "../providers/ollama";
-import { voyageai, VoyageaiJobSchema } from "../providers/voyageai";
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
+import { openai, OpenAIJobSchema } from "~/providers/openai";
+import { anthropic, AnthropicJobSchema } from "~/providers/anthropic";
+import { fal, FalJobSchema } from "~/providers/fal";
+import { ollama, OllamaJobSchema } from "~/providers/ollama";
+import { voyageai, VoyageaiJobSchema } from "~/providers/voyageai";
+import { type Job } from "./job";
 
 export const JobSchema = z.union([
   ...AnthropicJobSchema.options,
   ...FalJobSchema.options,
   ...OllamaJobSchema.options,
-  ...OpenaiJobSchema.options,
+  ...OpenAIJobSchema.options,
   ...VoyageaiJobSchema.options,
 ]);
 
