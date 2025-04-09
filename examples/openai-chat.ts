@@ -1,4 +1,4 @@
-import { openai, systemPrompt, userPrompt, load } from "../src";
+import { openai, systemPrompt, userPrompt } from "../src";
 
 const job = openai({})
   .chat("gpt-4o-mini")

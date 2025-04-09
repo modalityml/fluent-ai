@@ -1,4 +1,4 @@
-import { type JobOptions } from "~/jobs/schema";
+import { type JobOptions } from "~/jobs";
 import { OpenAIChatJobBuilder } from "~/providers/openai/chat";
 import { OpenAIImageJobBuilder } from "~/providers/openai/image";
 import { OpenAIEmbeddingJobBuilder } from "~/providers/openai/embedding";

@@ -1,5 +1,4 @@
-import { ModelsJobBuilder } from "~/jobs/models";
-import { type JobOptions } from "~/jobs/schema";
+import { ModelsJobBuilder, type JobOptions } from "~/jobs";
 
 export class AnthropicModelsJobBuilder extends ModelsJobBuilder {
   constructor(options: JobOptions) {
