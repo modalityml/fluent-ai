@@ -34,14 +34,20 @@ export const MessageSchema = z.object({
   content: MessageContentSchema,
 });
 
-export const StreamOptionsSchema = z.object({
+export type Message = z.infer<typeof MessageContentSchema>;
+
+export const ChatStreamOptionsSchema = z.object({
   includeUsage: z.boolean().optional(),
 });
+
+export type ChatStreamOptions = z.infer<typeof ChatStreamOptionsSchema>;
 
 export const ResponseFormatSchema = z.object({
   type: z.enum(["json_object", "json_schema"]),
   json_schema: z.any().optional(),
 });
+
+export type ResponseFormat = z.infer<typeof ResponseFormatSchema>;
 
 export const ChatToolSchema = z.object({
   params: z.object({
@@ -61,7 +67,7 @@ export const JsonSchemaDefSchema = z.object({
 export const ChatJobParamsSchema = z.object({
   temperature: z.number().optional(),
   stream: z.boolean().optional(),
-  streamOptions: StreamOptionsSchema.optional(),
+  streamOptions: ChatStreamOptionsSchema.optional(),
   maxTokens: z.number().optional(),
   messages: z.array(MessageSchema),
   tools: z.array(ChatToolSchema).optional(),

@@ -1,11 +1,13 @@
 import { z, ZodSchema } from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
 import { Job } from "../job";
 import type {
   ChatJobSchemaType,
   ChatJobParams,
   ChatResultSchema,
+  ChatStreamOptions,
+  ResponseFormat,
 } from "./schema";
+import { ChatTool } from "./tool";
 
 export function systemPrompt(content: string) {
   return { role: "system", content };
@@ -62,81 +64,6 @@ export function image() {
 
 export function tool(name: string) {
   return new ChatTool(name);
-}
-
-export class ChatTool {
-  public params: {
-    name: string;
-    description?: string;
-    parameters?: ZodSchema;
-  };
-
-  constructor(name: string) {
-    this.params = { name };
-  }
-
-  description(description: string) {
-    this.params.description = description;
-    return this;
-  }
-
-  parameters(parameters: ZodSchema) {
-    this.params.parameters = parameters;
-    return this;
-  }
-
-  toJSON() {
-    return {
-      type: "function",
-      function: {
-        name: this.params.name,
-        description: this.params.description,
-        parameters: zodToJsonSchema(this.params.parameters!),
-      },
-    };
-  }
-}
-
-export interface ChatUsage {
-  input_tokens: number;
-  output_tokens: number;
-}
-
-export interface ChatTextResponse {
-  usage?: ChatUsage;
-  text?: string;
-}
-
-export interface ChatObjectResponse {
-  usage?: ChatUsage;
-  object?: any;
-}
-
-export interface StreamOptions {
-  includeUsage?: boolean;
-}
-
-export interface ResponseFormat {
-  type: "json_object" | "json_schema";
-  json_schema?: ZodSchema;
-}
-
-export type MessageContent =
-  | string
-  | { text: string; type: "text" }[]
-  | {
-      type: "image";
-      image_url?: string;
-      source?: {
-        type: "base64";
-        data: string;
-        media_type: "image/jpeg" | "image/png" | "image/webp" | "image/gif";
-      };
-    }[];
-
-export interface Message {
-  role: "system" | "user" | "assistant";
-  content: MessageContent;
 }
 
 export class ChatJob<T extends ChatJobSchemaType> extends Job<T> {
@@ -218,7 +145,7 @@ export class ChatJob<T extends ChatJobSchemaType> extends Job<T> {
     return this;
   }
 
-  stream(streamOptions?: StreamOptions) {
+  stream(streamOptions?: ChatStreamOptions) {
     this.params.stream = true;
     if (streamOptions) {
       this.params.streamOptions = streamOptions;
