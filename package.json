@@ -29,7 +29,7 @@
     "llm",
     "bun",
     "ollama",
-    "authropic",
+    "anthropic",
     "zod"
   ],
   "devDependencies": {
