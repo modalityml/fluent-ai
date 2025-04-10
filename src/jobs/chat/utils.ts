@@ -1,3 +1,4 @@
+import type { Message, MessageContent } from "./schema";
 import { ChatTool } from "./tool";
 
 export function systemPrompt(content: string) {
@@ -14,7 +15,7 @@ export function assistantPrompt(content: string) {
   return { role: "assistant", content };
 }
 
-export function convertMessages(messages: any[]) {
+export function convertMessages(messages: Message[]) {
   return messages.map((message) => {
     if (message.role === "user") {
       if (Array.isArray(message.content)) {
@@ -23,14 +24,14 @@ export function convertMessages(messages: any[]) {
         } else {
           return {
             role: "user",
-            content: message.content.map((c: any) => {
+            content: message.content.map((c) => {
               if (typeof c === "string") {
                 return { type: "text", text: c };
-              } else {
+              } else if (c.type === "image") {
                 return {
                   type: "image_url",
                   image_url: {
-                    url: c.image.url,
+                    url: c.image_url,
                   },
                 };
               }

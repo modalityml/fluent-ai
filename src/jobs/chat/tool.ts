@@ -1,4 +1,4 @@
-import { ZodSchema } from "zod";
+import type { ZodSchema } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 import type { ChatToolParams } from "./schema";
 

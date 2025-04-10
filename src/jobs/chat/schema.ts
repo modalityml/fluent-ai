@@ -1,4 +1,4 @@
-import { z, ZodSchema } from "zod";
+import { z, type ZodSchema } from "zod";
 import { BaseJobSchema } from "~/jobs/schema";
 
 export const MessageContentSchema = z.union([
@@ -29,12 +29,14 @@ export const MessageContentSchema = z.union([
   ),
 ]);
 
+export type MessageContent = z.infer<typeof MessageContentSchema>;
+
 export const MessageSchema = z.object({
   role: z.enum(["system", "user", "assistant"]),
   content: MessageContentSchema,
 });
 
-export type Message = z.infer<typeof MessageContentSchema>;
+export type Message = z.infer<typeof MessageSchema>;
 
 export const ChatStreamOptionsSchema = z.object({
   includeUsage: z.boolean().optional(),

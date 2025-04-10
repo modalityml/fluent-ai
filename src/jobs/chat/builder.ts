@@ -1,7 +1,7 @@
-import { ZodSchema } from "zod";
+import type { ZodSchema } from "zod";
 import { JobBuilder } from "~/jobs/builder";
-import type { ChatJob, ChatStreamOptions, ResponseFormat } from "./schema";
-import { ChatTool } from "./tool";
+import type { ChatJob, ChatStreamOptions, Message, ResponseFormat } from "./schema";
+import type{ ChatTool } from "./tool";
 
 export class ChatJobBuilder extends JobBuilder {
   job: ChatJob;
@@ -20,7 +20,7 @@ export class ChatJobBuilder extends JobBuilder {
     return this;
   }
 
-  messages(messages: any[]) {
+  messages(messages: Message[]) {
     this.job.messages = messages;
     return this;
   }
@@ -58,7 +58,7 @@ export class ChatJobBuilder extends JobBuilder {
     return this;
   }
 
-  toolChoice(toolChoice: any) {
+  toolChoice(toolChoice: string) {
     this.job.toolChoice = toolChoice;
     return this;
   }
