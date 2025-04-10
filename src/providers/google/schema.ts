@@ -7,3 +7,8 @@ export const GoogleBaseJobSchema = z.object({
 
 export const GoogleChatJobSchema = ChatJobSchema.merge(GoogleBaseJobSchema);
 export type GoogleChatJob = z.infer<typeof GoogleChatJobSchema>;
+
+export const GoogleJobSchema = z.discriminatedUnion("type", [
+  GoogleChatJobSchema,
+]);
+export type GoogleJob = z.infer<typeof GoogleJobSchema>;
