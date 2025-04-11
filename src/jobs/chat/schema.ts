@@ -1,5 +1,5 @@
 import { z, type ZodSchema } from "zod";
-import { BaseJobSchema, JobProviderSchema } from "~/jobs/schema";
+import { BaseJobSchema } from "~/jobs/schema";
 
 export const MessageContentSchema = z.union([
   z.string(),
@@ -97,7 +97,6 @@ export const ChatResultSchema = z.object({
 export const ChatJobSchema = BaseJobSchema.extend({
   type: z.literal("chat"),
   model: z.string(),
-  provider: JobProviderSchema.optional(),
   temperature: z.number().optional(),
   stream: z.boolean().optional(),
   streamOptions: ChatStreamOptionsSchema.optional(),
@@ -113,6 +112,3 @@ export const ChatJobSchema = BaseJobSchema.extend({
 
   result: ChatResultSchema.optional(),
 });
-
-export type ChatJob = z.infer<typeof ChatJobSchema>;
-export type ChatResult = z.infer<typeof ChatResultSchema>;
