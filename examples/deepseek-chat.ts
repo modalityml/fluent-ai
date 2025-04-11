@@ -1,9 +1,6 @@
-import { openai, systemPrompt, userPrompt } from "../src";
+import { deepseek, systemPrompt, userPrompt } from "../src";
 
-const job = openai({
-  apiKey: process.env.DEEPSEEK_API_KEY,
-  baseURL: "https://api.deepseek.com",
-})
+const job = deepseek()
   .chat("deepseek-chat")
   .messages([
     systemPrompt("you are a helpful assistant"),

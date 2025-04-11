@@ -6,19 +6,22 @@ import {
   userPrompt,
   tool,
   anthropic,
-  requestObject,
   load,
 } from "../src";
 import { z } from "zod";
+import { requestObject } from "./utils";
 
-// prettier-ignore
-const jobs = [
-  anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
-  ollama().chat("llama3.2"),
-  openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-];
+function createJobs() {
+  return [
+    anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
+    ollama().chat("llama3.2"),
+    openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
+  ];
+}
 
 test("chat", async () => {
+  const jobs = createJobs();
+
   for (const job of jobs) {
     expect(
       await requestObject(
@@ -35,12 +38,16 @@ test("chat", async () => {
 });
 
 test("dump", () => {
+  const jobs = createJobs();
+
   for (const job of jobs) {
     expect(job.dump()).toMatchSnapshot();
   }
 });
 
 test("load", async () => {
+  const jobs = createJobs();
+
   for (const job of jobs) {
     const req1 = await requestObject(load(job.dump()).makeRequest!());
     const req2 = await requestObject(job.makeRequest());
@@ -61,6 +68,7 @@ test("json_object", async () => {
 });
 
 test("tool", async () => {
+  const jobs = createJobs();
   const weatherTool = tool("get_current_weather")
     .description("Get the current weather in a given location")
     .parameters(
@@ -83,6 +91,7 @@ test("tool", async () => {
 });
 
 test("jsonSchema", async () => {
+  const jobs = createJobs();
   const personSchema = z.object({
     name: z.string(),
     age: z.number(),

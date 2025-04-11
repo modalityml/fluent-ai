@@ -1,40 +1,75 @@
-import type { AIJob, Job } from "./job";
-import { openai } from "../providers/openai";
-import { anthropic } from "../providers/anthropic";
-import { fal } from "../providers/fal";
-import { ollama } from "../providers/ollama";
-import { voyageai } from "../providers/voyageai";
+import { z } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
+import {
+  anthropic,
+  AnthropicJobSchema,
+  deepseek,
+  DeepseekJobSchema,
+  fal,
+  FalJobSchema,
+  ollama,
+  OllamaJobSchema,
+  openai,
+  OpenAIJobSchema,
+  voyage,
+  VoyageJobSchema,
+} from "~/providers";
 
-export function load(obj: AIJob): Job {
+export const JobSchema = z.union([
+  ...AnthropicJobSchema.options,
+  ...DeepseekJobSchema.options,
+  ...FalJobSchema.options,
+  ...OllamaJobSchema.options,
+  ...OpenAIJobSchema.options,
+  ...VoyageJobSchema.options,
+]);
+
+export type Job = z.infer<typeof JobSchema>;
+
+export const jobJsonSchema = zodToJsonSchema(JobSchema);
+
+export function load(obj: Job) {
+  obj = JobSchema.parse(obj);
+
   let provider = null;
-
   if (obj.provider === "anthropic") {
     provider = anthropic(obj.options);
+  } else if (obj.provider === "deepseek") {
+    provider = deepseek(obj.options);
   } else if (obj.provider === "fal") {
     provider = fal(obj.options);
   } else if (obj.provider === "ollama") {
     provider = ollama();
   } else if (obj.provider === "openai") {
     provider = openai(obj.options);
-  } else if (obj.provider === "voyageai") {
-    provider = voyageai(obj.options);
+  } else if (obj.provider === "voyage") {
+    provider = voyage(obj.options);
   }
 
   if (!provider) {
     throw new Error("Unknown provider " + obj.provider);
   }
 
-  if (obj.chat && "chat" in provider) {
-    return provider.chat(obj.chat.model)._setParams(obj.chat.params);
-  } else if (obj.models && "listModels" in provider) {
-	return provider.listModels()._setParams(obj.models.params);
-  } else if (obj.image && "image" in provider) {
-    return provider.image(obj.image.model)._setParams(obj.image.params);
-  } else if (obj.embedding && "embedding" in provider) {
-    return provider
-      .embedding(obj.embedding.model)
-      ._setParams(obj.embedding.params);
+  let builder = null;
+
+  if (obj.type === "chat" && "chat" in provider) {
+    builder = provider.chat(obj.model);
+  }
+  if (obj.type === "embedding" && "embedding" in provider) {
+    builder = provider.embedding(obj.model);
+  }
+  if (obj.type === "image" && "image" in provider) {
+    builder = provider.image(obj.model);
+  }
+  if (obj.type === "models" && "models" in provider) {
+    builder = provider.models();
   }
 
-  throw new Error("Failed to load job");
+  if (!builder) {
+    throw new Error("Failed to load job");
+  }
+
+  builder.job = obj;
+
+  return builder;
 }
