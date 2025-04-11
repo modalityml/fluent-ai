@@ -1,13 +1,23 @@
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import { openai, OpenAIJobSchema } from "~/providers/openai";
-import { anthropic, AnthropicJobSchema } from "~/providers/anthropic";
-import { fal, FalJobSchema } from "~/providers/fal";
-import { ollama, OllamaJobSchema } from "~/providers/ollama";
-import { voyage, VoyageJobSchema } from "~/providers/voyage";
+import {
+  anthropic,
+  AnthropicJobSchema,
+  deepseek,
+  DeepseekJobSchema,
+  fal,
+  FalJobSchema,
+  ollama,
+  OllamaJobSchema,
+  openai,
+  OpenAIJobSchema,
+  voyage,
+  VoyageJobSchema,
+} from "~/providers";
 
 export const JobSchema = z.union([
   ...AnthropicJobSchema.options,
+  ...DeepseekJobSchema.options,
   ...FalJobSchema.options,
   ...OllamaJobSchema.options,
   ...OpenAIJobSchema.options,
@@ -24,6 +34,8 @@ export function load(obj: Job) {
   let provider = null;
   if (obj.provider === "anthropic") {
     provider = anthropic(obj.options);
+  } else if (obj.provider === "deepseek") {
+    provider = deepseek(obj.options);
   } else if (obj.provider === "fal") {
     provider = fal(obj.options);
   } else if (obj.provider === "ollama") {

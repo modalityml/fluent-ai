@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const JobProviderSchema = z.enum([
   "anthropic",
+  "deepseek",
   "fal",
   "ollama",
   "openai",

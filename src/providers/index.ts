@@ -1,4 +1,5 @@
 export * from "./anthropic";
+export * from "./deepseek";
 export * from "./fal";
 export * from "./fireworks";
 export * from "./google";
