@@ -1,5 +1,8 @@
+import type { z } from "zod";
 import { JobBuilder } from "~/jobs/builder";
-import type { ModelsJob } from "./schema";
+import type { ModelsJobSchema } from "./schema";
+
+type ModelsJob = z.infer<typeof ModelsJobSchema>;
 
 export class ModelsJobBuilder extends JobBuilder {
   job: ModelsJob;

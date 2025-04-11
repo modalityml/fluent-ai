@@ -1,5 +1,8 @@
-import { JobBuilder } from "../builder";
-import type { ImageJob, ImageSize } from "./schema";
+import type { z } from "zod";
+import { JobBuilder } from "~/jobs/builder";
+import type { ImageJobSchema, ImageSize } from "./schema";
+
+type ImageJob = z.infer<typeof ImageJobSchema>;
 
 export class ImageJobBuilder extends JobBuilder {
   job: ImageJob;

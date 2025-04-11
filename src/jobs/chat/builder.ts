@@ -1,7 +1,14 @@
-import type { ZodSchema } from "zod";
+import { z, type ZodSchema } from "zod";
 import { JobBuilder } from "~/jobs/builder";
-import type { ChatJob, ChatStreamOptions, Message, ResponseFormat } from "./schema";
-import type{ ChatTool } from "./tool";
+import type {
+  ChatJobSchema,
+  ChatStreamOptions,
+  Message,
+  ResponseFormat,
+} from "./schema";
+import type { ChatTool } from "./tool";
+
+type ChatJob = z.infer<typeof ChatJobSchema>;
 
 export class ChatJobBuilder extends JobBuilder {
   job: ChatJob;
