@@ -1,4 +1,9 @@
-import { ChatJobBuilder, convertMessages, type JobOptions } from "~/jobs";
+import {
+  ChatJobBuilder,
+  convertMessages,
+  convertTools,
+  type JobOptions,
+} from "~/jobs";
 
 export class OllamaChatJobBuilder extends ChatJobBuilder {
   constructor(options: JobOptions, model: string) {
@@ -13,7 +18,7 @@ export class OllamaChatJobBuilder extends ChatJobBuilder {
       body: JSON.stringify({
         model: this.job.model,
         messages: convertMessages(this.job.messages),
-        tools: this.job.tools?.map((tool) => tool.toJSON?.()),
+        tools: convertTools(this.job.tools),
         stream: false,
       }),
     });

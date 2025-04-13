@@ -1,4 +1,5 @@
-import type { Message, MessageContent } from "./schema";
+import { z } from "zod";
+import type { Message } from "./schema";
 import { ChatTool } from "./tool";
 
 export function systemPrompt(content: string) {
@@ -44,6 +45,17 @@ export function convertMessages(messages: Message[]) {
     }
     return message;
   });
+}
+
+export function convertTools(tools: ChatTool[]) {
+  return tools.map((tool) => ({
+    type: "function",
+    function: {
+      name: tool.params.name,
+      description: tool.params.description,
+      parameters: z.toJSONSchema(tool.params.parameters!),
+    },
+  }));
 }
 
 export function audio() {

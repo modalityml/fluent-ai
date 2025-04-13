@@ -1,9 +1,8 @@
-import type { ZodSchema } from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
-import type { ChatToolParams } from "./schema";
+import { z } from "zod";
+import type { ChatToolSchema } from "./schema";
 
 export class ChatTool {
-  public params: ChatToolParams;
+  public params: z.infer<typeof ChatToolSchema>;
 
   constructor(name: string) {
     this.params = { name };
@@ -14,19 +13,8 @@ export class ChatTool {
     return this;
   }
 
-  parameters(parameters: ZodSchema) {
+  parameters(parameters: z.ZodType) {
     this.params.parameters = parameters;
     return this;
-  }
-
-  toJSON() {
-    return {
-      type: "function",
-      function: {
-        name: this.params.name,
-        description: this.params.description,
-        parameters: zodToJsonSchema(this.params.parameters!),
-      },
-    };
   }
 }

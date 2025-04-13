@@ -1,5 +1,4 @@
 import { z } from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
 import {
   anthropic,
   AnthropicJobSchema,
@@ -26,7 +25,7 @@ export const JobSchema = z.union([
 
 export type Job = z.infer<typeof JobSchema>;
 
-export const jobJsonSchema = zodToJsonSchema(JobSchema);
+export const jobJsonSchema = z.toJSONSchema(JobSchema);
 
 export function load(obj: Job) {
   obj = JobSchema.parse(obj);

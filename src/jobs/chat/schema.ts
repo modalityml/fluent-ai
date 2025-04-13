@@ -1,4 +1,4 @@
-import { z, type ZodSchema } from "zod";
+import { z } from "zod";
 import { BaseJobSchema } from "~/jobs/schema";
 
 export const MessageContentSchema = z.union([
@@ -52,19 +52,10 @@ export const ResponseFormatSchema = z.object({
 export type ResponseFormat = z.infer<typeof ResponseFormatSchema>;
 
 export const ChatToolSchema = z.object({
-  params: z.object({
-    name: z.string(),
-    description: z.string().optional(),
-    parameters: z.any().optional(),
-  }),
-  toJSON: z.function().returns(z.any()).optional(),
+  name: z.string(),
+  description: z.string().optional(),
+  parameters: z.any().optional(),
 });
-
-export interface ChatToolParams {
-  name: string;
-  description?: string;
-  parameters?: ZodSchema;
-}
 
 export const JsonSchemaDefSchema = z.object({
   name: z.string(),
@@ -88,7 +79,7 @@ export const ChatResultSchema = z.object({
     .array(
       z.object({
         name: z.string(),
-        arguments: z.record(z.any()),
+        arguments: z.record(z.string(), z.any()),
       })
     )
     .optional(),

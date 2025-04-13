@@ -1,4 +1,9 @@
-import { ChatJobBuilder, convertMessages, type JobOptions } from "~/jobs";
+import {
+  ChatJobBuilder,
+  convertMessages,
+  convertTools,
+  type JobOptions,
+} from "~/jobs";
 
 export class AnthropicChatJobBuilder extends ChatJobBuilder {
   constructor(options: JobOptions, model: string) {
@@ -15,7 +20,7 @@ export class AnthropicChatJobBuilder extends ChatJobBuilder {
     } as any;
 
     if (this.job.tools && this.job.tools.length) {
-      requestParams.tools = this.job.tools.map((tool) => tool.toJSON?.());
+      requestParams.tools = convertTools(this.job.tools);
       requestParams.tool_choice = this.job.toolChoice;
     }
 

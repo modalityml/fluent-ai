@@ -1,6 +1,11 @@
+import { z } from "zod";
 import { EventSourceParserStream } from "eventsource-parser/stream";
-import zodToJsonSchema from "zod-to-json-schema";
-import { ChatJobBuilder, convertMessages, type JobOptions } from "~/jobs";
+import {
+  ChatJobBuilder,
+  convertMessages,
+  convertTools,
+  type JobOptions,
+} from "~/jobs";
 import { OPENAI_BASE_URL } from "./schema";
 
 export class OpenAIChatJobBuilder extends ChatJobBuilder {
@@ -29,12 +34,12 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
     } as any;
 
     if (this.job.tools && this.job.tools.length) {
-      requestBody.tools = this.job.tools.map((tool) => tool.toJSON?.());
+      requestBody.tools = convertTools(this.job.tools);
       requestBody.tool_choice = this.job.toolChoice;
     }
 
     if (this.job.jsonSchema) {
-      const schema = zodToJsonSchema(this.job.jsonSchema.schema);
+      const schema = z.toJSONSchema(this.job.jsonSchema.schema);
       requestBody.response_format = {
         type: "json_schema",
         json_schema: {
