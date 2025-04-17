@@ -1,4 +1,5 @@
 export * from "./jobs/load";
+export * from "./jobs/schema";
 export * from "./jobs/chat";
 export * from "./jobs/image";
 export * from "./jobs/embedding";
