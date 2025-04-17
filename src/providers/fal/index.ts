@@ -1,4 +1,4 @@
-import type { JobOptions } from "~/jobs";
+import type { JobOptions } from "~/jobs/schema";
 import { FalImageJobBuilder } from "./image";
 
 export function fal(options?: JobOptions) {

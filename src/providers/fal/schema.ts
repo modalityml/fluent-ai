@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ImageJobSchema } from "~/jobs";
+import { ImageJobSchema } from "~/jobs/image";
 
 export type FalImage = {
   url: string;

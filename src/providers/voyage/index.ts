@@ -1,9 +1,6 @@
 import { z } from "zod";
-import {
-  EmbeddingJobBuilder,
-  EmbeddingJobSchema,
-  type JobOptions,
-} from "~/jobs";
+import { EmbeddingJobBuilder, EmbeddingJobSchema } from "~/jobs/embedding";
+import type { JobOptions } from "~/jobs/schema";
 
 export const VoyageBaseJobSchema = z.object({
   provider: z.literal("voyage"),

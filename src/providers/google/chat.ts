@@ -1,4 +1,5 @@
-import { ChatJobBuilder, convertMessages, type JobOptions } from "~/jobs";
+import { ChatJobBuilder, convertMessages } from "~/jobs/chat";
+import type { JobOptions } from "~/jobs/schema";
 
 export class GoogleChatJobBuilder extends ChatJobBuilder {
   constructor(options: JobOptions, model: string) {

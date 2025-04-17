@@ -1,4 +1,4 @@
-import type { JobOptions } from "~/jobs";
+import type { JobOptions } from "~/jobs/schema";
 import { GoogleChatJobBuilder } from "./chat";
 
 export function google(options?: JobOptions) {

@@ -1,4 +1,5 @@
-import { EmbeddingJobBuilder, type JobOptions } from "~/jobs";
+import { EmbeddingJobBuilder } from "~/jobs/embedding";
+import type { JobOptions } from "~/jobs/schema";
 import { OPENAI_BASE_URL } from "./schema";
 
 export class OpenAIEmbeddingJobBuilder extends EmbeddingJobBuilder {

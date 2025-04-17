@@ -1,18 +1,16 @@
 import { z } from "zod";
-import type { Message } from "./schema";
+import type { ChatToolSchema, Message } from "./schema";
 import { ChatTool } from "./tool";
 
-export function systemPrompt(content: string) {
+export function systemPrompt(content: string): Message {
   return { role: "system", content };
 }
 
-export type UserPromptContent = string | { image: { url: string } };
-
-export function userPrompt(...content: UserPromptContent[]) {
+export function userPrompt(content: string): Message {
   return { role: "user", content };
 }
 
-export function assistantPrompt(content: string) {
+export function assistantPrompt(content: string): Message {
   return { role: "assistant", content };
 }
 
@@ -47,13 +45,13 @@ export function convertMessages(messages: Message[]) {
   });
 }
 
-export function convertTools(tools: ChatTool[]) {
+export function convertTools(tools: z.infer<typeof ChatToolSchema>[]) {
   return tools.map((tool) => ({
     type: "function",
     function: {
-      name: tool.params.name,
-      description: tool.params.description,
-      parameters: z.toJSONSchema(tool.params.parameters!),
+      name: tool.name,
+      description: tool.description,
+      parameters: z.toJSONSchema(tool.parameters),
     },
   }));
 }

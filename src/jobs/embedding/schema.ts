@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseJobSchema } from "../schema";
+import { BaseJobSchema } from "~/jobs/schema";
 
 const EmbeddingResultSchema = z.object({
   embedding: z.array(z.number()),

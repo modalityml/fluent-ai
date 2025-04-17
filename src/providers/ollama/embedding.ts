@@ -1,4 +1,5 @@
-import { EmbeddingJobBuilder, type JobOptions } from "~/jobs";
+import { EmbeddingJobBuilder } from "~/jobs/embedding";
+import type { JobOptions } from "~/jobs/schema";
 
 export class OllamaEmbeddingJobBuilder extends EmbeddingJobBuilder {
   constructor(options: JobOptions, model: string) {

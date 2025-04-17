@@ -29,8 +29,6 @@ export const MessageContentSchema = z.union([
   ),
 ]);
 
-export type MessageContent = z.infer<typeof MessageContentSchema>;
-
 export const MessageSchema = z.object({
   role: z.enum(["system", "user", "assistant"]),
   content: MessageContentSchema,
@@ -62,6 +60,8 @@ export const JsonSchemaDefSchema = z.object({
   description: z.string().optional(),
   schema: z.any(),
 });
+
+export const ChunkSchema = z.object({});
 
 export const ChatResultSchema = z.object({
   message: z.object({

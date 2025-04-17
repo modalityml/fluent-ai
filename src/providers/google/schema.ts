@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ChatJobSchema } from "~/jobs";
+import { ChatJobSchema } from "~/jobs/chat";
 
 export const GoogleBaseJobSchema = z.object({
   provider: z.literal("google"),

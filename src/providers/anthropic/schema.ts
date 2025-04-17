@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { ChatJobSchema, ModelsJobSchema } from "~/jobs";
+import { ChatJobSchema } from "~/jobs/chat";
+import { ModelsJobSchema } from "~/jobs/models";
 
 export const AnthropicBaseJobSchema = z.object({
   provider: z.literal("anthropic"),

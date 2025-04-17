@@ -1,26 +1,18 @@
 import { z } from "zod";
-import {
-  anthropic,
-  AnthropicJobSchema,
-  deepseek,
-  DeepseekJobSchema,
-  fal,
-  FalJobSchema,
-  ollama,
-  OllamaJobSchema,
-  openai,
-  OpenAIJobSchema,
-  voyage,
-  VoyageJobSchema,
-} from "~/providers";
+import { anthropic, AnthropicJobSchema } from "~/providers/anthropic";
+import { deepseek, DeepseekJobSchema } from "~/providers/deepseek";
+import { fal, FalJobSchema } from "~/providers/fal";
+import { ollama, OllamaJobSchema } from "~/providers/ollama";
+import { openai, OpenAIJobSchema } from "~/providers/openai";
+import { voyage, VoyageJobSchema } from "~/providers/voyage";
 
 export const JobSchema = z.union([
-  ...AnthropicJobSchema.options,
-  ...DeepseekJobSchema.options,
-  ...FalJobSchema.options,
-  ...OllamaJobSchema.options,
-  ...OpenAIJobSchema.options,
-  ...VoyageJobSchema.options,
+  AnthropicJobSchema,
+  DeepseekJobSchema,
+  FalJobSchema,
+  OllamaJobSchema,
+  OpenAIJobSchema,
+  VoyageJobSchema,
 ]);
 
 export type Job = z.infer<typeof JobSchema>;

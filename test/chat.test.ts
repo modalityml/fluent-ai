@@ -20,9 +20,7 @@ function createJobs() {
 }
 
 test("chat", async () => {
-  const jobs = createJobs();
-
-  for (const job of jobs) {
+  for (const job of createJobs()) {
     expect(
       await requestObject(
         job
@@ -37,19 +35,32 @@ test("chat", async () => {
   }
 });
 
-test("dump", () => {
-  const jobs = createJobs();
+test("stream", async () => {
+  for (const job of createJobs()) {
+    expect(
+      await requestObject(
+        job
+          .messages([
+            systemPrompt("you are a helpful assistant"),
+            userPrompt("hi"),
+          ])
+          .stream()
+          .makeRequest()
+      )
+    ).toMatchSnapshot();
+  }
+});
 
-  for (const job of jobs) {
+test("dump", () => {
+  for (const job of createJobs()) {
     expect(job.dump()).toMatchSnapshot();
   }
 });
 
 test("load", async () => {
-  const jobs = createJobs();
-
-  for (const job of jobs) {
-    const req1 = await requestObject(load(job.dump()).makeRequest!());
+  for (const job of createJobs()) {
+    console.log(job.dump());
+    const req1 = await requestObject(load(job.dump()).makeRequest());
     const req2 = await requestObject(job.makeRequest());
     expect(req1).toEqual(req2);
   }
@@ -68,7 +79,6 @@ test("json_object", async () => {
 });
 
 test("tool", async () => {
-  const jobs = createJobs();
   const weatherTool = tool("get_current_weather")
     .description("Get the current weather in a given location")
     .parameters(
@@ -78,7 +88,7 @@ test("tool", async () => {
       })
     );
 
-  for (const job of jobs) {
+  for (const job of createJobs()) {
     expect(
       await requestObject(
         job
@@ -91,13 +101,12 @@ test("tool", async () => {
 });
 
 test("jsonSchema", async () => {
-  const jobs = createJobs();
   const personSchema = z.object({
     name: z.string(),
     age: z.number(),
   });
 
-  for (const job of jobs) {
+  for (const job of createJobs()) {
     expect(
       await requestObject(
         job

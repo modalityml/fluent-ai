@@ -1,7 +1,9 @@
 import { z } from "zod";
-import { ChatJobSchema, ModelsJobSchema, type JobOptions } from "~/jobs";
+import { ChatJobSchema } from "~/jobs/chat";
+import { ModelsJobSchema } from "~/jobs/models";
+import type { JobOptions } from "~/jobs/schema";
 import { OpenAIChatJobBuilder } from "~/providers/openai";
-import { OpenAIModelsJobBuilder } from "../openai/models";
+import { OpenAIModelsJobBuilder } from "~/providers/openai/models";
 
 export const BaseDeepseekJobSchema = z.object({
   provider: z.literal("deepseek"),

@@ -1,4 +1,4 @@
-import { z, type ZodSchema } from "zod";
+import { z } from "zod";
 import { JobBuilder } from "~/jobs/builder";
 import type {
   ChatJobSchema,
@@ -53,7 +53,7 @@ export class ChatJobBuilder extends JobBuilder {
   }
 
   tools(tools: ChatTool[]) {
-    this.job.tools = tools;
+    this.job.tools = tools.map((tool) => tool.params);
     return this;
   }
 
@@ -61,7 +61,7 @@ export class ChatJobBuilder extends JobBuilder {
     if (!this.job.tools) {
       this.job.tools = [];
     }
-    this.job.tools.push(tool);
+    this.job.tools.push(tool.params);
     return this;
   }
 
@@ -75,7 +75,7 @@ export class ChatJobBuilder extends JobBuilder {
     return this;
   }
 
-  jsonSchema(schema: ZodSchema, name: string, description?: string) {
+  jsonSchema(schema: z.ZodType, name: string, description?: string) {
     this.job.jsonSchema = {
       name,
       description,

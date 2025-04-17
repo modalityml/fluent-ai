@@ -1,9 +1,5 @@
-import {
-  ChatJobBuilder,
-  convertMessages,
-  convertTools,
-  type JobOptions,
-} from "~/jobs";
+import { ChatJobBuilder, convertMessages, convertTools } from "~/jobs/chat";
+import type { JobOptions } from "~/jobs/schema";
 
 export class AnthropicChatJobBuilder extends ChatJobBuilder {
   constructor(options: JobOptions, model: string) {

@@ -1,5 +1,6 @@
-import { ImageJobBuilder, ImageJobSchema, type JobOptions } from "~/jobs";
 import { z } from "zod";
+import { ImageJobBuilder, ImageJobSchema } from "~/jobs/image";
+import type { JobOptions } from "~/jobs/schema";
 
 export const LumaBaseJobSchema = z.object({
   provider: z.literal("luma"),

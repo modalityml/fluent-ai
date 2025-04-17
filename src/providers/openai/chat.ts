@@ -1,12 +1,8 @@
 import { z } from "zod";
-import { EventSourceParserStream } from "eventsource-parser/stream";
-import {
-  ChatJobBuilder,
-  convertMessages,
-  convertTools,
-  type JobOptions,
-} from "~/jobs";
 import { OPENAI_BASE_URL } from "./schema";
+import { ChatStream } from "~/jobs/chat/stream";
+import { ChatJobBuilder, convertMessages, convertTools } from "~/jobs/chat";
+import type { JobOptions } from "~/jobs/schema";
 
 export class OpenAIChatJobBuilder extends ChatJobBuilder {
   constructor(options: JobOptions, model: string) {
@@ -62,27 +58,7 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
 
   handleResponse = async (response: Response) => {
     if (this.job.stream) {
-      return (async function* () {
-        const eventStream = response
-          .body!.pipeThrough(new TextDecoderStream())
-          .pipeThrough(new EventSourceParserStream());
-        const reader = eventStream.getReader();
-        for (;;) {
-          const { done, value } = await reader.read();
-          if (done) {
-            break;
-          }
-          if (value.data === "[DONE]") {
-            break;
-          }
-
-          const chunk = JSON.parse(value.data);
-          if (chunk.choices[0].finish_reason) {
-          } else {
-            yield chunk;
-          }
-        }
-      })();
+      return new ChatStream(response);
     }
 
     const chatCompletion = await response.json();

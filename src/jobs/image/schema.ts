@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseJobSchema } from "../schema";
+import { BaseJobSchema } from "~/jobs/schema";
 
 export const ImageSizeSchema = z.union([
   z.literal("square_hd"),

@@ -1,4 +1,5 @@
-import { ImageJobBuilder, type JobOptions } from "~/jobs";
+import { ImageJobBuilder } from "~/jobs/image";
+import type { JobOptions } from "~/jobs/schema";
 import { OPENAI_BASE_URL } from "./schema";
 
 export class OpenAIImageJobBuilder extends ImageJobBuilder {

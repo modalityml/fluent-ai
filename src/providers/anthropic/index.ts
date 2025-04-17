@@ -1,4 +1,4 @@
-import type { JobOptions } from "~/jobs";
+import type { JobOptions } from "~/jobs/schema";
 import { AnthropicChatJobBuilder } from "./chat";
 import { AnthropicModelsJobBuilder } from "./models";
 

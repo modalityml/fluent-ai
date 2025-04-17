@@ -1,5 +1,7 @@
 import { z } from "zod";
-import { ChatJobSchema, ModelsJobSchema, EmbeddingJobSchema } from "~/jobs";
+import { ChatJobSchema } from "~/jobs/chat";
+import { EmbeddingJobSchema } from "~/jobs/embedding";
+import { ModelsJobSchema } from "~/jobs/models";
 
 export const OllamaBaseJobSchema = z.object({
   provider: z.literal("ollama"),

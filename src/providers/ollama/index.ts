@@ -1,4 +1,4 @@
-import type { JobOptions } from "~/jobs";
+import type { JobOptions } from "~/jobs/schema";
 import { OllamaChatJobBuilder } from "./chat";
 import { OllamaEmbeddingJobBuilder } from "./embedding";
 import { OllamaModelsJobBuilder } from "./models";

@@ -1,10 +1,8 @@
 import { z } from "zod";
-import {
-  ChatJobSchema,
-  EmbeddingJobSchema,
-  ImageJobSchema,
-  ModelsJobSchema,
-} from "~/jobs";
+import { ChatJobSchema } from "~/jobs/chat";
+import { EmbeddingJobSchema } from "~/jobs/embedding";
+import { ImageJobSchema } from "~/jobs/image";
+import { ModelsJobSchema } from "~/jobs/models";
 
 export const OPENAI_BASE_URL = "https://api.openai.com/v1";
 
