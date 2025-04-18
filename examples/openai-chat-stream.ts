@@ -6,9 +6,9 @@ const job = openai()
   .stream();
 
 const stream = await job.run();
-for await (const event of stream) {
-  process.stdout.write(chunkText(event));
+for await (const chunk of stream) {
+  // console.log(chunk);
+  process.stdout.write(chunkText(chunk));
 }
-
-const result = await stream.done();
+const result = await job.done();
 console.log(result);

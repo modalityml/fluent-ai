@@ -69,7 +69,10 @@ export function tool(name: string) {
 }
 
 export function chunkText(chunk: any) {
-  return chunk.choices[0].delta.content;
+  if (chunk.choices[0].delta.content) {
+    return chunk.choices[0].delta.content;
+  }
+  return "";
 }
 
 // TODO:

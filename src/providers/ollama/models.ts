@@ -1,5 +1,5 @@
-import { ModelsJobBuilder } from "~/jobs/models";
 import type { JobOptions } from "~/jobs/schema";
+import { ModelsJobBuilder } from "~/jobs/models";
 
 export class OllamaModelsJobBuilder extends ModelsJobBuilder {
   constructor(options: JobOptions) {

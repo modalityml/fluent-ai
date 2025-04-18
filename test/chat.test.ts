@@ -59,7 +59,6 @@ test("dump", () => {
 
 test("load", async () => {
   for (const job of createJobs()) {
-    console.log(job.dump());
     const req1 = await requestObject(load(job.dump()).makeRequest());
     const req2 = await requestObject(job.makeRequest());
     expect(req1).toEqual(req2);
