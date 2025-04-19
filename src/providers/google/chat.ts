@@ -27,7 +27,12 @@ export class GoogleChatJobBuilder extends ChatJobBuilder {
   };
 
   handleResponse = async (response: Response) => {
-    const json = await response.json();
-    return json;
+    const raw = await response.json();
+    this.cost = {
+      promptTokens: raw.usageMetadata.promptTokenCount,
+      completionTokens: raw.usageMetadata.candidatesTokenCount,
+      totalTokens: raw.usageMetadata.totalTokenCount,
+    };
+    return { raw };
   };
 }

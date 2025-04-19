@@ -12,7 +12,7 @@ export function jobStream<Output>(response: Response) {
         break;
       }
       const chunk = JSON.parse(value.data);
-      yield chunk as Output;
+      yield { raw: chunk } as Output;
     }
   })();
 }

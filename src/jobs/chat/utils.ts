@@ -40,12 +40,17 @@ export function tool(name: string) {
 
 export function text(result: any) {
   if (result.raw) {
-    // output text
-    return result.raw.choices[0].message.content;
-  }
-  if (result.choices[0].delta.content) {
-    // chunk text
-    return result.choices[0].delta.content;
+    if (result.raw.candidates) {
+      return result.raw.candidates[0].content.parts[0].text;
+    }
+
+    if (result.raw.choices[0].message) {
+      return result.raw.choices[0].message.content;
+    }
+
+    if (result.raw.choices[0].delta.content) {
+      return result.raw.choices[0].delta.content;
+    }
   }
   return "";
 }
