@@ -1,37 +1,22 @@
 import { z } from "zod";
 import { BaseJobSchema } from "~/jobs/schema";
 
-export const MessageContentSchema = z.union([
-  z.string(),
-  z.array(
-    z.object({
-      type: z.literal("text"),
-      text: z.string(),
-    })
-  ),
-  z.array(
-    z.object({
-      type: z.literal("image"),
-      image_url: z.string().optional(),
-      source: z
-        .object({
-          type: z.literal("base64"),
-          data: z.string(),
-          media_type: z.enum([
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "image/gif",
-          ]),
-        })
-        .optional(),
-    })
-  ),
-]);
-
 export const MessageSchema = z.object({
   role: z.enum(["system", "user", "assistant"]),
-  content: MessageContentSchema,
+  content: z.union([
+    z.string(),
+    z.array(
+      z.union([
+        z.object({ type: z.literal("text"), text: z.string() }),
+        z.object({
+          type: z.literal("image_url"),
+          image_url: z.object({
+            url: z.string(),
+          }),
+        }),
+      ])
+    ),
+  ]),
 });
 
 export type Message = z.infer<typeof MessageSchema>;
@@ -97,13 +82,12 @@ export const ChatInputSchema = z.object({
   responseFormat: ResponseFormatSchema.optional(),
   topP: z.number().optional(),
   topK: z.number().optional(),
-  systemPrompt: z.string().optional(),
+  system: z.string().optional(),
   jsonSchema: JsonSchemaDefSchema.optional(),
 });
 
-export const ChatOutputSchema = z.object({
-  raw: z.any(),
-});
+// TODO: Add a schema for the output
+export const ChatOutputSchema = z.any();
 
 export const ChatJobSchema = BaseJobSchema.extend({
   type: z.literal("chat"),

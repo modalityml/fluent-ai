@@ -15,6 +15,9 @@ const job = openai()
         },
       ],
     },
-  ]);
-const result = await job.run();
-console.log(text(result));
+  ])
+  .stream();
+const stream = await job.run();
+for await (const chunk of stream) {
+  process.stdout.write(text(chunk));
+}

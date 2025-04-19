@@ -1,4 +1,4 @@
-import { ChatJobBuilder, convertMessages, convertTools } from "~/jobs/chat";
+import { ChatJobBuilder, convertTools } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
 
 export class AnthropicChatJobBuilder extends ChatJobBuilder {
@@ -12,7 +12,7 @@ export class AnthropicChatJobBuilder extends ChatJobBuilder {
     const requestParams = {
       model: this.input.model,
       max_tokens: this.input.maxTokens,
-      messages: convertMessages(this.input.messages),
+      messages: this.input.messages,
     } as any;
 
     if (this.input.tools && this.input.tools.length) {

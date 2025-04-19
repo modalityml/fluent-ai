@@ -11,7 +11,7 @@ fluent-ai is a lightweight, type-safe AI toolkit that seamlessly integrates mult
 ## Installation
 
 ```sh
-npm install fluent-ai zod
+npm install fluent-ai zod@next
 ```
 
 ## AI Service provider support
@@ -48,11 +48,11 @@ Each request to AI providers is wrapped in a `Job`. which can also serialized an
 ### Method chaining
 
 ```ts
-import { openai, userPrompt } from "fluent-ai";
+import { openai, user } from "fluent-ai";
 
 const job = openai()
   .chat("gpt-4o-mini")
-  .messages([userPrompt("Hi")])
+  .messages([user("Hi")])
   .temperature(0.5)
   .maxTokens(1024);
 ```
@@ -101,11 +101,11 @@ Chat completion, such as ChatGPT, is the most common AI service. It generates re
 ### Text generation
 
 ```ts
-import { openai, systemPrompt, userPrompt } from "fluent-ai";
+import { openai, system, user } from "fluent-ai";
 
 const job = openai()
   .chat("gpt-4o-mini")
-  .messages([systemPrompt("You are a helpful assistant"), userPrompt("Hi")]);
+  .messages([system("You are a helpful assistant"), user("Hi")]);
 
 const { text } = await job.run();
 ```
@@ -120,7 +120,7 @@ fluent-ai provides a consistent `jsonSchema()` function for all providers to gen
 
 ```ts
 import { z } from "zod";
-import { openai, userPrompt } from "fluent-ai";
+import { openai, user } from "fluent-ai";
 
 const personSchema = z.object({
   name: z.string(),
@@ -129,7 +129,7 @@ const personSchema = z.object({
 
 const job = openai()
   .chat("gpt-4o-mini")
-  .messages([userPrompt("generate a person with name and age in json format")])
+  .messages([user("generate a person with name and age in json format")])
   .jsonSchema(personSchema, "person");
 
 const { object } = await job.run();
@@ -161,7 +161,7 @@ To use the tool, add it to a chat job with a function-calling-enabled model, suc
 const job = openai().chat("gpt-4o-mini").tool(weatherTool);
 
 const { toolCalls } = await job
-  .messages([userPrompt("What is the weather in San Francisco?")])
+  .messages([user("What is the weather in San Francisco?")])
   .run();
 ```
 
@@ -172,7 +172,7 @@ Rather than waiting for the complete response, streaming enables the model to re
 ```ts
 const job = openai()
   .chat("gpt-4o-mini")
-  .messages([systemPrompt("You are a helpful assistant"), userPrompt("Hi")])
+  .messages([system("You are a helpful assistant"), user("Hi")])
   .stream();
 
 const { stream } = await job.run();
@@ -188,13 +188,11 @@ fluent-ai supports streaming text, object and tool calls on demand. For more det
 You can leverage chat models with vision capabilities by including an image URL in your prompt.
 
 ```ts
-import { openai, systemPrompt, userPrompt } from "fluent-ai";
+import { openai, system, user } from "fluent-ai";
 
 openai()
   .chat("gpt-4o-mini")
-  .messages([
-    userPrompt("Describe the image", { image: { url: "<image_url>" } }),
-  ]);
+  .messages([user("Describe the image", { image: { url: "<image_url>" } })]);
 ```
 
 ## Embedding

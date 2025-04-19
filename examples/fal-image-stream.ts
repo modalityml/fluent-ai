@@ -6,6 +6,4 @@ const stream = await job.run();
 for await (const event of stream) {
   console.log(event);
 }
-
-const result = await stream.done();
 console.log(result);

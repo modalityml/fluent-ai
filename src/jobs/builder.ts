@@ -49,9 +49,6 @@ export class JobBuilder<Input, Output> {
     return await this.handleResponse!(response);
   }
 
-  // TODO: result for streaming
-  async done() {}
-
   dump() {
     return {
       version: version,

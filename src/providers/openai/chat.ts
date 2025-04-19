@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ChatJobBuilder, convertMessages, convertTools } from "~/jobs/chat";
+import { ChatJobBuilder, convertTools } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
 import { jobStream } from "~/jobs/stream";
 import { OPENAI_BASE_URL } from "./schema";
@@ -13,12 +13,12 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
 
   makeRequest = () => {
     const baseURL = this.options.baseURL || OPENAI_BASE_URL;
-    const messages = convertMessages(this.input.messages);
+    const messages = this.input.messages;
 
-    if (this.input.systemPrompt) {
+    if (this.input.system) {
       messages.unshift({
         role: "system",
-        content: this.input.systemPrompt,
+        content: this.input.system,
       });
     }
     const requestBody = {

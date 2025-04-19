@@ -2,49 +2,6 @@ import { z } from "zod";
 import type { ChatToolSchema, Message } from "./schema";
 import { ChatTool } from "./tool";
 
-export function systemPrompt(content: string): Message {
-  return { role: "system", content };
-}
-
-export function userPrompt(content: string): Message {
-  return { role: "user", content };
-}
-
-export function assistantPrompt(content: string): Message {
-  return { role: "assistant", content };
-}
-
-export function convertMessages(messages: Message[]) {
-  return messages.map((message) => {
-    if (message.role === "user") {
-      if (Array.isArray(message.content)) {
-        if (message.content.length === 1) {
-          return { role: "user", content: message.content[0] };
-        } else {
-          return {
-            role: "user",
-            content: message.content.map((c) => {
-              if (typeof c === "string") {
-                return { type: "text", text: c };
-              } else if (c.type === "image") {
-                return {
-                  type: "image_url",
-                  image_url: {
-                    url: c.image_url,
-                  },
-                };
-              }
-            }),
-          };
-        }
-      } else {
-        return { role: "user", content: message.content };
-      }
-    }
-    return message;
-  });
-}
-
 export function convertTools(tools: z.infer<typeof ChatToolSchema>[]) {
   return tools.map((tool) => ({
     type: "function",
@@ -54,6 +11,18 @@ export function convertTools(tools: z.infer<typeof ChatToolSchema>[]) {
       parameters: z.toJSONSchema(tool.parameters),
     },
   }));
+}
+
+export function user(content: string) {
+  return { role: "user", content: content } as Message;
+}
+
+export function assistant(content: string) {
+  return { role: "assistant", content: content } as Message;
+}
+
+export function system(content: string) {
+  return { role: "system", content: content } as Message;
 }
 
 export function audio() {

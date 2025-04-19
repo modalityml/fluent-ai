@@ -21,8 +21,8 @@ export class ChatJobBuilder extends JobBuilder<ChatInput, ChatOutput> {
     };
   }
 
-  systemPrompt(systemPrompt: string) {
-    this.input.systemPrompt = systemPrompt;
+  system(system: string) {
+    this.input.system = system;
     return this;
   }
 

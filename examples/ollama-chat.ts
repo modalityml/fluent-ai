@@ -1,7 +1,7 @@
-import { ollama, systemPrompt, userPrompt } from "../src";
+import { ollama, system, user } from "../src";
 
 const job = ollama()
   .chat("llama3.2")
-  .messages([systemPrompt("you are a helpful assistant"), userPrompt("hi")]);
+  .messages([system("you are a helpful assistant"), user("hi")]);
 const result = await job.run();
 console.log(result);

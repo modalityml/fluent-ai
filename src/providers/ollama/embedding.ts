@@ -19,7 +19,7 @@ export class OllamaEmbeddingJobBuilder extends EmbeddingJobBuilder {
   };
 
   handleResponse = async (response: Response) => {
-    const json = await response.json();
-    return json;
+    const raw = await response.json();
+    return { raw, embeddings: raw.embeddings };
   };
 }

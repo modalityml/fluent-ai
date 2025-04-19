@@ -1,13 +1,5 @@
 import { test, expect } from "bun:test";
-import {
-  openai,
-  ollama,
-  systemPrompt,
-  userPrompt,
-  tool,
-  anthropic,
-  load,
-} from "../src";
+import { openai, ollama, system, user, tool, anthropic, load } from "../src";
 import { z } from "zod";
 import { requestObject } from "./utils";
 
@@ -24,10 +16,7 @@ test("chat", async () => {
     expect(
       await requestObject(
         job
-          .messages([
-            systemPrompt("you are a helpful assistant"),
-            userPrompt("hi"),
-          ])
+          .messages([system("you are a helpful assistant"), user("hi")])
           .temperature(0.5)
           .makeRequest()
       )
@@ -40,10 +29,7 @@ test("stream", async () => {
     expect(
       await requestObject(
         job
-          .messages([
-            systemPrompt("you are a helpful assistant"),
-            userPrompt("hi"),
-          ])
+          .messages([system("you are a helpful assistant"), user("hi")])
           .stream()
           .makeRequest()
       )
@@ -70,7 +56,7 @@ test("json_object", async () => {
     await requestObject(
       openai({ apiKey: "<key>" })
         .chat("gpt-4o-mini")
-        .messages([userPrompt("hi")])
+        .messages([user("hi")])
         .responseFormat({ type: "json_object" })
         .makeRequest()
     )
@@ -92,7 +78,7 @@ test("tool", async () => {
       await requestObject(
         job
           .tool(weatherTool)
-          .messages([userPrompt("What's the weather like in Boston today?")])
+          .messages([user("What's the weather like in Boston today?")])
           .makeRequest()
       )
     ).toMatchSnapshot();
@@ -110,7 +96,7 @@ test("jsonSchema", async () => {
       await requestObject(
         job
           .messages([
-            userPrompt("generate a person with name and age in json format"),
+            user("generate a person with name and age in json format"),
           ])
           .jsonSchema(personSchema, "person")
           .makeRequest()

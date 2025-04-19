@@ -1,4 +1,4 @@
-import { ChatJobBuilder, convertMessages, convertTools } from "~/jobs/chat";
+import { ChatJobBuilder, convertTools } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
 
 export class OllamaChatJobBuilder extends ChatJobBuilder {
@@ -11,7 +11,7 @@ export class OllamaChatJobBuilder extends ChatJobBuilder {
   makeRequest = () => {
     const requestBody = {
       model: this.input.model,
-      messages: convertMessages(this.input.messages),
+      messages: this.input.messages,
       stream: false,
     } as any;
 

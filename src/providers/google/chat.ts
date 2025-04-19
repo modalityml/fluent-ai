@@ -1,4 +1,4 @@
-import { ChatJobBuilder, convertMessages } from "~/jobs/chat";
+import { ChatJobBuilder } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
 
 export class GoogleChatJobBuilder extends ChatJobBuilder {
@@ -17,7 +17,7 @@ export class GoogleChatJobBuilder extends ChatJobBuilder {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          contents: convertMessages(this.input.messages).map((msg) => ({
+          contents: this.input.messages.map((msg) => ({
             role: msg.role === "user" ? "user" : "model",
             parts: [{ text: msg.content }],
           })),
