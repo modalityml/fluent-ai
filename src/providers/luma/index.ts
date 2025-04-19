@@ -6,7 +6,7 @@ export const LumaBaseJobSchema = z.object({
   provider: z.literal("luma"),
 });
 
-export const LumaImageJobSchema = ImageJobSchema.merge(LumaBaseJobSchema);
+export const LumaImageJobSchema = ImageJobSchema.extend(LumaBaseJobSchema);
 
 export const LumaJobSchema = z.discriminatedUnion("type", [LumaImageJobSchema]);
 export type LumaJob = z.infer<typeof LumaJobSchema>;
@@ -42,7 +42,7 @@ export class LumaImageJobBuilder extends ImageJobBuilder {
       },
       body: JSON.stringify({
         generation_type: "image",
-        prompt: this.job.prompt,
+        prompt: this.input.prompt,
       }),
     });
   };

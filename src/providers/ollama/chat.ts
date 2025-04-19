@@ -10,13 +10,13 @@ export class OllamaChatJobBuilder extends ChatJobBuilder {
 
   makeRequest = () => {
     const requestBody = {
-      model: this.job.model,
-      messages: convertMessages(this.job.messages),
+      model: this.input.model,
+      messages: convertMessages(this.input.messages),
       stream: false,
     } as any;
 
-    if (this.job.tools && this.job.tools.length) {
-      requestBody.tools = convertTools(this.job.tools);
+    if (this.input.tools && this.input.tools.length) {
+      requestBody.tools = convertTools(this.input.tools);
     }
 
     return new Request("http://localhost:11434/api/chat", {

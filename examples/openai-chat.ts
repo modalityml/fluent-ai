@@ -1,7 +1,9 @@
-import { openai, systemPrompt, userPrompt } from "../src";
+import { openai, systemPrompt, text, userPrompt } from "../src";
 
 const job = openai({})
   .chat("gpt-4o-mini")
   .messages([systemPrompt("you are a helpful assistant"), userPrompt("hi")]);
 const result = await job.run();
-console.log(JSON.stringify(result.raw, null, 2));
+console.log(text(result));
+console.log(job.cost);
+console.log(job.performance);

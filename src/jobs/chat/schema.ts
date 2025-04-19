@@ -85,8 +85,7 @@ export const ChatResultSchema = z.object({
     .optional(),
 });
 
-export const ChatJobSchema = BaseJobSchema.extend({
-  type: z.literal("chat"),
+export const ChatInputSchema = z.object({
   model: z.string(),
   temperature: z.number().optional(),
   stream: z.boolean().optional(),
@@ -100,6 +99,18 @@ export const ChatJobSchema = BaseJobSchema.extend({
   topK: z.number().optional(),
   systemPrompt: z.string().optional(),
   jsonSchema: JsonSchemaDefSchema.optional(),
-
-  result: ChatResultSchema.optional(),
 });
+
+export const ChatOutputSchema = z.object({
+  raw: z.any(),
+});
+
+export const ChatJobSchema = BaseJobSchema.extend({
+  type: z.literal("chat"),
+  input: ChatInputSchema,
+  output: ChatOutputSchema.optional(),
+});
+
+export type ChatInput = z.infer<typeof ChatInputSchema>;
+
+export type ChatOutput = z.infer<typeof ChatOutputSchema>;

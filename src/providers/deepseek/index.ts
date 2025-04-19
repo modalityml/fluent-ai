@@ -8,9 +8,11 @@ import { OpenAIModelsJobBuilder } from "~/providers/openai/models";
 export const BaseDeepseekJobSchema = z.object({
   provider: z.literal("deepseek"),
 });
-export const DeepseekChatJobSchema = ChatJobSchema.merge(BaseDeepseekJobSchema);
+export const DeepseekChatJobSchema = ChatJobSchema.extend(
+  BaseDeepseekJobSchema
+);
 export type DeepseekChatJob = z.infer<typeof DeepseekChatJobSchema>;
-export const DeepseekModelsJobSchema = ModelsJobSchema.merge(
+export const DeepseekModelsJobSchema = ModelsJobSchema.extend(
   BaseDeepseekJobSchema
 );
 export type DeepseekModelsJob = z.infer<typeof DeepseekModelsJobSchema>;

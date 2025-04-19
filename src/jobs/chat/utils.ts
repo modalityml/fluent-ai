@@ -68,15 +68,14 @@ export function tool(name: string) {
   return new ChatTool(name);
 }
 
-export function chunkText(chunk: any) {
-  if (chunk.choices[0].delta.content) {
-    return chunk.choices[0].delta.content;
+export function text(result: any) {
+  if (result.raw) {
+    // output text
+    return result.raw.choices[0].message.content;
+  }
+  if (result.choices[0].delta.content) {
+    // chunk text
+    return result.choices[0].delta.content;
   }
   return "";
 }
-
-// TODO:
-export function chunkObject(chunk: any) {}
-
-// TODO:
-export function chunkTools(chunk: any) {}

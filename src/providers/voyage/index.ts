@@ -7,7 +7,7 @@ export const VoyageBaseJobSchema = z.object({
 });
 
 export const VoyageEmbeddingJobSchema =
-  EmbeddingJobSchema.merge(VoyageBaseJobSchema);
+  EmbeddingJobSchema.extend(VoyageBaseJobSchema);
 
 export const VoyageJobSchema = z.discriminatedUnion("type", [
   VoyageEmbeddingJobSchema,
@@ -41,8 +41,8 @@ export class VoyageEmbeddingJobBuilder extends EmbeddingJobBuilder {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: this.job.model,
-        input: this.job.input,
+        model: this.input.model,
+        input: this.input.value,
       }),
     });
   };

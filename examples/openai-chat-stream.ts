@@ -1,4 +1,4 @@
-import { chunkText, openai, userPrompt } from "../src";
+import { text, openai, userPrompt } from "../src";
 
 const job = openai()
   .chat("gpt-4o-mini")
@@ -7,8 +7,7 @@ const job = openai()
 
 const stream = await job.run();
 for await (const chunk of stream) {
-  // console.log(chunk);
-  process.stdout.write(chunkText(chunk));
+  process.stdout.write(text(chunk));
 }
-const result = await job.done();
-console.log(result);
+const output = await job.done();
+console.log(output);

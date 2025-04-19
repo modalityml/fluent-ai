@@ -4,13 +4,11 @@ export const JobProviderSchema = z.enum([
   "anthropic",
   "deepseek",
   "fal",
+  "google",
+  "luma",
   "ollama",
   "openai",
   "voyage",
-  "together",
-  "fireworks",
-  "luma",
-  "google",
 ]);
 
 export const JobTypeSchema = z.enum(["chat", "image", "models", "embedding"]);
@@ -20,9 +18,23 @@ export const JobOptionsSchema = z.object({
   baseURL: z.string().optional(),
 });
 
+export const JobCostSchema = z.object({
+  promptTokens: z.number().optional(),
+  completionTokens: z.number().optional(),
+  totalTokens: z.number().optional(),
+});
+
+export const JobPerformance = z.object({});
+
+export type JobCost = z.infer<typeof JobCostSchema>;
+
+export type JobPerformance = z.infer<typeof JobPerformance>;
+
 export const BaseJobSchema = z.object({
   version: z.string().optional(),
   options: JobOptionsSchema.optional(),
+  cost: JobCostSchema.optional(),
+  performance: JobPerformance.optional(),
 });
 
 export type JobProvider = z.infer<typeof JobProviderSchema>;

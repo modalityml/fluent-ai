@@ -2,6 +2,8 @@ import { z } from "zod";
 import { anthropic, AnthropicJobSchema } from "~/providers/anthropic";
 import { deepseek, DeepseekJobSchema } from "~/providers/deepseek";
 import { fal, FalJobSchema } from "~/providers/fal";
+import { GoogleJobSchema } from "~/providers/google";
+import { LumaJobSchema } from "~/providers/luma";
 import { ollama, OllamaJobSchema } from "~/providers/ollama";
 import { openai, OpenAIJobSchema } from "~/providers/openai";
 import { voyage, VoyageJobSchema } from "~/providers/voyage";
@@ -10,6 +12,8 @@ export const JobSchema = z.union([
   AnthropicJobSchema,
   DeepseekJobSchema,
   FalJobSchema,
+  GoogleJobSchema,
+  LumaJobSchema,
   OllamaJobSchema,
   OpenAIJobSchema,
   VoyageJobSchema,
@@ -44,13 +48,13 @@ export function load(obj: Job) {
   let builder = null;
 
   if (obj.type === "chat" && "chat" in provider) {
-    builder = provider.chat(obj.model);
+    builder = provider.chat(obj.input.model);
   }
   if (obj.type === "embedding" && "embedding" in provider) {
-    builder = provider.embedding(obj.model);
+    builder = provider.embedding(obj.input.model);
   }
   if (obj.type === "image" && "image" in provider) {
-    builder = provider.image(obj.model);
+    builder = provider.image(obj.input.model);
   }
   if (obj.type === "models" && "models" in provider) {
     builder = provider.models();
@@ -60,7 +64,7 @@ export function load(obj: Job) {
     throw new Error("Failed to load job");
   }
 
-  builder.job = obj;
+  builder.input = obj.input;
 
   return builder;
 }

@@ -12,7 +12,7 @@ export const FalBaseJobSchema = z.object({
   provider: z.literal("fal"),
 });
 
-export const FalImageJobSchema = ImageJobSchema.merge(FalBaseJobSchema);
+export const FalImageJobSchema = ImageJobSchema.extend(FalBaseJobSchema);
 export type FalImageJob = z.infer<typeof FalImageJobSchema>;
 
 export const FalJobSchema = z.discriminatedUnion("type", [FalImageJobSchema]);

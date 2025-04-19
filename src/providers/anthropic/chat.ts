@@ -10,14 +10,14 @@ export class AnthropicChatJobBuilder extends ChatJobBuilder {
 
   makeRequest = () => {
     const requestParams = {
-      model: this.job.model,
-      max_tokens: this.job.maxTokens,
-      messages: convertMessages(this.job.messages),
+      model: this.input.model,
+      max_tokens: this.input.maxTokens,
+      messages: convertMessages(this.input.messages),
     } as any;
 
-    if (this.job.tools && this.job.tools.length) {
-      requestParams.tools = convertTools(this.job.tools);
-      requestParams.tool_choice = this.job.toolChoice;
+    if (this.input.tools && this.input.tools.length) {
+      requestParams.tools = convertTools(this.input.tools);
+      requestParams.tool_choice = this.input.toolChoice;
     }
 
     const headers = {

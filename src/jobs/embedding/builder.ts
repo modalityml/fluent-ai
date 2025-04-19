@@ -1,40 +1,32 @@
-import type { z } from "zod";
 import { JobBuilder } from "~/jobs/builder";
-import type { EmbeddingJobSchema } from "./schema";
+import type { EmbeddingInput, EmbeddingOutput } from "./schema";
 
-type EmbeddingJob = z.infer<typeof EmbeddingJobSchema>;
-
-export class EmbeddingJobBuilder extends JobBuilder {
-  job: EmbeddingJob;
+export class EmbeddingJobBuilder extends JobBuilder<
+  EmbeddingInput,
+  EmbeddingOutput
+> {
+  input: EmbeddingInput;
 
   constructor(model: string) {
     super();
-    this.job = {
-      type: "embedding",
+    this.type = "embedding";
+    this.input = {
       model: model,
     };
   }
 
-  input(input: string) {
-    this.job.input = input;
+  value(value: string) {
+    this.input.value = value;
     return this;
   }
 
   dimensions(dimensions: number) {
-    this.job.dimensions = dimensions;
+    this.input.dimensions = dimensions;
     return this;
   }
 
   encodingFormat(encodingFormat: string) {
-    this.job.encodingFormat = encodingFormat;
+    this.input.encodingFormat = encodingFormat;
     return this;
-  }
-
-  dump() {
-    const obj = super.dump();
-    return {
-      ...obj,
-      ...this.job,
-    };
   }
 }

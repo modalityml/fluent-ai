@@ -13,34 +13,34 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
 
   makeRequest = () => {
     const baseURL = this.options.baseURL || OPENAI_BASE_URL;
-    const messages = convertMessages(this.job.messages);
+    const messages = convertMessages(this.input.messages);
 
-    if (this.job.systemPrompt) {
+    if (this.input.systemPrompt) {
       messages.unshift({
         role: "system",
-        content: this.job.systemPrompt,
+        content: this.input.systemPrompt,
       });
     }
     const requestBody = {
       messages: messages,
-      model: this.job.model,
-      temperature: this.job.temperature,
-      stream: this.job.stream,
-      response_format: this.job.responseFormat,
+      model: this.input.model,
+      temperature: this.input.temperature,
+      stream: this.input.stream,
+      response_format: this.input.responseFormat,
     } as any;
 
-    if (this.job.tools && this.job.tools.length) {
-      requestBody.tools = convertTools(this.job.tools);
-      requestBody.tool_choice = this.job.toolChoice;
+    if (this.input.tools && this.input.tools.length) {
+      requestBody.tools = convertTools(this.input.tools);
+      requestBody.tool_choice = this.input.toolChoice;
     }
 
-    if (this.job.jsonSchema) {
-      const schema = z.toJSONSchema(this.job.jsonSchema.schema);
+    if (this.input.jsonSchema) {
+      const schema = z.toJSONSchema(this.input.jsonSchema.schema);
       requestBody.response_format = {
         type: "json_schema",
         json_schema: {
-          name: this.job.jsonSchema.name,
-          description: this.job.jsonSchema.description,
+          name: this.input.jsonSchema.name,
+          description: this.input.jsonSchema.description,
           schema: schema,
         },
       };
@@ -57,11 +57,16 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
   };
 
   handleResponse = async (response: Response) => {
-    if (this.job.stream) {
+    if (this.input.stream) {
       return jobStream(response);
     }
 
     const raw = await response.json();
+    this.cost = {
+      promptTokens: raw.usage.prompt_tokens,
+      completionTokens: raw.usage.completion_tokens,
+      totalTokens: raw.usage.total_tokens,
+    };
     return { raw };
   };
 }

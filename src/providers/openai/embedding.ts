@@ -18,15 +18,20 @@ export class OpenAIEmbeddingJobBuilder extends EmbeddingJobBuilder {
       },
       method: "POST",
       body: JSON.stringify({
-        model: this.job.model,
-        input: this.job.input,
-        encoding_format: this.job.encodingFormat,
-        dimensions: this.job.dimensions,
+        model: this.input.model,
+        input: this.input.value,
+        encoding_format: this.input.encodingFormat,
+        dimensions: this.input.dimensions,
       }),
     });
   };
 
   handleResponse = async (response: Response) => {
-    return await response.json();
+    const raw = await response.json();
+    this.cost = {
+      promptTokens: raw.usage.prompt_tokens,
+      totalTokens: raw.usage.total_tokens,
+    };
+    return { embedding: raw.data[0].embedding, raw };
   };
 }

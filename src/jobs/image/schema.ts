@@ -16,7 +16,25 @@ export const ImageSizeSchema = z.union([
 
 export type ImageSize = z.infer<typeof ImageSizeSchema>;
 
-const ImageResultSchema = z.object({
+export const ImageInputSchema = z.object({
+  model: z.string(),
+  prompt: z.string().optional(),
+  n: z.number().optional(),
+  quality: z.string().optional(),
+  responseFormat: z.string().optional(),
+  size: ImageSizeSchema.optional(),
+  style: z.string().optional(),
+  user: z.string().optional(),
+  numInferenceSteps: z.number().optional(),
+  seed: z.number().optional(),
+  guidanceScale: z.number().optional(),
+  syncMode: z.boolean().optional(),
+  enableSafetyChecker: z.boolean().optional(),
+  stream: z.boolean().optional(),
+});
+
+const ImageOuputSchema = z.object({
+  raw: z.any(),
   images: z.array(
     z.union([
       z.object({
@@ -38,21 +56,10 @@ const ImageResultSchema = z.object({
 
 export const ImageJobSchema = BaseJobSchema.extend({
   type: z.literal("image"),
-  model: z.string(),
-
-  prompt: z.string().optional(),
-  n: z.number().optional(),
-  quality: z.string().optional(),
-  responseFormat: z.string().optional(),
-  size: ImageSizeSchema.optional(),
-  style: z.string().optional(),
-  user: z.string().optional(),
-  numInferenceSteps: z.number().optional(),
-  seed: z.number().optional(),
-  guidanceScale: z.number().optional(),
-  syncMode: z.boolean().optional(),
-  enableSafetyChecker: z.boolean().optional(),
-  stream: z.boolean().optional(),
-
-  result: ImageResultSchema.optional(),
+  input: ImageInputSchema,
+  output: ImageOuputSchema.optional(),
 });
+
+export type ImageInput = z.infer<typeof ImageInputSchema>;
+
+export type ImageOutput = z.infer<typeof ImageOuputSchema>;

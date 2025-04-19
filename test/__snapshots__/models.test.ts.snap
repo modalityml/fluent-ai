@@ -36,7 +36,11 @@ exports[`models 3`] = `
 
 exports[`dump 1`] = `
 {
+  "cost": undefined,
+  "input": {},
   "options": {},
+  "output": undefined,
+  "performance": undefined,
   "provider": "ollama",
   "type": "models",
   "version": "0.2.4",
@@ -45,9 +49,13 @@ exports[`dump 1`] = `
 
 exports[`dump 2`] = `
 {
+  "cost": undefined,
+  "input": {},
   "options": {
     "apiKey": "<key>",
   },
+  "output": undefined,
+  "performance": undefined,
   "provider": "openai",
   "type": "models",
   "version": "0.2.4",
@@ -56,9 +64,13 @@ exports[`dump 2`] = `
 
 exports[`dump 3`] = `
 {
+  "cost": undefined,
+  "input": {},
   "options": {
     "apiKey": "<key>",
   },
+  "output": undefined,
+  "performance": undefined,
   "provider": "anthropic",
   "type": "models",
   "version": "0.2.4",

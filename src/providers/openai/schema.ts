@@ -10,17 +10,18 @@ export const BaseOpenAIJobSchema = z.object({
   provider: z.literal("openai"),
 });
 
-export const OpenAIChatJobSchema = ChatJobSchema.merge(BaseOpenAIJobSchema);
+export const OpenAIChatJobSchema = ChatJobSchema.extend(BaseOpenAIJobSchema);
 export type OpenAIChatJob = z.infer<typeof OpenAIChatJobSchema>;
 
 export const OpenAIEmbeddingJobSchema =
-  EmbeddingJobSchema.merge(BaseOpenAIJobSchema);
+  EmbeddingJobSchema.extend(BaseOpenAIJobSchema);
 export type OpenAIEmbeddingJob = z.infer<typeof OpenAIEmbeddingJobSchema>;
 
-export const OpenAIImageJobSchema = ImageJobSchema.merge(BaseOpenAIJobSchema);
+export const OpenAIImageJobSchema = ImageJobSchema.extend(BaseOpenAIJobSchema);
 export type OpenAIImageJob = z.infer<typeof OpenAIImageJobSchema>;
 
-export const OpenAIModelsJobSchema = ModelsJobSchema.merge(BaseOpenAIJobSchema);
+export const OpenAIModelsJobSchema =
+  ModelsJobSchema.extend(BaseOpenAIJobSchema);
 export type OpenAIModelsJob = z.infer<typeof OpenAIModelsJobSchema>;
 
 export const OpenAIJobSchema = z.discriminatedUnion("type", [

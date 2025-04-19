@@ -4,9 +4,9 @@ import { requestObject } from "./utils";
 
 function createJobs() {
   return [
-    ollama().embedding("nomic-embed-text").input("hi"),
-    openai({ apiKey: "<key>" }).embedding("text-embedding-ada-002").input("hi"),
-    voyage({ apiKey: "<key>" }).embedding("voyage-3-lite").input("hi"),
+    ollama().embedding("nomic-embed-text").value("hi"),
+    openai({ apiKey: "<key>" }).embedding("text-embedding-ada-002").value("hi"),
+    voyage({ apiKey: "<key>" }).embedding("voyage-3-lite").value("hi"),
   ];
 }
 

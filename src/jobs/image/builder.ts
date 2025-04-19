@@ -1,90 +1,79 @@
-import type { z } from "zod";
 import { JobBuilder } from "~/jobs/builder";
-import type { ImageJobSchema, ImageSize } from "./schema";
+import type { ImageInput, ImageOutput, ImageSize } from "./schema";
 
-type ImageJob = z.infer<typeof ImageJobSchema>;
-
-export class ImageJobBuilder extends JobBuilder {
-  job: ImageJob;
+export class ImageJobBuilder extends JobBuilder<ImageInput, ImageOutput> {
+  input: ImageInput;
 
   constructor(model: string) {
     super();
-    this.job = {
-      type: "image",
+    this.type = "image";
+    this.input = {
       model: model,
     };
   }
 
   prompt(prompt: string) {
-    this.job.prompt = prompt;
+    this.input.prompt = prompt;
     return this;
   }
 
   n(numImages: number) {
-    this.job.n = numImages;
+    this.input.n = numImages;
     return this;
   }
 
   quality(quality: string) {
-    this.job.quality = quality;
+    this.input.quality = quality;
     return this;
   }
 
   responseFormat(responseFormat: string) {
-    this.job.responseFormat = responseFormat;
+    this.input.responseFormat = responseFormat;
     return this;
   }
 
   size(imageSize: ImageSize) {
-    this.job.size = imageSize;
+    this.input.size = imageSize;
     return this;
   }
 
   style(style: string) {
-    this.job.style = style;
+    this.input.style = style;
     return this;
   }
 
   user(user: string) {
-    this.job.user = user;
+    this.input.user = user;
     return this;
   }
 
   numInferenceSteps(numInferenceSteps: number) {
-    this.job.numInferenceSteps = numInferenceSteps;
+    this.input.numInferenceSteps = numInferenceSteps;
     return this;
   }
 
   seed(seed: number) {
-    this.job.seed = seed;
+    this.input.seed = seed;
     return this;
   }
 
   guidanceScale(guidanceScale: number) {
-    this.job.guidanceScale = guidanceScale;
+    this.input.guidanceScale = guidanceScale;
     return this;
   }
 
   syncMode(syncMode: boolean) {
-    this.job.syncMode = syncMode;
+    this.input.syncMode = syncMode;
     return this;
   }
 
   enableSafetyChecker(enableSafetyChecker: boolean) {
-    this.job.enableSafetyChecker = enableSafetyChecker;
+    this.input.enableSafetyChecker = enableSafetyChecker;
     return this;
   }
 
   stream() {
-    this.job.stream = true;
+    this.input.stream = true;
     return this;
-  }
-
-  dump() {
-    const obj = super.dump();
-    return {
-      ...obj,
-      ...this.job,
-    };
   }
 }

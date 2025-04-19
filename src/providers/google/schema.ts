@@ -5,7 +5,7 @@ export const GoogleBaseJobSchema = z.object({
   provider: z.literal("google"),
 });
 
-export const GoogleChatJobSchema = ChatJobSchema.merge(GoogleBaseJobSchema);
+export const GoogleChatJobSchema = ChatJobSchema.extend(GoogleBaseJobSchema);
 export type GoogleChatJob = z.infer<typeof GoogleChatJobSchema>;
 
 export const GoogleJobSchema = z.discriminatedUnion("type", [

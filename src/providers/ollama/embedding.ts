@@ -12,8 +12,8 @@ export class OllamaEmbeddingJobBuilder extends EmbeddingJobBuilder {
     return new Request("http://localhost:11434/api/embed", {
       method: "POST",
       body: JSON.stringify({
-        model: this.job.model,
-        input: this.job.input,
+        model: this.input.model,
+        input: this.input.value,
       }),
     });
   };

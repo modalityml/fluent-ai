@@ -10,14 +10,14 @@ export class GoogleChatJobBuilder extends ChatJobBuilder {
 
   makeRequest = () => {
     return new Request(
-      `https://generativelanguage.googleapis.com/v1beta/models/${this.job.model}:generateContent?key=${this.options.apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${this.input.model}:generateContent?key=${this.options.apiKey}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          contents: convertMessages(this.job.messages).map((msg) => ({
+          contents: convertMessages(this.input.messages).map((msg) => ({
             role: msg.role === "user" ? "user" : "model",
             parts: [{ text: msg.content }],
           })),

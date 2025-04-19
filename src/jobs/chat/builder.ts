@@ -1,82 +1,81 @@
 import { z } from "zod";
 import { JobBuilder } from "~/jobs/builder";
 import type {
-  ChatJobSchema,
+  ChatInput,
+  ChatOutput,
   ChatStreamOptions,
   Message,
   ResponseFormat,
 } from "./schema";
 import type { ChatTool } from "./tool";
 
-type ChatJob = z.infer<typeof ChatJobSchema>;
-
-export class ChatJobBuilder extends JobBuilder {
-  job: ChatJob;
+export class ChatJobBuilder extends JobBuilder<ChatInput, ChatOutput> {
+  input: ChatInput;
 
   constructor(model: string) {
     super();
-    this.job = {
-      type: "chat",
+    this.type = "chat";
+    this.input = {
       model: model,
       messages: [],
     };
   }
 
   systemPrompt(systemPrompt: string) {
-    this.job.systemPrompt = systemPrompt;
+    this.input.systemPrompt = systemPrompt;
     return this;
   }
 
   messages(messages: Message[]) {
-    this.job.messages = messages;
+    this.input.messages = messages;
     return this;
   }
 
   temperature(temperature: number) {
-    this.job.temperature = temperature;
+    this.input.temperature = temperature;
     return this;
   }
 
   maxTokens(maxTokens: number) {
-    this.job.maxTokens = maxTokens;
+    this.input.maxTokens = maxTokens;
     return this;
   }
 
   topP(topP: number) {
-    this.job.topP = topP;
+    this.input.topP = topP;
     return this;
   }
 
   topK(topK: number) {
-    this.job.topK = topK;
+    this.input.topK = topK;
     return this;
   }
 
   tools(tools: ChatTool[]) {
-    this.job.tools = tools.map((tool) => tool.params);
+    this.input.tools = tools.map((tool) => tool.params);
     return this;
   }
 
   tool(tool: ChatTool) {
-    if (!this.job.tools) {
-      this.job.tools = [];
+    if (!this.input.tools) {
+      this.input.tools = [];
     }
-    this.job.tools.push(tool.params);
+    this.input.tools.push(tool.params);
     return this;
   }
 
   toolChoice(toolChoice: string) {
-    this.job.toolChoice = toolChoice;
+    this.input.toolChoice = toolChoice;
     return this;
   }
 
   responseFormat(responseFormat: ResponseFormat) {
-    this.job.responseFormat = responseFormat;
+    this.input.responseFormat = responseFormat;
     return this;
   }
 
   jsonSchema(schema: z.ZodType, name: string, description?: string) {
-    this.job.jsonSchema = {
+    this.input.jsonSchema = {
       name,
       description,
       schema,
@@ -86,17 +85,10 @@ export class ChatJobBuilder extends JobBuilder {
   }
 
   stream(streamOptions?: ChatStreamOptions) {
-    this.job.stream = true;
+    this.input.stream = true;
     if (streamOptions) {
-      this.job.streamOptions = streamOptions;
+      this.input.streamOptions = streamOptions;
     }
     return this;
-  }
-
-  dump() {
-    return {
-      ...super.dump(),
-      ...this.job,
-    };
   }
 }

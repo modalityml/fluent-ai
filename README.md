@@ -18,7 +18,7 @@ npm install fluent-ai zod
 
 fluent-ai includes support for multiple AI providers and modalities.
 
-| Provider  | chat               | embedding          | image              | models             |
+| provider  | chat completion    | embedding          | image generation   | list models        |
 | --------- | ------------------ | ------------------ | ------------------ | ------------------ |
 | anthropic | :white_check_mark: |                    |                    | :white_check_mark: |
 | fal       |                    |                    | :white_check_mark: |                    |

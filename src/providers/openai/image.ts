@@ -18,14 +18,14 @@ export class OpenAIImageJobBuilder extends ImageJobBuilder {
       },
       method: "POST",
       body: JSON.stringify({
-        prompt: this.job.prompt,
-        model: this.job.model,
-        n: this.job.n,
-        quality: this.job.quality,
-        response_format: this.job.responseFormat,
-        size: this.job.size,
-        style: this.job.style,
-        user: this.job.user,
+        prompt: this.input.prompt,
+        model: this.input.model,
+        n: this.input.n,
+        quality: this.input.quality,
+        response_format: this.input.responseFormat,
+        size: this.input.size,
+        style: this.input.style,
+        user: this.input.user,
       }),
     });
   };

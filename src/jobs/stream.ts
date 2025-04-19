@@ -1,6 +1,6 @@
 import { EventSourceParserStream } from "eventsource-parser/stream";
 
-export function jobStream<Input, Output>(response: Response) {
+export function jobStream<Output>(response: Response) {
   return (async function* () {
     const eventStream = response
       .body!.pipeThrough(new TextDecoderStream())
@@ -12,7 +12,7 @@ export function jobStream<Input, Output>(response: Response) {
         break;
       }
       const chunk = JSON.parse(value.data);
-      yield chunk;
+      yield chunk as Output;
     }
   })();
 }
