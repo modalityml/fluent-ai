@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parse } from "partial-json";
 import type { ChatToolSchema, Message } from "./schema";
 import { ChatTool } from "./tool";
 
@@ -47,4 +48,15 @@ export function text(result: any) {
     return result.choices[0].delta.content;
   }
   return "";
+}
+
+export function object(result: any) {
+  return JSON.parse(result.raw.choices[0].message.content);
+}
+
+export function partialParse(content: string) {
+  if (content) {
+    return parse(content);
+  }
+  return {};
 }
