@@ -1,7 +1,16 @@
 import { version } from "../../package.json";
 import type { JobOptions, JobProvider } from "./schema";
 
-class HTTPError extends Error {}
+export class HTTPError extends Error {
+  status: number;
+  json?: any;
+
+  constructor(message: string, status: number, json?: any) {
+    super(message);
+    this.status = status;
+    this.json = json;
+  }
+}
 
 export class JobBuilder {
   provider!: JobProvider;
@@ -14,7 +23,16 @@ export class JobBuilder {
     const request = this.makeRequest!();
     const response = await fetch(request);
     if (!response.ok) {
-      throw new HTTPError(`Fetch error: ${response.statusText}`);
+      let json;
+      try {
+        json = await response.json();
+      } catch (e) {}
+
+      throw new HTTPError(
+        `Fetch error: ${response.statusText}`,
+        response.status,
+        json
+      );
     }
     return await this.handleResponse!(response);
   }

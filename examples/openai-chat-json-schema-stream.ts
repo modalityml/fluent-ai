@@ -13,7 +13,6 @@ const job = openai()
   .stream();
 
 const { objectStream } = await job.run();
-
 for await (const object of objectStream) {
   console.log(object);
 }

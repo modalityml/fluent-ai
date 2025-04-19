@@ -4,5 +4,4 @@ const job = openai({})
   .chat("gpt-4o-mini")
   .messages([systemPrompt("you are a helpful assistant"), userPrompt("hi")]);
 const result = await job.run();
-
-console.log(result);
+console.log(JSON.stringify(result.raw, null, 2));

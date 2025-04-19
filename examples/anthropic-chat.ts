@@ -5,5 +5,4 @@ const job = anthropic()
   .maxTokens(1024)
   .messages([userPrompt("Hello, world")]);
 const result = await job.run();
-
-console.log(result);
+console.log(result.raw);

@@ -9,14 +9,11 @@ const weatherTool = tool("get_current_weather")
       unit: z.enum(["celsius", "fahrenheit"]).optional(),
     })
   );
-
 const job = openai()
   .chat("gpt-4o-mini")
   .tool(weatherTool)
   .messages([
     userPrompt("What's the weather like in Boston, Beijing, Tokyo today?"),
   ]);
-
-const { toolCalls } = await job.run();
-
-console.log(JSON.stringify(toolCalls, null, 2));
+const result = await job.run();
+console.log(JSON.stringify(result.raw, null, 2));

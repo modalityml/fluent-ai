@@ -61,19 +61,7 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
       return jobStream(response);
     }
 
-    const chatCompletion = await response.json();
-    if (this.job.tools && this.job.tools.length) {
-      return {
-        text: chatCompletion.choices[0].message.content,
-        toolCalls: chatCompletion.choices[0].message.tool_calls,
-      };
-    } else {
-      const content = chatCompletion.choices[0].message.content;
-      if (this.job.jsonSchema) {
-        const parsed = JSON.parse(content);
-        return { text: content, object: parsed };
-      }
-      return { text: content };
-    }
+    const raw = await response.json();
+    return { raw };
   };
 }

@@ -34,7 +34,7 @@ export class AnthropicChatJobBuilder extends ChatJobBuilder {
   };
 
   handleResponse = async (response: Response) => {
-    const json = await response.json();
-    return json;
+    const raw = await response.json();
+    return { raw };
   };
 }
