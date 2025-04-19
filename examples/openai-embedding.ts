@@ -1,6 +1,5 @@
 import { openai } from "../src";
 
-const job = openai().embedding("text-embedding-3-small").input("hello");
+const job = openai().embedding("text-embedding-3-small").value("hello");
 const result = await job.run();
-
-console.log(JSON.stringify(result, null, 2));
+console.log(result.embedding);

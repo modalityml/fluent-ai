@@ -35,43 +35,52 @@ exports[`embeddings 3`] = `
 
 exports[`dump 1`] = `
 {
-  "embedding": {
+  "cost": undefined,
+  "input": {
     "model": "nomic-embed-text",
-    "params": {
-      "input": "hi",
-    },
+    "value": "hi",
   },
   "options": {},
+  "output": undefined,
+  "performance": undefined,
   "provider": "ollama",
+  "type": "embedding",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 2`] = `
 {
-  "embedding": {
+  "cost": undefined,
+  "input": {
     "model": "text-embedding-ada-002",
-    "params": {
-      "input": "hi",
-    },
+    "value": "hi",
   },
   "options": {
     "apiKey": "<key>",
   },
+  "output": undefined,
+  "performance": undefined,
   "provider": "openai",
+  "type": "embedding",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 3`] = `
 {
-  "embedding": {
+  "cost": undefined,
+  "input": {
     "model": "voyage-3-lite",
-    "params": {
-      "input": "hi",
-    },
+    "value": "hi",
   },
   "options": {
     "apiKey": "<key>",
   },
-  "provider": "voyageai",
+  "output": undefined,
+  "performance": undefined,
+  "provider": "voyage",
+  "type": "embedding",
+  "version": "0.2.4",
 }
 `;

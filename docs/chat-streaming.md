@@ -13,7 +13,7 @@ export interface StreamOptions {
 ```ts
 const { textStream } = await openai()
   .chat("gpt-4o-mini")
-  .messages([userPrompt("hi")])
+  .messages([user("hi")])
   .stream()
   .run();
 
@@ -28,9 +28,7 @@ for await (const text of textStream) {
 const { toolCallStream } = await openai()
   .chat("gpt-4o-mini")
   .tool(weatherTool)
-  .messages([
-    userPrompt("What's the weather like in Boston, Beijing, Tokyo today?"),
-  ])
+  .messages([user("What's the weather like in Boston, Beijing, Tokyo today?")])
   .stream()
   .run();
 
@@ -44,7 +42,7 @@ for await (const toolCalls of toolCallStream) {
 ```ts
 const { objectStream } = await openai()
   .chat("gpt-4o-mini")
-  .messages([userPrompt("generate a person with name and age in json format")])
+  .messages([user("generate a person with name and age in json format")])
   .responseSchema(personSchema)
   .objectStream()
   .run();
@@ -61,7 +59,7 @@ The original chunk object from providers
 ```ts
 const { stream } = await openai()
   .chat("gpt-4o-mini")
-  .messages([userPrompt("hi")]);
+  .messages([user("hi")]);
 
 for await (const chunk of stream) {
   console.log(chunk);

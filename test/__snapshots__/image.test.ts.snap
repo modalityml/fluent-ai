@@ -26,32 +26,38 @@ exports[`image 2`] = `
 
 exports[`dump 1`] = `
 {
-  "image": {
+  "cost": undefined,
+  "input": {
     "model": "fal-ai/flux/dev",
-    "params": {
-      "n": 3,
-      "prompt": "A cute baby sea otter",
-    },
+    "n": 3,
+    "prompt": "A cute baby sea otter",
   },
   "options": {
     "apiKey": "<key>",
   },
+  "output": undefined,
+  "performance": undefined,
   "provider": "fal",
+  "type": "image",
+  "version": "0.2.4",
 }
 `;
 
 exports[`dump 2`] = `
 {
-  "image": {
+  "cost": undefined,
+  "input": {
     "model": "dall-e-2",
-    "params": {
-      "n": 3,
-      "prompt": "A cute baby sea otter",
-    },
+    "n": 3,
+    "prompt": "A cute baby sea otter",
   },
   "options": {
     "apiKey": "<key>",
   },
+  "output": undefined,
+  "performance": undefined,
   "provider": "openai",
+  "type": "image",
+  "version": "0.2.4",
 }
 `;

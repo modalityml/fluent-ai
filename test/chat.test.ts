@@ -1,32 +1,22 @@
 import { test, expect } from "bun:test";
-import {
-  openai,
-  ollama,
-  systemPrompt,
-  userPrompt,
-  tool,
-  anthropic,
-  requestObject,
-  load,
-} from "../src";
+import { openai, ollama, system, user, tool, anthropic, load } from "../src";
 import { z } from "zod";
+import { requestObject } from "./utils";
 
-// prettier-ignore
-const jobs = [
-  anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
-  ollama().chat("llama3.2"),
-  openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
-];
+function createJobs() {
+  return [
+    anthropic({ apiKey: "<key>" }).chat("claude-3-5-sonnet-20241022"),
+    ollama().chat("llama3.2"),
+    openai({ apiKey: "<key>" }).chat("gpt-4o-mini"),
+  ];
+}
 
 test("chat", async () => {
-  for (const job of jobs) {
+  for (const job of createJobs()) {
     expect(
       await requestObject(
         job
-          .messages([
-            systemPrompt("you are a helpful assistant"),
-            userPrompt("hi"),
-          ])
+          .messages([system("you are a helpful assistant"), user("hi")])
           .temperature(0.5)
           .makeRequest()
       )
@@ -34,15 +24,28 @@ test("chat", async () => {
   }
 });
 
+test("stream", async () => {
+  for (const job of createJobs()) {
+    expect(
+      await requestObject(
+        job
+          .messages([system("you are a helpful assistant"), user("hi")])
+          .stream()
+          .makeRequest()
+      )
+    ).toMatchSnapshot();
+  }
+});
+
 test("dump", () => {
-  for (const job of jobs) {
+  for (const job of createJobs()) {
     expect(job.dump()).toMatchSnapshot();
   }
 });
 
 test("load", async () => {
-  for (const job of jobs) {
-    const req1 = await requestObject(load(job.dump()).makeRequest!());
+  for (const job of createJobs()) {
+    const req1 = await requestObject(load(job.dump()).makeRequest());
     const req2 = await requestObject(job.makeRequest());
     expect(req1).toEqual(req2);
   }
@@ -53,7 +56,7 @@ test("json_object", async () => {
     await requestObject(
       openai({ apiKey: "<key>" })
         .chat("gpt-4o-mini")
-        .messages([userPrompt("hi")])
+        .messages([user("hi")])
         .responseFormat({ type: "json_object" })
         .makeRequest()
     )
@@ -70,12 +73,12 @@ test("tool", async () => {
       })
     );
 
-  for (const job of jobs) {
+  for (const job of createJobs()) {
     expect(
       await requestObject(
         job
           .tool(weatherTool)
-          .messages([userPrompt("What's the weather like in Boston today?")])
+          .messages([user("What's the weather like in Boston today?")])
           .makeRequest()
       )
     ).toMatchSnapshot();
@@ -88,12 +91,12 @@ test("jsonSchema", async () => {
     age: z.number(),
   });
 
-  for (const job of jobs) {
+  for (const job of createJobs()) {
     expect(
       await requestObject(
         job
           .messages([
-            userPrompt("generate a person with name and age in json format"),
+            user("generate a person with name and age in json format"),
           ])
           .jsonSchema(personSchema, "person")
           .makeRequest()
