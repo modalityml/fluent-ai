@@ -10,6 +10,8 @@ fluent-ai is a lightweight, type-safe AI toolkit that seamlessly integrates mult
 
 ## Installation
 
+[Zod](https://zod.dev/) is a popular type of validation library for TypeScript and JavaScript that allows developers to define and validate data schemas in a concise and type-safe manner. fluent-ai is built upon zod.
+
 ```sh
 npm install fluent-ai zod@next
 ```
@@ -59,21 +61,28 @@ const job = openai()
 
 ### Declaration
 
-Alternatively, fluent-ai also supports job declaration from json object.
+Alternatively, fluent-ai supports declarative job creation using JSON objects, with full TypeScript autocompletion support.
 
 ```ts
 import { load } from "fluent-ai";
 
 const job = load({
   provider: "openai",
-  chat: {
+  type: "chat",
+  input: {
     model: "gpt-4o-mini",
-    params: {
-      messages: [{ role: "user", content: "hi" }],
-      temperature: 0.5,
-    },
+    messages: [{ role: "user", content: "hi" }],
+    temperature: 0.5,
   },
 });
+```
+
+fluent-ai provides built-in TypeScript type definitions and schema validation for jobs:
+
+```ts
+import { type Job } from "fluent-ai"; // TypeScript type
+import { JobSchema } from "fluent-ai"; // Zod schema
+import { jobJSONSchema } from "fluent-ai"; // JSON Schema
 ```
 
 ### Job serialization and deserialization
@@ -101,38 +110,14 @@ Chat completion, such as ChatGPT, is the most common AI service. It generates re
 ### Text generation
 
 ```ts
-import { openai, system, user } from "fluent-ai";
+import { openai, system, user, text } from "fluent-ai";
 
 const job = openai()
   .chat("gpt-4o-mini")
   .messages([system("You are a helpful assistant"), user("Hi")]);
 
-const { text } = await job.run();
-```
-
-### Structured output
-
-Structured output from AI chat completions involves formatting the responses based on predefined json schema. This feature is essential when building applications with chat completions.
-
-[Zod](https://zod.dev/) is a popular type of validation library for TypeScript and JavaScript that allows developers to define and validate data schemas in a concise and type-safe manner. fluent-ai provides built-in integration for declare json-schema with zod. To use zod integration, first install `zod` from npm. Any parameter in fluent-ai that accepts a JSON schema will also work with a Zod schema.
-
-fluent-ai provides a consistent `jsonSchema()` function for all providers to generate structured output. For more details, refer to the [structured output docs](/docs/chat-structured-outputs.md)
-
-```ts
-import { z } from "zod";
-import { openai, user } from "fluent-ai";
-
-const personSchema = z.object({
-  name: z.string(),
-  age: z.number(),
-});
-
-const job = openai()
-  .chat("gpt-4o-mini")
-  .messages([user("generate a person with name and age in json format")])
-  .jsonSchema(personSchema, "person");
-
-const { object } = await job.run();
+const result = await job.run();
+console.log(text(result));
 ```
 
 ### Function calling (tool calling)
@@ -160,9 +145,7 @@ To use the tool, add it to a chat job with a function-calling-enabled model, suc
 ```ts
 const job = openai().chat("gpt-4o-mini").tool(weatherTool);
 
-const { toolCalls } = await job
-  .messages([user("What is the weather in San Francisco?")])
-  .run();
+await job.messages([user("What is the weather in San Francisco?")]).run();
 ```
 
 ### Streaming support
@@ -175,32 +158,19 @@ const job = openai()
   .messages([system("You are a helpful assistant"), user("Hi")])
   .stream();
 
-const { stream } = await job.run();
-for await (const chunk of stream) {
-  console.log(chunk);
+for await (const event of await job.run()) {
+  console.log(text(event));
 }
 ```
 
 fluent-ai supports streaming text, object and tool calls on demand. For more details, see the [streaming docs](/docs/chat-streaming.md).
-
-### Vision support
-
-You can leverage chat models with vision capabilities by including an image URL in your prompt.
-
-```ts
-import { openai, system, user } from "fluent-ai";
-
-openai()
-  .chat("gpt-4o-mini")
-  .messages([user("Describe the image", { image: { url: "<image_url>" } })]);
-```
 
 ## Embedding
 
 ```ts
 import { openai } from "fluent-ai";
 
-const job = openai().embedding("text-embedding-3-small").input("hello");
+const job = openai().embedding("text-embedding-3-small").value("hello");
 const result = await job.run();
 ```
 

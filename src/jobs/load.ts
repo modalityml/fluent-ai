@@ -21,7 +21,7 @@ export const JobSchema = z.union([
 
 export type Job = z.infer<typeof JobSchema>;
 
-export const jobJsonSchema = z.toJSONSchema(JobSchema);
+export const jobJSONSchema = z.toJSONSchema(JobSchema);
 
 export function load(obj: Job) {
   obj = JobSchema.parse(obj);
