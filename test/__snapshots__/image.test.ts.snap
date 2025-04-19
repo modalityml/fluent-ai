@@ -39,7 +39,7 @@ exports[`dump 1`] = `
   "performance": undefined,
   "provider": "fal",
   "type": "image",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;
 
@@ -58,6 +58,6 @@ exports[`dump 2`] = `
   "performance": undefined,
   "provider": "openai",
   "type": "image",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;

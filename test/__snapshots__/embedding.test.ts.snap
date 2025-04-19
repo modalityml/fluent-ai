@@ -45,7 +45,7 @@ exports[`dump 1`] = `
   "performance": undefined,
   "provider": "ollama",
   "type": "embedding",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;
 
@@ -63,7 +63,7 @@ exports[`dump 2`] = `
   "performance": undefined,
   "provider": "openai",
   "type": "embedding",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;
 
@@ -81,6 +81,6 @@ exports[`dump 3`] = `
   "performance": undefined,
   "provider": "voyage",
   "type": "embedding",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;

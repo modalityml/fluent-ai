@@ -82,7 +82,7 @@ exports[`dump 1`] = `
   "performance": undefined,
   "provider": "anthropic",
   "type": "chat",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;
 
@@ -98,7 +98,7 @@ exports[`dump 2`] = `
   "performance": undefined,
   "provider": "ollama",
   "type": "chat",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;
 
@@ -116,7 +116,7 @@ exports[`dump 3`] = `
   "performance": undefined,
   "provider": "openai",
   "type": "chat",
-  "version": "0.2.4",
+  "version": "0.3.0",
 }
 `;
 
