@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { ChatJobBuilder, convertTools } from "~/jobs/chat";
+import { ChatJobBuilder, convertTools, type ChatOutput } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
 import { jobStream } from "~/jobs/stream";
-import { OPENAI_BASE_URL } from "./schema";
+import { OPENAI_BASE_URL, type OpenAIChatJob } from "./schema";
 
-export class OpenAIChatJobBuilder extends ChatJobBuilder {
+export class OpenAIChatJobBuilder extends ChatJobBuilder<OpenAIChatJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "openai";
@@ -12,7 +12,7 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
   }
 
   makeRequest = () => {
-    const baseURL = this.options.baseURL || OPENAI_BASE_URL;
+    const baseURL = this.options!.baseURL || OPENAI_BASE_URL;
     const messages = this.input.messages;
 
     if (this.input.system) {
@@ -48,7 +48,7 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
 
     return new Request(`${baseURL}/chat/completions`, {
       headers: {
-        Authorization: `Bearer ${this.options.apiKey}`,
+        Authorization: `Bearer ${this.options!.apiKey}`,
         "Content-Type": "application/json",
       },
       method: "POST",
@@ -56,9 +56,9 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
     });
   };
 
-  handleResponse = async (response: Response) => {
+  async handleResponse(response: Response) {
     if (this.input.stream) {
-      return jobStream(response);
+      return jobStream<ChatOutput>(response);
     }
 
     const raw = await response.json();
@@ -68,5 +68,5 @@ export class OpenAIChatJobBuilder extends ChatJobBuilder {
       totalTokens: raw.usage.total_tokens,
     };
     return { raw };
-  };
+  }
 }

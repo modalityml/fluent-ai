@@ -1,17 +1,18 @@
 import { ModelsJobBuilder } from "~/jobs/models";
 import type { JobOptions } from "~/jobs/schema";
+import type { AnthropicModelsJob } from "./schema";
 
-export class AnthropicModelsJobBuilder extends ModelsJobBuilder {
+export class AnthropicModelsJobBuilder extends ModelsJobBuilder<AnthropicModelsJob> {
   constructor(options: JobOptions) {
     super();
     this.provider = "anthropic";
     this.options = options;
   }
 
-  makeRequest = () => {
+  makeRequest() {
     const headers = {
       "anthropic-version": "2023-06-01",
-      "x-api-key": this.options.apiKey!,
+      "x-api-key": this.options!.apiKey!,
       "Content-Type": "application/json",
     };
 
@@ -19,10 +20,10 @@ export class AnthropicModelsJobBuilder extends ModelsJobBuilder {
       method: "GET",
       headers: headers,
     });
-  };
+  }
 
-  handleResponse = async (response: Response) => {
+  async handleResponse(response: Response) {
     const json = await response.json();
-    return json;
-  };
+    return { raw: json };
+  }
 }

@@ -60,6 +60,6 @@ export const ImageJobSchema = BaseJobSchema.extend({
   output: ImageOuputSchema.optional(),
 });
 
+export type ImageJob = z.infer<typeof ImageJobSchema>;
 export type ImageInput = z.infer<typeof ImageInputSchema>;
-
 export type ImageOutput = z.infer<typeof ImageOuputSchema>;

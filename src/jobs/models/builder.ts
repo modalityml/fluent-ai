@@ -1,8 +1,10 @@
 import { JobBuilder } from "~/jobs/builder";
-import type { ModelsInput, ModelsOutput } from "./schema";
+import type { ModelsJob } from "./schema";
 
-export class ModelsJobBuilder extends JobBuilder<ModelsInput, ModelsOutput> {
-  input: ModelsInput;
+export abstract class ModelsJobBuilder<
+  Job extends ModelsJob,
+> extends JobBuilder<Job> {
+  input: Job["input"];
 
   constructor() {
     super();

@@ -11,6 +11,7 @@ export const ModelsJobSchema = BaseJobSchema.extend({
   output: ModelsOuputSchema.optional(),
 });
 
+export type ModelsJob = z.infer<typeof ModelsJobSchema>;
 export type ModelsInput = z.infer<typeof ModelsInputSchema>;
 
 export type ModelsOutput = z.infer<typeof ModelsOuputSchema>;

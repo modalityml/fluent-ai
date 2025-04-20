@@ -1,7 +1,8 @@
 import { ImageJobBuilder } from "~/jobs/image";
 import type { JobOptions } from "~/jobs/schema";
+import type { FalImageJob } from "./schema";
 
-export class FalImageJobBuilder extends ImageJobBuilder {
+export class FalImageJobBuilder extends ImageJobBuilder<FalImageJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "fal";
@@ -12,7 +13,7 @@ export class FalImageJobBuilder extends ImageJobBuilder {
     return new Request(`https://queue.fal.run/${this.input.model}`, {
       method: "POST",
       headers: {
-        Authorization: `Key ${this.options.apiKey}`,
+        Authorization: `Key ${this.options!.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

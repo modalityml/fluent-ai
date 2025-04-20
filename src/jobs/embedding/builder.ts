@@ -1,11 +1,10 @@
 import { JobBuilder } from "~/jobs/builder";
-import type { EmbeddingInput, EmbeddingOutput } from "./schema";
+import type { EmbeddingJob } from "./schema";
 
-export class EmbeddingJobBuilder extends JobBuilder<
-  EmbeddingInput,
-  EmbeddingOutput
-> {
-  input: EmbeddingInput;
+export abstract class EmbeddingJobBuilder<
+  Job extends EmbeddingJob,
+> extends JobBuilder<Job> {
+  input: Job["input"];
 
   constructor(model: string) {
     super();
