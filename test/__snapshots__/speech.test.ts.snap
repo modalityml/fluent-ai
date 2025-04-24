@@ -1,0 +1,35 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dump 1`] = `
+{
+  "cost": undefined,
+  "input": {
+    "model": "tts-1",
+  },
+  "options": {
+    "apiKey": undefined,
+  },
+  "output": undefined,
+  "performance": undefined,
+  "provider": "openai",
+  "type": "speech",
+  "version": "0.3.0",
+}
+`;
+
+exports[`dump 2`] = `
+{
+  "cost": undefined,
+  "input": {
+    "model": "model",
+  },
+  "options": {
+    "apiKey": undefined,
+  },
+  "output": undefined,
+  "performance": undefined,
+  "provider": "elevenlabs",
+  "type": "speech",
+  "version": "0.3.0",
+}
+`;

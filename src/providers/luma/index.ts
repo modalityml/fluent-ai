@@ -15,10 +15,6 @@ export function luma(options?: JobOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.LUMA_API_KEY;
 
-  if (!options.apiKey) {
-    throw new Error("Luma API key is required");
-  }
-
   return {
     image(model: string) {
       return new LumaImageJobBuilder(options, model);

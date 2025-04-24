@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const JobProviderSchema = z.enum([
   "anthropic",
+  "elevenlabs",
   "deepseek",
   "fal",
   "google",
@@ -11,7 +12,13 @@ export const JobProviderSchema = z.enum([
   "voyage",
 ]);
 
-export const JobTypeSchema = z.enum(["chat", "image", "models", "embedding"]);
+export const JobTypeSchema = z.enum([
+  "chat",
+  "image",
+  "models",
+  "embedding",
+  "speech",
+]);
 
 export const JobOptionsSchema = z.object({
   apiKey: z.string().optional(),

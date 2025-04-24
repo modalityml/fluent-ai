@@ -1,5 +1,5 @@
-import { ImageJobBuilder } from "~/jobs/image";
 import type { JobOptions } from "~/jobs/schema";
+import { ImageJobBuilder } from "~/jobs/image";
 
 export class FalImageJobBuilder extends ImageJobBuilder {
   constructor(options: JobOptions, model: string) {

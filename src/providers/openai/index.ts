@@ -3,14 +3,11 @@ import { OpenAIChatJobBuilder } from "~/providers/openai/chat";
 import { OpenAIImageJobBuilder } from "~/providers/openai/image";
 import { OpenAIEmbeddingJobBuilder } from "~/providers/openai/embedding";
 import { OpenAIModelsJobBuilder } from "~/providers/openai/models";
+import { OpenAISpeechJobBuilder } from "~/providers/openai/speech";
 
 export function openai(options?: JobOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.OPENAI_API_KEY;
-
-  if (!options.apiKey) {
-    throw new Error("OpenAI API key is required");
-  }
 
   return {
     chat(model: string) {
@@ -24,6 +21,9 @@ export function openai(options?: JobOptions) {
     },
     models() {
       return new OpenAIModelsJobBuilder(options);
+    },
+    speech(model: string) {
+      return new OpenAISpeechJobBuilder(options, model);
     },
   };
 }
