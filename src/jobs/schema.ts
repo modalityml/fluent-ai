@@ -39,8 +39,12 @@ export type JobPerformance = z.infer<typeof JobPerformance>;
 
 export const BaseJobSchema = z.object({
   version: z.string().optional(),
+  provider: JobProviderSchema,
   options: JobOptionsSchema.optional(),
   cost: JobCostSchema.optional(),
+  type: JobTypeSchema,
+  input: z.any(),
+  output: z.any().optional(),
   performance: JobPerformance.optional(),
 });
 

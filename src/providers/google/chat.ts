@@ -1,7 +1,8 @@
-import { ChatJobBuilder } from "~/jobs/chat";
+import { ChatJobBuilder, type Message } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
+import type { GoogleChatJob } from "./schema";
 
-export class GoogleChatJobBuilder extends ChatJobBuilder {
+export class GoogleChatJobBuilder extends ChatJobBuilder<GoogleChatJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "google";
@@ -10,14 +11,14 @@ export class GoogleChatJobBuilder extends ChatJobBuilder {
 
   makeRequest = () => {
     return new Request(
-      `https://generativelanguage.googleapis.com/v1beta/models/${this.input.model}:generateContent?key=${this.options.apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${this.input.model}:generateContent?key=${this.options!.apiKey}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          contents: this.input.messages.map((msg) => ({
+          contents: this.input.messages.map((msg: Message) => ({
             role: msg.role === "user" ? "user" : "model",
             parts: [{ text: msg.content }],
           })),

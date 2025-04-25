@@ -1,8 +1,10 @@
 import { JobBuilder } from "~/jobs/builder";
-import type { ImageInput, ImageOutput, ImageSize } from "./schema";
+import type { ImageJob, ImageSize } from "./schema";
 
-export class ImageJobBuilder extends JobBuilder<ImageInput, ImageOutput> {
-  input: ImageInput;
+export abstract class ImageJobBuilder<
+  Job extends ImageJob,
+> extends JobBuilder<Job> {
+  input: Job["input"];
 
   constructor(model: string) {
     super();

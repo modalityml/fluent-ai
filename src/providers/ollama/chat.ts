@@ -1,14 +1,15 @@
 import { ChatJobBuilder, convertTools } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
+import type { OllamaChatJob } from "./schema";
 
-export class OllamaChatJobBuilder extends ChatJobBuilder {
+export class OllamaChatJobBuilder extends ChatJobBuilder<OllamaChatJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "ollama";
     this.options = options;
   }
 
-  makeRequest = () => {
+  makeRequest() {
     const requestBody = {
       model: this.input.model,
       messages: this.input.messages,
@@ -23,10 +24,9 @@ export class OllamaChatJobBuilder extends ChatJobBuilder {
       method: "POST",
       body: JSON.stringify(requestBody),
     });
-  };
+  }
 
-  handleResponse = async (response: Response) => {
-    const json = await response.json();
-    return json;
-  };
+  handleResponse(response: Response) {
+    return response.json();
+  }
 }

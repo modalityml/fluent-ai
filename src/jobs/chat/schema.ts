@@ -1,23 +1,72 @@
 import { z } from "zod";
 import { BaseJobSchema } from "~/jobs/schema";
 
-export const MessageSchema = z.object({
-  role: z.enum(["system", "user", "assistant"]),
-  content: z.union([
-    z.string(),
-    z.array(
-      z.union([
-        z.object({ type: z.literal("text"), text: z.string() }),
-        z.object({
-          type: z.literal("image_url"),
-          image_url: z.object({
-            url: z.string(),
-          }),
-        }),
-      ])
-    ),
-  ]),
+export const MessageContentSchema = z.union([
+  z.string(),
+  z.array(
+    z.object({
+      type: z.literal("text"),
+      text: z.string(),
+    }),
+  ),
+  z.array(
+    z.object({
+      type: z.literal("image"),
+      image_url: z.string().optional(),
+      source: z
+        .object({
+          type: z.literal("base64"),
+          data: z.string(),
+          media_type: z.enum([
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/gif",
+          ]),
+        })
+        .optional(),
+    }),
+  ),
+]);
+
+export const ToolCallSchema = z.object({
+  name: z.string().optional(),
+  type: z.string().optional(),
+  id: z.string().optional(),
+  call_id: z.string().optional(),
+  arguments: z.record(z.string(), z.any()),
 });
+
+export const BaseMessageSchema = z.object({
+  role: z.enum(["assistant", "user", "system", "tool"]),
+  content: MessageContentSchema,
+});
+
+export const AIMessageSchema = BaseMessageSchema.extend({
+  role: z.literal("assistant"),
+  tool_calls: z.array(ToolCallSchema).optional(),
+});
+
+export const HumanMessageSchema = BaseMessageSchema.extend({
+  role: z.literal("user"),
+});
+
+export const SystemMessageSchema = BaseMessageSchema.extend({
+  role: z.literal("system"),
+});
+
+export const ToolMessageSchema = BaseMessageSchema.extend({
+  role: z.literal("tool"),
+  call_id: z.string().optional(),
+  result: z.any().optional(),
+});
+
+export const MessageSchema = z.discriminatedUnion("role", [
+  AIMessageSchema,
+  HumanMessageSchema,
+  SystemMessageSchema,
+  ToolMessageSchema,
+]);
 
 export type Message = z.infer<typeof MessageSchema>;
 
@@ -48,28 +97,6 @@ export const JsonSchemaDefSchema = z.object({
 
 export const ChunkSchema = z.object({});
 
-export const ChatResultSchema = z.object({
-  message: z.object({
-    role: z.literal("assistant"),
-    content: z.string().nullable(),
-  }),
-  usage: z
-    .object({
-      prompt_tokens: z.number(),
-      completion_tokens: z.number(),
-      total_tokens: z.number(),
-    })
-    .optional(),
-  tool_calls: z
-    .array(
-      z.object({
-        name: z.string(),
-        arguments: z.record(z.string(), z.any()),
-      })
-    )
-    .optional(),
-});
-
 export const ChatInputSchema = z.object({
   model: z.string(),
   temperature: z.number().optional(),
@@ -87,13 +114,17 @@ export const ChatInputSchema = z.object({
 });
 
 // TODO: Add a schema for the output
-export const ChatOutputSchema = z.any();
-
+export const ChatOutputSchema = z.object({
+  message: AIMessageSchema.optional(),
+  raw: z.any().optional(),
+});
 export const ChatJobSchema = BaseJobSchema.extend({
   type: z.literal("chat"),
   input: ChatInputSchema,
   output: ChatOutputSchema.optional(),
 });
+
+export type ChatJob = z.infer<typeof ChatJobSchema>;
 
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 

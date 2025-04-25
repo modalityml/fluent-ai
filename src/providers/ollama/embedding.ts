@@ -1,14 +1,15 @@
 import { EmbeddingJobBuilder } from "~/jobs/embedding";
 import type { JobOptions } from "~/jobs/schema";
+import type { OllamaEmbeddingJob } from "./schema";
 
-export class OllamaEmbeddingJobBuilder extends EmbeddingJobBuilder {
+export class OllamaEmbeddingJobBuilder extends EmbeddingJobBuilder<OllamaEmbeddingJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "ollama";
     this.options = options;
   }
 
-  makeRequest = () => {
+  makeRequest() {
     return new Request("http://localhost:11434/api/embed", {
       method: "POST",
       body: JSON.stringify({
@@ -16,10 +17,10 @@ export class OllamaEmbeddingJobBuilder extends EmbeddingJobBuilder {
         input: this.input.value,
       }),
     });
-  };
+  }
 
-  handleResponse = async (response: Response) => {
+  async handleResponse(response: Response) {
     const raw = await response.json();
-    return { raw, embeddings: raw.embeddings };
-  };
+    return { raw, embedding: raw.embedding };
+  }
 }

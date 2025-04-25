@@ -1,16 +1,17 @@
 import { z } from "zod";
 import { JobBuilder } from "~/jobs/builder";
 import type {
-  ChatInput,
-  ChatOutput,
+  ChatJob,
   ChatStreamOptions,
   Message,
   ResponseFormat,
 } from "./schema";
 import type { ChatTool } from "./tool";
 
-export class ChatJobBuilder extends JobBuilder<ChatInput, ChatOutput> {
-  input: ChatInput;
+export abstract class ChatJobBuilder<
+  Job extends ChatJob,
+> extends JobBuilder<Job> {
+  input: Job["input"];
 
   constructor(model: string) {
     super();

@@ -1,14 +1,15 @@
 import { ChatJobBuilder, convertTools } from "~/jobs/chat";
 import type { JobOptions } from "~/jobs/schema";
+import type { AnthropicChatJob } from "./schema";
 
-export class AnthropicChatJobBuilder extends ChatJobBuilder {
+export class AnthropicChatJobBuilder extends ChatJobBuilder<AnthropicChatJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "anthropic";
     this.options = options;
   }
 
-  makeRequest = () => {
+  makeRequest() {
     const requestParams = {
       model: this.input.model,
       max_tokens: this.input.maxTokens,
@@ -22,7 +23,7 @@ export class AnthropicChatJobBuilder extends ChatJobBuilder {
 
     const headers = {
       "anthropic-version": "2023-06-01",
-      "x-api-key": this.options.apiKey!,
+      "x-api-key": this.options!.apiKey!,
       "Content-Type": "application/json",
     };
 
@@ -31,10 +32,10 @@ export class AnthropicChatJobBuilder extends ChatJobBuilder {
       headers: headers,
       body: JSON.stringify(requestParams),
     });
-  };
+  }
 
-  handleResponse = async (response: Response) => {
+  async handleResponse(response: Response) {
     const raw = await response.json();
     return { raw };
-  };
+  }
 }
