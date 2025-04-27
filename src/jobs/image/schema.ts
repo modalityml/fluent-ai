@@ -2,6 +2,7 @@ import { z } from "zod";
 import { BaseJobSchema } from "~/jobs/schema";
 
 export const ImageSizeSchema = z.union([
+  z.string(),
   z.literal("square_hd"),
   z.literal("square"),
   z.literal("portrait_4_3"),
@@ -31,6 +32,10 @@ export const ImageInputSchema = z.object({
   syncMode: z.boolean().optional(),
   enableSafetyChecker: z.boolean().optional(),
   stream: z.boolean().optional(),
+  moderation: z.string().optional(),
+  outputCompression: z.string().optional(),
+  outputFormat: z.string().optional(),
+  background: z.string().optional(),
 });
 
 const ImageOuputSchema = z.object({
@@ -43,7 +48,7 @@ const ImageOuputSchema = z.object({
       z.object({
         base64: z.string(),
       }),
-    ])
+    ]),
   ),
   metadata: z
     .object({

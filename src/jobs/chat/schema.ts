@@ -7,7 +7,7 @@ export const MessageContentSchema = z.union([
     z.object({
       type: z.literal("text"),
       text: z.string(),
-    })
+    }),
   ),
   z.array(
     z.object({
@@ -25,7 +25,7 @@ export const MessageContentSchema = z.union([
           ]),
         })
         .optional(),
-    })
+    }),
   ),
 ]);
 

@@ -7,18 +7,18 @@ test("workflow", () => {
     .input(
       z.object({
         description: z.string(),
-      })
+      }),
     )
     .step("step1", ({ context }) => {
       return openai()
         .chat("gpt-4o-mini")
         .prompt(
-          `generate a story based on following description: ${context.input.description}`
+          `generate a story based on following description: ${context.input.description}`,
         )
         .jsonSchema(
           z.object({
             story: z.string(),
-          })
+          }),
         );
     })
     .step("step2", ({ context }) => {

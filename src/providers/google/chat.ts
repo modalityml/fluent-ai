@@ -23,7 +23,7 @@ export class GoogleChatJobBuilder extends ChatJobBuilder<GoogleChatJob> {
             parts: [{ text: msg.content }],
           })),
         }),
-      }
+      },
     );
   };
 

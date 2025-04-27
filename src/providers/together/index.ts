@@ -12,7 +12,7 @@ export function together(options?: JobOptions) {
           ...options,
           baseURL: "https://api.together.xyz/v1",
         },
-        model
+        model,
       );
     },
   };

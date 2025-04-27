@@ -9,10 +9,10 @@ export const DeepseekBaseJobSchema = z.object({
   provider: z.literal("deepseek"),
 });
 export const DeepseekChatJobSchema = ChatJobSchema.extend(
-  DeepseekBaseJobSchema
+  DeepseekBaseJobSchema,
 );
 export const DeepseekModelsJobSchema = ModelsJobSchema.extend(
-  DeepseekBaseJobSchema
+  DeepseekBaseJobSchema,
 );
 export const DeepseekJobSchema = z.discriminatedUnion("type", [
   DeepseekChatJobSchema,
@@ -30,7 +30,7 @@ export function deepseek(options?: JobOptions) {
           ...options,
           baseURL: "https://api.deepseek.com",
         },
-        model
+        model,
       );
     },
 

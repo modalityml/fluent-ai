@@ -35,7 +35,7 @@ export const ElevenlabsBaseJobSchema = z.object({
 });
 
 export const ElevenlabsSpeechJobSchema = SpeechJobSchema.extend(
-  ElevenlabsBaseJobSchema
+  ElevenlabsBaseJobSchema,
 );
 
 export const ElevenlabsJobSchema = z.discriminatedUnion("type", [

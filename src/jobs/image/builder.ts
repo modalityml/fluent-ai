@@ -74,6 +74,26 @@ export abstract class ImageJobBuilder<
     return this;
   }
 
+  moderation(moderation: string) {
+    this.input.moderation = moderation;
+    return this;
+  }
+
+  outputCompression(outputCompression: string) {
+    this.input.outputCompression = outputCompression;
+    return this;
+  }
+
+  outputFormat(outputFormat: string) {
+    this.input.outputFormat = outputFormat;
+    return this;
+  }
+
+  background(background: string) {
+    this.input.background = background;
+    return this;
+  }
+
   stream() {
     this.input.stream = true;
     return this;

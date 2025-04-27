@@ -12,7 +12,7 @@ export function fireworks(options?: JobOptions) {
           ...options,
           baseURL: "https://api.fireworks.ai/inference/v1",
         },
-        model
+        model,
       );
     },
   };

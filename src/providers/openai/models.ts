@@ -1,7 +1,6 @@
 import type { JobOptions } from "~/jobs/schema";
 import { ModelsJobBuilder } from "~/jobs/models";
-import { OPENAI_BASE_URL } from "./schema";
-import type { OpenAIModelsJob } from "./schema";
+import { OPENAI_BASE_URL, type OpenAIModelsJob } from "./schema";
 
 export class OpenAIModelsJobBuilder extends ModelsJobBuilder<OpenAIModelsJob> {
   constructor(options: JobOptions) {

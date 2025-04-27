@@ -9,7 +9,7 @@ import type {
 import type { ChatTool } from "./tool";
 
 export abstract class ChatJobBuilder<
-  Job extends ChatJob
+  Job extends ChatJob,
 > extends JobBuilder<Job> {
   input: Job["input"];
 

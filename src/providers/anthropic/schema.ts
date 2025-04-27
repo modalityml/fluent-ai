@@ -7,11 +7,11 @@ export const AnthropicBaseJobSchema = z.object({
 });
 
 export const AnthropicChatJobSchema = ChatJobSchema.extend(
-  AnthropicBaseJobSchema
+  AnthropicBaseJobSchema,
 );
 
 export const AnthropicModelsJobSchema = ModelsJobSchema.extend(
-  AnthropicBaseJobSchema
+  AnthropicBaseJobSchema,
 );
 
 export const AnthropicJobSchema = z.discriminatedUnion("type", [
