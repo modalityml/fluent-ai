@@ -5,5 +5,4 @@ const job = openai()
   .prompt("a cat")
   .size({ width: 512, height: 512 });
 const result = await job.run();
-
 console.log(result);

@@ -7,7 +7,7 @@ const weatherTool = tool("get_current_weather")
     z.object({
       location: z.string(),
       unit: z.enum(["celsius", "fahrenheit"]).optional(),
-    })
+    }),
   );
 const job = openai()
   .chat("gpt-4o-mini")

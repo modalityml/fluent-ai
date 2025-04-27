@@ -2,5 +2,6 @@ import { openai } from "../src";
 
 const job = openai().models();
 const result = await job.run();
-
-console.log(result);
+for (const model of result.raw.data) {
+  console.log(model.id);
+}
