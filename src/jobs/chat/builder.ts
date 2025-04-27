@@ -32,6 +32,14 @@ export abstract class ChatJobBuilder<
     return this;
   }
 
+  prompt(prompt: string) {
+    this.input.messages.push({
+      role: "user",
+      content: prompt,
+    });
+    return this;
+  }
+
   temperature(temperature: number) {
     this.input.temperature = temperature;
     return this;
