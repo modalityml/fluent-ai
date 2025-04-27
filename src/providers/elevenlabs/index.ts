@@ -1,5 +1,5 @@
-import type { JobOptions } from "~/jobs/schema";
 import { z } from "zod";
+import type { JobOptions } from "~/jobs/schema";
 import { SpeechJobBuilder, SpeechJobSchema } from "~/jobs/speech";
 
 export function elevenlabs(options?: JobOptions) {
@@ -22,13 +22,13 @@ class ElevenlabsSpeechJobBuilder extends SpeechJobBuilder {
 }
 
 export const ElevenlabsBaseJobSchema = z.object({
-  provider: z.literal("fal"),
+  provider: z.literal("elevenlabs"),
 });
 
-export const ElevenlabsImageJobSchema = SpeechJobSchema.extend(
+export const ElevenlabsSpeechJobSchema = SpeechJobSchema.extend(
   ElevenlabsBaseJobSchema
 );
 
 export const ElevenlabsJobSchema = z.discriminatedUnion("type", [
-  ElevenlabsImageJobSchema,
+  ElevenlabsSpeechJobSchema,
 ]);

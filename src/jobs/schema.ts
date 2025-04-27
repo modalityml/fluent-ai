@@ -14,9 +14,9 @@ export const JobProviderSchema = z.enum([
 
 export const JobTypeSchema = z.enum([
   "chat",
+  "embedding",
   "image",
   "models",
-  "embedding",
   "speech",
 ]);
 
@@ -50,5 +50,4 @@ export const BaseJobSchema = z.object({
 
 export type JobProvider = z.infer<typeof JobProviderSchema>;
 export type JobType = z.infer<typeof JobTypeSchema>;
-export type BaseJob = z.infer<typeof BaseJobSchema>;
 export type JobOptions = z.infer<typeof JobOptionsSchema>;

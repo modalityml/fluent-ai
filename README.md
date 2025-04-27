@@ -20,14 +20,15 @@ npm install fluent-ai zod@next
 
 fluent-ai includes support for multiple AI providers and modalities.
 
-| provider  | chat completion    | embedding          | image generation   | list models        |
-| --------- | ------------------ | ------------------ | ------------------ | ------------------ |
-| anthropic | :white_check_mark: |                    |                    | :white_check_mark: |
-| fal       |                    |                    | :white_check_mark: |                    |
-| google    | :white_check_mark: |                    |                    |                    |
-| ollama    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| voyage    |                    | :white_check_mark: |                    |                    |
+| provider   | chat completion    | embedding          | image generation   | list models        | text to speech     |
+| ---------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ |
+| anthropic  | :white_check_mark: |                    |                    | :white_check_mark: |                    |
+| elevenlabs |                    |                    |                    |                    | :white_check_mark: |
+| fal        |                    |                    | :white_check_mark: |                    |                    |
+| google     | :white_check_mark: |                    |                    |                    |                    |
+| ollama     | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |                    |
+| openai     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| voyage     |                    | :white_check_mark: |                    |                    |                    |
 
 By default, API keys for providers are read from environment variable (`process.env`) following the format `<PROVIDER>_API_KEY` (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`).
 
@@ -191,6 +192,15 @@ fluent-ai provides an easy way to retrieve all available models from supported p
 import { openai } from "fluent-ai";
 
 const models = await openai().models().run();
+```
+
+## Text to Speech
+
+```ts
+import { openai } from "fluent-ai";
+
+const job = openai().model("tts-1").text("hi");
+const result = await job.run();
 ```
 
 ## Support

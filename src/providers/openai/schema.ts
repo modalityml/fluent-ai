@@ -7,26 +7,22 @@ import { SpeechJobSchema } from "~/jobs/speech";
 
 export const OPENAI_BASE_URL = "https://api.openai.com/v1";
 
-export const BaseOpenAIJobSchema = z.object({
+export const OpenAIBaseJobSchema = z.object({
   provider: z.literal("openai"),
 });
 
-export const OpenAIChatJobSchema = ChatJobSchema.extend(BaseOpenAIJobSchema);
-export type OpenAIChatJob = z.infer<typeof OpenAIChatJobSchema>;
+export const OpenAIChatJobSchema = ChatJobSchema.extend(OpenAIBaseJobSchema);
 
 export const OpenAIEmbeddingJobSchema =
-  EmbeddingJobSchema.extend(BaseOpenAIJobSchema);
-export type OpenAIEmbeddingJob = z.infer<typeof OpenAIEmbeddingJobSchema>;
+  EmbeddingJobSchema.extend(OpenAIBaseJobSchema);
 
-export const OpenAIImageJobSchema = ImageJobSchema.extend(BaseOpenAIJobSchema);
-export type OpenAIImageJob = z.infer<typeof OpenAIImageJobSchema>;
+export const OpenAIImageJobSchema = ImageJobSchema.extend(OpenAIBaseJobSchema);
 
 export const OpenAIModelsJobSchema =
-  ModelsJobSchema.extend(BaseOpenAIJobSchema);
-export type OpenAIModelsJob = z.infer<typeof OpenAIModelsJobSchema>;
+  ModelsJobSchema.extend(OpenAIBaseJobSchema);
 
 export const OpenAISpeechJobSchema =
-  SpeechJobSchema.extend(BaseOpenAIJobSchema);
+  SpeechJobSchema.extend(OpenAIBaseJobSchema);
 
 export const OpenAIJobSchema = z.discriminatedUnion("type", [
   OpenAIChatJobSchema,
@@ -35,4 +31,3 @@ export const OpenAIJobSchema = z.discriminatedUnion("type", [
   OpenAIModelsJobSchema,
   OpenAISpeechJobSchema,
 ]);
-export type OpenAIJob = z.infer<typeof OpenAIJobSchema>;

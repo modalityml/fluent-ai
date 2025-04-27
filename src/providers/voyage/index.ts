@@ -14,8 +14,6 @@ export const VoyageJobSchema = z.discriminatedUnion("type", [
   VoyageEmbeddingJobSchema,
 ]);
 
-export type VoyageJob = z.infer<typeof VoyageJobSchema>;
-
 export function voyage(options?: JobOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.VOYAGE_API_KEY;

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BaseJobSchema } from "~/jobs/schema";
 
 export const SpeechInputSchema = z.object({
   model: z.string(),
@@ -6,7 +7,7 @@ export const SpeechInputSchema = z.object({
 
 export const SpeechOutputSchema = z.object({});
 
-export const SpeechJobSchema = z.object({
+export const SpeechJobSchema = BaseJobSchema.extend({
   type: z.literal("speech"),
   input: SpeechInputSchema,
   output: SpeechOutputSchema.optional(),

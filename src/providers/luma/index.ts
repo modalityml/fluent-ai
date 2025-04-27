@@ -11,7 +11,6 @@ export const LumaImageJobSchema = ImageJobSchema.extend(LumaBaseJobSchema);
 export type LumaImageJob = z.infer<typeof LumaImageJobSchema>;
 
 export const LumaJobSchema = z.discriminatedUnion("type", [LumaImageJobSchema]);
-export type LumaJob = z.infer<typeof LumaJobSchema>;
 
 export function luma(options?: JobOptions) {
   options = options || {};

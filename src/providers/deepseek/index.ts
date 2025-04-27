@@ -5,22 +5,19 @@ import type { JobOptions } from "~/jobs/schema";
 import { OpenAIChatJobBuilder } from "~/providers/openai";
 import { OpenAIModelsJobBuilder } from "~/providers/openai/models";
 
-export const BaseDeepseekJobSchema = z.object({
+export const DeepseekBaseJobSchema = z.object({
   provider: z.literal("deepseek"),
 });
 export const DeepseekChatJobSchema = ChatJobSchema.extend(
-  BaseDeepseekJobSchema
+  DeepseekBaseJobSchema
 );
-export type DeepseekChatJob = z.infer<typeof DeepseekChatJobSchema>;
 export const DeepseekModelsJobSchema = ModelsJobSchema.extend(
-  BaseDeepseekJobSchema
+  DeepseekBaseJobSchema
 );
-export type DeepseekModelsJob = z.infer<typeof DeepseekModelsJobSchema>;
 export const DeepseekJobSchema = z.discriminatedUnion("type", [
   DeepseekChatJobSchema,
   DeepseekModelsJobSchema,
 ]);
-export type DeepseekJob = z.infer<typeof DeepseekJobSchema>;
 
 export function deepseek(options?: JobOptions) {
   options = options || {};
