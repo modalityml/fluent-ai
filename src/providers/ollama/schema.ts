@@ -20,3 +20,8 @@ export const OllamaJobSchema = z.discriminatedUnion("type", [
   OllamaEmbeddingJobSchema,
   OllamaModelsJobSchema,
 ]);
+
+export type OllamaJob = z.infer<typeof OllamaJobSchema>;
+export type OllamaChatJob = z.infer<typeof OllamaChatJobSchema>;
+export type OllamaEmbeddingJob = z.infer<typeof OllamaEmbeddingJobSchema>;
+export type OllamaModelsJob = z.infer<typeof OllamaModelsJobSchema>;

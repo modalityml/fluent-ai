@@ -23,7 +23,7 @@ export abstract class JobBuilder<Job extends BaseJob> {
 
   abstract makeRequest(): Request;
   abstract handleResponse(
-    response: Response,
+    response: Response
   ): Promise<Job["output"] | AsyncGenerator<Job["output"]>>;
 
   async run(): Promise<Job["output"] | AsyncGenerator<Job["output"]>> {
@@ -38,7 +38,7 @@ export abstract class JobBuilder<Job extends BaseJob> {
       throw new HTTPError(
         `Fetch error: ${response.statusText}`,
         response.status,
-        json,
+        json
       );
     }
     return await this.handleResponse!(response);

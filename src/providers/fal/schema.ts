@@ -8,3 +8,6 @@ export const FalBaseJobSchema = z.object({
 export const FalImageJobSchema = ImageJobSchema.extend(FalBaseJobSchema);
 
 export const FalJobSchema = z.discriminatedUnion("type", [FalImageJobSchema]);
+
+export type FalJob = z.infer<typeof FalJobSchema>;
+export type FalImageJob = z.infer<typeof FalImageJobSchema>;

@@ -33,3 +33,21 @@ exports[`dump 2`] = `
   "version": "0.3.0",
 }
 `;
+
+exports[`speech 1`] = `
+{
+  "body": "",
+  "headers": {},
+  "method": "GET",
+  "url": "https://api.openai.com/v1",
+}
+`;
+
+exports[`speech 2`] = `
+{
+  "body": "",
+  "headers": {},
+  "method": "GET",
+  "url": "https://api.elevenlabs.io/v1/text-to-speech",
+}
+`;

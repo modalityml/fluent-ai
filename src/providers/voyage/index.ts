@@ -9,10 +9,12 @@ export const VoyageBaseJobSchema = z.object({
 export const VoyageEmbeddingJobSchema =
   EmbeddingJobSchema.extend(VoyageBaseJobSchema);
 
-export type VoyageEmbeddingJob = z.infer<typeof VoyageEmbeddingJobSchema>;
 export const VoyageJobSchema = z.discriminatedUnion("type", [
   VoyageEmbeddingJobSchema,
 ]);
+
+export type VoyageJob = z.infer<typeof VoyageJobSchema>;
+export type VoyageEmbeddingJob = z.infer<typeof VoyageEmbeddingJobSchema>;
 
 export function voyage(options?: JobOptions) {
   options = options || {};

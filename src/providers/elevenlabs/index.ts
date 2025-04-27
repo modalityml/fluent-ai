@@ -13,11 +13,20 @@ export function elevenlabs(options?: JobOptions) {
   };
 }
 
-class ElevenlabsSpeechJobBuilder extends SpeechJobBuilder {
+class ElevenlabsSpeechJobBuilder extends SpeechJobBuilder<ElevenlabsSpeechJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "elevenlabs";
     this.options = options;
+  }
+
+  makeRequest() {
+    return new Request("https://api.elevenlabs.io/v1/text-to-speech", {});
+  }
+
+  async handleResponse(response: Response) {
+    const raw = await response.json();
+    return { raw };
   }
 }
 
@@ -32,3 +41,6 @@ export const ElevenlabsSpeechJobSchema = SpeechJobSchema.extend(
 export const ElevenlabsJobSchema = z.discriminatedUnion("type", [
   ElevenlabsSpeechJobSchema,
 ]);
+
+export type ElevenlabsJob = z.infer<typeof ElevenlabsJobSchema>;
+export type ElevenlabsSpeechJob = z.infer<typeof ElevenlabsSpeechJobSchema>;

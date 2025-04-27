@@ -18,3 +18,7 @@ export const AnthropicJobSchema = z.discriminatedUnion("type", [
   AnthropicChatJobSchema,
   AnthropicModelsJobSchema,
 ]);
+
+export type AnthropicJob = z.infer<typeof AnthropicJobSchema>;
+export type AnthropicChatJob = z.infer<typeof AnthropicChatJobSchema>;
+export type AnthropicModelsJob = z.infer<typeof AnthropicModelsJobSchema>;

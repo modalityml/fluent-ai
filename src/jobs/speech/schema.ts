@@ -13,5 +13,6 @@ export const SpeechJobSchema = BaseJobSchema.extend({
   output: SpeechOutputSchema.optional(),
 });
 
+export type SpeechJob = z.infer<typeof SpeechJobSchema>;
 export type SpeechInput = z.infer<typeof SpeechInputSchema>;
 export type SpeechOutput = z.infer<typeof SpeechOutputSchema>;

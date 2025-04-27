@@ -7,7 +7,7 @@ export const MessageContentSchema = z.union([
     z.object({
       type: z.literal("text"),
       text: z.string(),
-    }),
+    })
   ),
   z.array(
     z.object({
@@ -25,7 +25,7 @@ export const MessageContentSchema = z.union([
           ]),
         })
         .optional(),
-    }),
+    })
   ),
 ]);
 
@@ -118,6 +118,7 @@ export const ChatOutputSchema = z.object({
   message: AIMessageSchema.optional(),
   raw: z.any().optional(),
 });
+
 export const ChatJobSchema = BaseJobSchema.extend({
   type: z.literal("chat"),
   input: ChatInputSchema,
@@ -125,7 +126,5 @@ export const ChatJobSchema = BaseJobSchema.extend({
 });
 
 export type ChatJob = z.infer<typeof ChatJobSchema>;
-
 export type ChatInput = z.infer<typeof ChatInputSchema>;
-
 export type ChatOutput = z.infer<typeof ChatOutputSchema>;

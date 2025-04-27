@@ -31,3 +31,10 @@ export const OpenAIJobSchema = z.discriminatedUnion("type", [
   OpenAIModelsJobSchema,
   OpenAISpeechJobSchema,
 ]);
+
+export type OpenAIJob = z.infer<typeof OpenAIJobSchema>;
+export type OpenAIChatJob = z.infer<typeof OpenAIChatJobSchema>;
+export type OpenAIEmbeddingJob = z.infer<typeof OpenAIEmbeddingJobSchema>;
+export type OpenAIImageJob = z.infer<typeof OpenAIImageJobSchema>;
+export type OpenAIModelsJob = z.infer<typeof OpenAIModelsJobSchema>;
+export type OpenAISpeechJob = z.infer<typeof OpenAISpeechJobSchema>;

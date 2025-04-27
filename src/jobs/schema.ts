@@ -33,10 +33,6 @@ export const JobCostSchema = z.object({
 
 export const JobPerformance = z.object({});
 
-export type JobCost = z.infer<typeof JobCostSchema>;
-
-export type JobPerformance = z.infer<typeof JobPerformance>;
-
 export const BaseJobSchema = z.object({
   version: z.string().optional(),
   provider: JobProviderSchema,
@@ -48,6 +44,9 @@ export const BaseJobSchema = z.object({
   performance: JobPerformance.optional(),
 });
 
+export type JobCost = z.infer<typeof JobCostSchema>;
+export type JobPerformance = z.infer<typeof JobPerformance>;
+export type BaseJob = z.infer<typeof BaseJobSchema>;
 export type JobProvider = z.infer<typeof JobProviderSchema>;
 export type JobType = z.infer<typeof JobTypeSchema>;
 export type JobOptions = z.infer<typeof JobOptionsSchema>;

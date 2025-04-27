@@ -10,3 +10,6 @@ export const GoogleChatJobSchema = ChatJobSchema.extend(GoogleBaseJobSchema);
 export const GoogleJobSchema = z.discriminatedUnion("type", [
   GoogleChatJobSchema,
 ]);
+
+export type GoogleJob = z.infer<typeof GoogleJobSchema>;
+export type GoogleChatJob = z.infer<typeof GoogleChatJobSchema>;

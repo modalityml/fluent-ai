@@ -1,8 +1,10 @@
 import { JobBuilder } from "~/jobs/builder";
-import type { SpeechInput, SpeechOutput } from "./schema";
+import type { SpeechJob } from "./schema";
 
-export class SpeechJobBuilder extends JobBuilder<SpeechInput, SpeechOutput> {
-  input: SpeechInput;
+export abstract class SpeechJobBuilder<
+  Job extends SpeechJob
+> extends JobBuilder<Job> {
+  input: Job["input"];
 
   constructor(model: string) {
     super();
