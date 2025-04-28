@@ -22,11 +22,13 @@ export abstract class JobBuilder<Job extends BaseJob> {
   performance?: Job["performance"]; // TODO: track job performance
 
   abstract makeRequest(): Request;
-  abstract handleResponse(
-    response: Response,
-  ): Promise<Job["output"] | AsyncGenerator<Job["output"]>>;
 
-  async run(): Promise<Job["output"] | AsyncGenerator<Job["output"]>> {
+
+  async handleResponse(response: Response): Promise<Job["output"]> {
+    throw new Error("Not implemented");
+  }
+  
+  async run(): Promise<Job["output"]> {
     const request = this.makeRequest!();
     const response = await fetch(request);
     if (!response.ok) {
@@ -43,6 +45,7 @@ export abstract class JobBuilder<Job extends BaseJob> {
     }
     return await this.handleResponse!(response);
   }
+
   dump() {
     return {
       version: version,

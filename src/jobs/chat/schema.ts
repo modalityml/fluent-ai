@@ -97,6 +97,11 @@ export const JsonSchemaDefSchema = z.object({
 
 export const ChunkSchema = z.object({});
 
+export const ChatToolChoiceSchema = z.object({
+  mode: z.enum(["auto", "none", "any"]),
+  allowed_tools: z.array(z.string()).optional(),
+});
+
 export const ChatInputSchema = z.object({
   model: z.string(),
   temperature: z.number().optional(),
@@ -105,7 +110,8 @@ export const ChatInputSchema = z.object({
   maxTokens: z.number().optional(),
   messages: z.array(MessageSchema),
   tools: z.array(ChatToolSchema).optional(),
-  toolChoice: z.string().optional(),
+  //TODO: support gemini and anthropic tool choice, might need refactor
+  toolChoice: ChatToolChoiceSchema.optional(),
   responseFormat: ResponseFormatSchema.optional(),
   topP: z.number().optional(),
   topK: z.number().optional(),

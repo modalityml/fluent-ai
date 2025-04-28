@@ -21,6 +21,18 @@ export class OpenAIModelsJobBuilder extends ModelsJobBuilder<OpenAIModelsJob> {
   }
 
   async handleResponse(response: Response) {
-    return { raw: await response.json() };
+    const raw: {
+      data: {
+        id: string;
+        object: string;
+        created: number;
+        owned_by: string;
+      }[];
+    } = await response.json();
+    return raw.data.map((model) => ({
+      id: model.id,
+      created: model.created,
+      owned_by: model.owned_by,
+    }));
   }
 }

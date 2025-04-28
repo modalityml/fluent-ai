@@ -3,7 +3,13 @@ import { BaseJobSchema } from "~/jobs/schema";
 
 export const ModelsInputSchema = z.object({});
 
-export const ModelsOuputSchema = z.object({});
+export const ModelsOuputSchema = z.array(
+  z.object({
+    id: z.string(),
+    created: z.number(),
+    owned_by: z.string(),
+  }),
+);
 
 export const ModelsJobSchema = BaseJobSchema.extend({
   type: z.literal("models"),

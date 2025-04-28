@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { JobBuilder } from "~/jobs/builder";
+import { HTTPError, JobBuilder } from "~/jobs/builder";
 import type {
   ChatJob,
   ChatStreamOptions,
+  ChatToolChoiceSchema,
   Message,
   ResponseFormat,
 } from "./schema";
@@ -20,6 +21,27 @@ export abstract class ChatJobBuilder<
       model: model,
       messages: [],
     };
+  }
+
+  async *handleStream(response: Response): AsyncGenerator<Job["output"]> {
+    throw new Error("Not implemented");
+  }
+
+  async *stream(options?: ChatStreamOptions): AsyncGenerator<Job["output"]> {
+    this.input.stream = true;
+    this.input.streamOptions = options;
+    if (!this.handleStream) {
+      throw new Error("Stream not supported");
+    }
+    const request = this.makeRequest!();
+    const response = await fetch(request);
+    if (!response.ok) {
+      throw new HTTPError(
+        `Fetch error: ${response.statusText}`,
+        response.status,
+      );
+    }
+    yield* this.handleStream(response);
   }
 
   system(system: string) {
@@ -73,7 +95,7 @@ export abstract class ChatJobBuilder<
     return this;
   }
 
-  toolChoice(toolChoice: string) {
+  toolChoice(toolChoice: z.infer<typeof ChatToolChoiceSchema>) {
     this.input.toolChoice = toolChoice;
     return this;
   }
@@ -90,14 +112,6 @@ export abstract class ChatJobBuilder<
       schema,
     };
 
-    return this;
-  }
-
-  stream(streamOptions?: ChatStreamOptions) {
-    this.input.stream = true;
-    if (streamOptions) {
-      this.input.streamOptions = streamOptions;
-    }
     return this;
   }
 }

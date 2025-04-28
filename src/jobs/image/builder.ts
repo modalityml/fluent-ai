@@ -93,9 +93,4 @@ export abstract class ImageJobBuilder<
     this.input.background = background;
     return this;
   }
-
-  stream() {
-    this.input.stream = true;
-    return this;
-  }
 }
