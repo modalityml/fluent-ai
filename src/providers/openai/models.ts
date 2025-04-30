@@ -29,10 +29,13 @@ export class OpenAIModelsJobBuilder extends ModelsJobBuilder<OpenAIModelsJob> {
         owned_by: string;
       }[];
     } = await response.json();
-    return raw.data.map((model) => ({
-      id: model.id,
-      created: model.created,
-      owned_by: model.owned_by,
-    }));
+    return {
+      raw: raw,
+      models: raw.data.map((model) => ({
+        id: model.id,
+        created: model.created,
+        owned_by: model.owned_by,
+      })),
+    };
   }
 }

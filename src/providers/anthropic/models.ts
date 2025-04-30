@@ -24,6 +24,6 @@ export class AnthropicModelsJobBuilder extends ModelsJobBuilder<AnthropicModelsJ
 
   async handleResponse(response: Response) {
     const json = await response.json();
-    return { raw: json };
+    return { raw: json, models: [] };
   }
 }

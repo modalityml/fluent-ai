@@ -15,6 +15,6 @@ export class OllamaModelsJobBuilder extends ModelsJobBuilder<OllamaModelsJob> {
 
   async handleResponse(response: Response) {
     const json = await response.json();
-    return { raw: json };
+    return { raw: json, models: [] };
   }
 }
