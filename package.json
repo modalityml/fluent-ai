@@ -44,5 +44,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/modalityml/fluent-ai.git"
+  },
+  "prettier": {
+    "trailingComma": "all"
   }
 }
