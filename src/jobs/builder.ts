@@ -6,6 +6,9 @@ export class HTTPError extends Error {
   json?: any;
 
   constructor(message: string, status: number, json?: any) {
+    if (json && json.error && json.error.message) {
+      message = json.error.message;
+    }
     super(message);
     this.status = status;
     this.json = json;
@@ -23,11 +26,10 @@ export abstract class JobBuilder<Job extends BaseJob> {
 
   abstract makeRequest(): Request;
 
-
   async handleResponse(response: Response): Promise<Job["output"]> {
     throw new Error("Not implemented");
   }
-  
+
   async run(): Promise<Job["output"]> {
     const request = this.makeRequest!();
     const response = await fetch(request);
@@ -38,7 +40,7 @@ export abstract class JobBuilder<Job extends BaseJob> {
       } catch (e) {}
 
       throw new HTTPError(
-        `Fetch error: ${response.statusText}`,
+        `HTTP error: ${response.statusText}`,
         response.status,
         json,
       );

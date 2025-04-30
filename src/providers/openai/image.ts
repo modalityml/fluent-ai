@@ -41,14 +41,12 @@ export class OpenAIImageJobBuilder extends ImageJobBuilder<OpenAIImageJob> {
   makeEditRequest(baseURL: string) {
     const url = `${baseURL}/images/edits`;
 
-    console.log(this.input);
-
     const formData = new FormData();
     formData.append("prompt", this.input.prompt || "");
     formData.append("model", this.input.model);
 
     const imageBlob = new Blob([this.input.image!], { type: "image/png" });
-    formData.append("image", imageBlob, "image.png");
+    formData.append("image[]", imageBlob, "image.png");
 
     if (this.input.mask) {
       const maskBlob = new Blob([this.input.mask], { type: "image/png" });
