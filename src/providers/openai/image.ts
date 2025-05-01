@@ -12,7 +12,7 @@ export class OpenAIImageJobBuilder extends ImageJobBuilder<OpenAIImageJob> {
   makeRequest() {
     const baseURL = this.options!.baseURL || OPENAI_BASE_URL;
 
-    if (this.input.image) {
+    if (this.input.images && this.input.images.length > 0) {
       return this.makeEditRequest(baseURL);
     }
 
@@ -45,8 +45,10 @@ export class OpenAIImageJobBuilder extends ImageJobBuilder<OpenAIImageJob> {
     formData.append("prompt", this.input.prompt || "");
     formData.append("model", this.input.model);
 
-    const imageBlob = new Blob([this.input.image!], { type: "image/png" });
-    formData.append("image[]", imageBlob, "image.png");
+    for (const image of this.input.images!) {
+      const imageBlob = new Blob([image], { type: "image/png" });
+      formData.append("image[]", imageBlob, "image.png");
+    }
 
     if (this.input.mask) {
       const maskBlob = new Blob([this.input.mask], { type: "image/png" });

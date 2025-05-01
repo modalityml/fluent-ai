@@ -9,5 +9,5 @@ const job = openai()
   .responseFormat("b64_json");
 
 const result = await job.run();
-const buffer = Buffer.from(result.raw.data[0].b64_json, "base64");
+const buffer = Buffer.from(result!.raw.data[0].b64_json, "base64");
 writeFileSync("cat.jpg", buffer);

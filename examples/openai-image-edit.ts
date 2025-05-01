@@ -8,5 +8,5 @@ const job = openai()
   .size("1024x1024");
 
 const result = await job.run();
-const buffer = Buffer.from(result.raw.data[0].b64_json, "base64");
+const buffer = Buffer.from(result!.raw.data[0].b64_json, "base64");
 writeFileSync("cat_edit.jpg", buffer);

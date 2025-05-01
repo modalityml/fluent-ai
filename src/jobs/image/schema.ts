@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { size, z } from "zod";
 import { BaseJobSchema } from "~/jobs/schema";
 
 export const ImageSizeSchema = z.union([
@@ -20,7 +20,7 @@ export type ImageSize = z.infer<typeof ImageSizeSchema>;
 export const ImageInputSchema = z.object({
   model: z.string(),
   prompt: z.string().optional(),
-  image: z.any().optional(), // TODO: fix any
+  images: z.array(z.any()).optional(), // TODO: fix any
   mask: z.any().optional(), // TODO: fix any
   n: z.number().optional(),
   quality: z.string().optional(),

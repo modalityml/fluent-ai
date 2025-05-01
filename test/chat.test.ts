@@ -30,7 +30,6 @@ test("stream", async () => {
       await requestObject(
         job
           .messages([system("you are a helpful assistant"), user("hi")])
-          .stream()
           .makeRequest(),
       ),
     ).toMatchSnapshot();

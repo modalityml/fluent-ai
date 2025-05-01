@@ -21,12 +21,13 @@ export abstract class ImageJobBuilder<
 
   edit(image: Buffer | Uint8Array | Array<Buffer | Uint8Array>) {
     if (Array.isArray(image)) {
-      this.input.image = image.map((img) =>
+      this.input.images = image.map((img) =>
         img instanceof Buffer ? new Uint8Array(img) : img,
       );
     } else {
-      this.input.image =
-        image instanceof Buffer ? new Uint8Array(image) : image;
+      this.input.images = [
+        image instanceof Buffer ? new Uint8Array(image) : image,
+      ];
     }
     return this;
   }
