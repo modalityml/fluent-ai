@@ -1,7 +1,8 @@
-import { z } from "zod";
+import { size, z } from "zod";
 import { BaseJobSchema } from "~/jobs/schema";
 
 export const ImageSizeSchema = z.union([
+  z.string(),
   z.literal("square_hd"),
   z.literal("square"),
   z.literal("portrait_4_3"),
@@ -19,6 +20,8 @@ export type ImageSize = z.infer<typeof ImageSizeSchema>;
 export const ImageInputSchema = z.object({
   model: z.string(),
   prompt: z.string().optional(),
+  images: z.array(z.any()).optional(), // TODO: fix any
+  mask: z.any().optional(), // TODO: fix any
   n: z.number().optional(),
   quality: z.string().optional(),
   responseFormat: z.string().optional(),
@@ -31,6 +34,10 @@ export const ImageInputSchema = z.object({
   syncMode: z.boolean().optional(),
   enableSafetyChecker: z.boolean().optional(),
   stream: z.boolean().optional(),
+  moderation: z.string().optional(),
+  outputCompression: z.string().optional(),
+  outputFormat: z.string().optional(),
+  background: z.string().optional(),
 });
 
 const ImageOuputSchema = z.object({
@@ -43,7 +50,7 @@ const ImageOuputSchema = z.object({
       z.object({
         base64: z.string(),
       }),
-    ])
+    ]),
   ),
   metadata: z
     .object({
@@ -60,6 +67,6 @@ export const ImageJobSchema = BaseJobSchema.extend({
   output: ImageOuputSchema.optional(),
 });
 
+export type ImageJob = z.infer<typeof ImageJobSchema>;
 export type ImageInput = z.infer<typeof ImageInputSchema>;
-
 export type ImageOutput = z.infer<typeof ImageOuputSchema>;

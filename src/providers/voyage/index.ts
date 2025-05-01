@@ -14,6 +14,7 @@ export const VoyageJobSchema = z.discriminatedUnion("type", [
 ]);
 
 export type VoyageJob = z.infer<typeof VoyageJobSchema>;
+export type VoyageEmbeddingJob = z.infer<typeof VoyageEmbeddingJobSchema>;
 
 export function voyage(options?: JobOptions) {
   options = options || {};
@@ -26,7 +27,7 @@ export function voyage(options?: JobOptions) {
   };
 }
 
-export class VoyageEmbeddingJobBuilder extends EmbeddingJobBuilder {
+export class VoyageEmbeddingJobBuilder extends EmbeddingJobBuilder<VoyageEmbeddingJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "voyage";
@@ -37,7 +38,7 @@ export class VoyageEmbeddingJobBuilder extends EmbeddingJobBuilder {
     return new Request("https://api.voyageai.com/v1/embeddings", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${this.options.apiKey}`,
+        Authorization: `Bearer ${this.options!.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -47,8 +48,9 @@ export class VoyageEmbeddingJobBuilder extends EmbeddingJobBuilder {
     });
   };
 
-  handleResponse = async (response: Response) => {
+  async handleResponse(response: Response) {
     const json = await response.json();
-    return json;
-  };
+    //TODO: handle raw.embedding
+    return { raw: json, embedding: json.embedding };
+  }
 }

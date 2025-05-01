@@ -7,17 +7,18 @@ export const AnthropicBaseJobSchema = z.object({
 });
 
 export const AnthropicChatJobSchema = ChatJobSchema.extend(
-  AnthropicBaseJobSchema
+  AnthropicBaseJobSchema,
 );
-export type AnthropicChatJob = z.infer<typeof AnthropicChatJobSchema>;
 
 export const AnthropicModelsJobSchema = ModelsJobSchema.extend(
-  AnthropicBaseJobSchema
+  AnthropicBaseJobSchema,
 );
-export type AnthropicModelsJob = z.infer<typeof AnthropicModelsJobSchema>;
 
 export const AnthropicJobSchema = z.discriminatedUnion("type", [
   AnthropicChatJobSchema,
   AnthropicModelsJobSchema,
 ]);
+
 export type AnthropicJob = z.infer<typeof AnthropicJobSchema>;
+export type AnthropicChatJob = z.infer<typeof AnthropicChatJobSchema>;
+export type AnthropicModelsJob = z.infer<typeof AnthropicModelsJobSchema>;

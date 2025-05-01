@@ -1,37 +1,36 @@
 import { version } from "../../package.json";
-import type { Job } from "./load";
-import type {
-  JobCost,
-  JobOptions,
-  JobPerformance,
-  JobProvider,
-  JobType,
-} from "./schema";
+import type { BaseJob } from "./schema";
 
 export class HTTPError extends Error {
   status: number;
   json?: any;
 
   constructor(message: string, status: number, json?: any) {
+    if (json && json.error && json.error.message) {
+      message = json.error.message;
+    }
     super(message);
     this.status = status;
     this.json = json;
   }
 }
 
-export class JobBuilder<Input, Output> {
-  provider!: JobProvider;
-  options!: JobOptions;
-  type!: JobType;
-  input?: Input;
-  output?: Output;
-  cost?: JobCost;
-  performance?: JobPerformance; // TODO: track job performance
+export abstract class JobBuilder<Job extends BaseJob> {
+  provider!: Job["provider"];
+  options!: Job["options"];
+  type!: Job["type"];
+  input?: Job["input"];
+  output?: Job["output"];
+  cost?: Job["cost"];
+  performance?: Job["performance"]; // TODO: track job performance
 
-  makeRequest?: () => Request;
-  handleResponse?: (response: Response) => any;
+  abstract makeRequest(): Request;
 
-  async run(): Promise<Output> {
+  async handleResponse(response: Response): Promise<Job["output"]> {
+    throw new Error("Not implemented");
+  }
+
+  async run(): Promise<Job["output"]> {
     const request = this.makeRequest!();
     const response = await fetch(request);
     if (!response.ok) {
@@ -41,9 +40,9 @@ export class JobBuilder<Input, Output> {
       } catch (e) {}
 
       throw new HTTPError(
-        `Fetch error: ${response.statusText}`,
+        `HTTP error: ${response.statusText}`,
         response.status,
-        json
+        json,
       );
     }
     return await this.handleResponse!(response);
@@ -56,9 +55,9 @@ export class JobBuilder<Input, Output> {
       options: this.options,
       type: this.type,
       input: this.input!,
-      output: this.output as any,
+      output: this.output,
       cost: this.cost,
       performance: this.performance,
-    } as Job;
+    };
   }
 }

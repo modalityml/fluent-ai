@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const JobProviderSchema = z.enum([
   "anthropic",
+  "elevenlabs",
   "deepseek",
   "fal",
   "google",
@@ -11,7 +12,13 @@ export const JobProviderSchema = z.enum([
   "voyage",
 ]);
 
-export const JobTypeSchema = z.enum(["chat", "image", "models", "embedding"]);
+export const JobTypeSchema = z.enum([
+  "chat",
+  "embedding",
+  "image",
+  "models",
+  "speech",
+]);
 
 export const JobOptionsSchema = z.object({
   apiKey: z.string().optional(),
@@ -26,18 +33,20 @@ export const JobCostSchema = z.object({
 
 export const JobPerformance = z.object({});
 
-export type JobCost = z.infer<typeof JobCostSchema>;
-
-export type JobPerformance = z.infer<typeof JobPerformance>;
-
 export const BaseJobSchema = z.object({
   version: z.string().optional(),
+  provider: JobProviderSchema,
   options: JobOptionsSchema.optional(),
   cost: JobCostSchema.optional(),
+  type: JobTypeSchema,
+  input: z.any(),
+  output: z.any().optional(),
   performance: JobPerformance.optional(),
 });
 
+export type JobCost = z.infer<typeof JobCostSchema>;
+export type JobPerformance = z.infer<typeof JobPerformance>;
+export type BaseJob = z.infer<typeof BaseJobSchema>;
 export type JobProvider = z.infer<typeof JobProviderSchema>;
 export type JobType = z.infer<typeof JobTypeSchema>;
-export type BaseJob = z.infer<typeof BaseJobSchema>;
 export type JobOptions = z.infer<typeof JobOptionsSchema>;

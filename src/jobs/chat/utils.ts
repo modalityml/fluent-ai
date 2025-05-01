@@ -3,7 +3,10 @@ import { parse } from "partial-json";
 import type { ChatToolSchema, Message } from "./schema";
 import { ChatTool } from "./tool";
 
+// TODO: move to providers, different providers have different tool formats
+// @deprecated
 export function convertTools(tools: z.infer<typeof ChatToolSchema>[]) {
+  console.warn("convertTools is deprecated, move to providers");
   return tools.map((tool) => ({
     type: "function",
     function: {
