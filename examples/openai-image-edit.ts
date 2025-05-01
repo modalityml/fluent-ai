@@ -3,7 +3,9 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 const job = openai()
   .image("gpt-image-1") // TODO: add support for dall-e-2
-  .edit(readFileSync("./cat.jpg"))
+  .edit(
+    new File([readFileSync("./cat.jpg")], "cat.jpg", { type: "image/jpeg" }),
+  )
   .prompt("add a hat to the cat")
   .size("1024x1024");
 

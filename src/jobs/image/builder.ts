@@ -19,21 +19,17 @@ export abstract class ImageJobBuilder<
     return this;
   }
 
-  edit(image: Buffer | Uint8Array | Array<Buffer | Uint8Array>) {
+  edit(image: File | Array<File>) {
     if (Array.isArray(image)) {
-      this.input.images = image.map((img) =>
-        img instanceof Buffer ? new Uint8Array(img) : img,
-      );
+      this.input.images = image;
     } else {
-      this.input.images = [
-        image instanceof Buffer ? new Uint8Array(image) : image,
-      ];
+      this.input.images = [image];
     }
     return this;
   }
 
-  mask(mask: Buffer | Uint8Array) {
-    this.input.mask = mask instanceof Buffer ? new Uint8Array(mask) : mask;
+  mask(mask: File) {
+    this.input.mask = mask;
     return this;
   }
 

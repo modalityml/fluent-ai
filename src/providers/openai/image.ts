@@ -46,13 +46,11 @@ export class OpenAIImageJobBuilder extends ImageJobBuilder<OpenAIImageJob> {
     formData.append("model", this.input.model);
 
     for (const image of this.input.images!) {
-      const imageBlob = new Blob([image], { type: "image/png" });
-      formData.append("image[]", imageBlob, "image.png");
+      formData.append("image[]", image, image.name);
     }
 
     if (this.input.mask) {
-      const maskBlob = new Blob([this.input.mask], { type: "image/png" });
-      formData.append("mask", maskBlob, "mask.png");
+      formData.append("mask", this.input.mask, "mask.png");
     }
 
     if (this.input.n) {
