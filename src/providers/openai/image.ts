@@ -22,7 +22,7 @@ export class OpenAIImageJobBuilder extends ImageJobBuilder<OpenAIImageJob> {
       model: this.input.model,
       n: this.input.n,
       quality: this.input.quality,
-      response_format: this.input.responseFormat,
+      output_format: this.input.outputFormat,
       size: this.input.size,
       style: this.input.style,
       user: this.input.user,
@@ -51,6 +51,10 @@ export class OpenAIImageJobBuilder extends ImageJobBuilder<OpenAIImageJob> {
 
     if (this.input.mask) {
       formData.append("mask", this.input.mask, "mask.png");
+    }
+
+    if (this.input.quality) {
+      formData.append("quality", String(this.input.quality));
     }
 
     if (this.input.n) {
