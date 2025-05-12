@@ -33,6 +33,12 @@ export const JobCostSchema = z.object({
 
 export const JobPerformance = z.object({});
 
+export const RemoteJobSchema = z.object({
+  id: z.string().optional(),
+  status: z.enum(["pending", "running", "completed", "failed"]),
+  createdAt: z.date().optional(),
+});
+
 export const BaseJobSchema = z.object({
   version: z.string().optional(),
   provider: JobProviderSchema,

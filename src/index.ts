@@ -18,3 +18,5 @@ export * from "./providers/together";
 export * from "./providers/voyage";
 
 export * from "./workflow";
+
+export * from "./client";
