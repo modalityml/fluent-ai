@@ -6,6 +6,7 @@ export * from "./jobs/embedding";
 export * from "./jobs/models";
 
 export * from "./providers/anthropic";
+export * from "./providers/elevenlabs";
 export * from "./providers/deepseek";
 export * from "./providers/fal";
 export * from "./providers/fireworks";
@@ -15,3 +16,7 @@ export * from "./providers/ollama";
 export * from "./providers/openai";
 export * from "./providers/together";
 export * from "./providers/voyage";
+
+export * from "./workflow";
+
+export * from "./client";

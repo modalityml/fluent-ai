@@ -1,8 +1,10 @@
 import { JobBuilder } from "~/jobs/builder";
-import type { ImageInput, ImageOutput, ImageSize } from "./schema";
+import type { ImageJob, ImageSize } from "./schema";
 
-export class ImageJobBuilder extends JobBuilder<ImageInput, ImageOutput> {
-  input: ImageInput;
+export abstract class ImageJobBuilder<
+  Job extends ImageJob,
+> extends JobBuilder<Job> {
+  input: Job["input"];
 
   constructor(model: string) {
     super();
@@ -14,6 +16,20 @@ export class ImageJobBuilder extends JobBuilder<ImageInput, ImageOutput> {
 
   prompt(prompt: string) {
     this.input.prompt = prompt;
+    return this;
+  }
+
+  edit(image: File | Array<File>) {
+    if (Array.isArray(image)) {
+      this.input.images = image;
+    } else {
+      this.input.images = [image];
+    }
+    return this;
+  }
+
+  mask(mask: File) {
+    this.input.mask = mask;
     return this;
   }
 
@@ -72,8 +88,23 @@ export class ImageJobBuilder extends JobBuilder<ImageInput, ImageOutput> {
     return this;
   }
 
-  stream() {
-    this.input.stream = true;
+  moderation(moderation: string) {
+    this.input.moderation = moderation;
+    return this;
+  }
+
+  outputCompression(outputCompression: string) {
+    this.input.outputCompression = outputCompression;
+    return this;
+  }
+
+  outputFormat(outputFormat: string) {
+    this.input.outputFormat = outputFormat;
+    return this;
+  }
+
+  background(background: string) {
+    this.input.background = background;
     return this;
   }
 }

@@ -1,9 +1,13 @@
 import { openai } from "../src";
+import { writeFileSync } from "node:fs";
 
 const job = openai()
-  .image("dalle-2")
+  .image("dall-e-2")
   .prompt("a cat")
-  .size({ width: 512, height: 512 });
-const result = await job.run();
+  .size("512x512")
+  .outputFormat("jpeg")
+  .responseFormat("b64_json");
 
-console.log(result);
+const result = await job.run();
+const buffer = Buffer.from(result!.raw.data[0].b64_json, "base64");
+writeFileSync("cat.jpg", buffer);
