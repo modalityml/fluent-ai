@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { anthropic, AnthropicJobSchema } from "~/providers/anthropic";
 import { deepseek, DeepseekJobSchema } from "~/providers/deepseek";
+import { elevenlabs, ElevenlabsJobSchema } from "~/providers/elevenlabs";
 import { fal, FalJobSchema } from "~/providers/fal";
 import { GoogleJobSchema } from "~/providers/google";
 import { LumaJobSchema } from "~/providers/luma";
@@ -11,6 +12,7 @@ import { voyage, VoyageJobSchema } from "~/providers/voyage";
 export const JobSchema = z.union([
   AnthropicJobSchema,
   DeepseekJobSchema,
+  ElevenlabsJobSchema,
   FalJobSchema,
   GoogleJobSchema,
   LumaJobSchema,
@@ -31,6 +33,8 @@ export function load(obj: Job) {
     provider = anthropic(obj.options);
   } else if (obj.provider === "deepseek") {
     provider = deepseek(obj.options);
+  } else if (obj.provider === "elevenlabs") {
+    provider = elevenlabs(obj.options);
   } else if (obj.provider === "fal") {
     provider = fal(obj.options);
   } else if (obj.provider === "ollama") {
@@ -58,6 +62,9 @@ export function load(obj: Job) {
   }
   if (obj.type === "models" && "models" in provider) {
     builder = provider.models();
+  }
+  if (obj.type === "speech" && "speech" in provider) {
+    builder = provider.speech(obj.input.model);
   }
 
   if (!builder) {

@@ -18,8 +18,8 @@ test("chat", async () => {
         job
           .messages([system("you are a helpful assistant"), user("hi")])
           .temperature(0.5)
-          .makeRequest()
-      )
+          .makeRequest(),
+      ),
     ).toMatchSnapshot();
   }
 });
@@ -30,9 +30,8 @@ test("stream", async () => {
       await requestObject(
         job
           .messages([system("you are a helpful assistant"), user("hi")])
-          .stream()
-          .makeRequest()
-      )
+          .makeRequest(),
+      ),
     ).toMatchSnapshot();
   }
 });
@@ -58,8 +57,8 @@ test("json_object", async () => {
         .chat("gpt-4o-mini")
         .messages([user("hi")])
         .responseFormat({ type: "json_object" })
-        .makeRequest()
-    )
+        .makeRequest(),
+    ),
   ).toMatchSnapshot();
 });
 
@@ -70,7 +69,7 @@ test("tool", async () => {
       z.object({
         location: z.string(),
         unit: z.enum(["celsius", "fahrenheit"]).optional(),
-      })
+      }),
     );
 
   for (const job of createJobs()) {
@@ -79,8 +78,8 @@ test("tool", async () => {
         job
           .tool(weatherTool)
           .messages([user("What's the weather like in Boston today?")])
-          .makeRequest()
-      )
+          .makeRequest(),
+      ),
     ).toMatchSnapshot();
   }
 });
@@ -99,8 +98,8 @@ test("jsonSchema", async () => {
             user("generate a person with name and age in json format"),
           ])
           .jsonSchema(personSchema, "person")
-          .makeRequest()
-      )
+          .makeRequest(),
+      ),
     ).toMatchSnapshot();
   }
 });

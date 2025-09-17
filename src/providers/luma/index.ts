@@ -9,15 +9,13 @@ export const LumaBaseJobSchema = z.object({
 export const LumaImageJobSchema = ImageJobSchema.extend(LumaBaseJobSchema);
 
 export const LumaJobSchema = z.discriminatedUnion("type", [LumaImageJobSchema]);
+
 export type LumaJob = z.infer<typeof LumaJobSchema>;
+export type LumaImageJob = z.infer<typeof LumaImageJobSchema>;
 
 export function luma(options?: JobOptions) {
   options = options || {};
   options.apiKey = options.apiKey || process.env.LUMA_API_KEY;
-
-  if (!options.apiKey) {
-    throw new Error("Luma API key is required");
-  }
 
   return {
     image(model: string) {
@@ -26,18 +24,18 @@ export function luma(options?: JobOptions) {
   };
 }
 
-export class LumaImageJobBuilder extends ImageJobBuilder {
+export class LumaImageJobBuilder extends ImageJobBuilder<LumaImageJob> {
   constructor(options: JobOptions, model: string) {
     super(model);
     this.provider = "luma";
     this.options = options;
   }
 
-  makeRequest = () => {
+  makeRequest() {
     return new Request("https://api.lumalabs.ai/dream-machine/v1/generations", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${this.options.apiKey}`,
+        Authorization: `Bearer ${this.options!.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -45,5 +43,11 @@ export class LumaImageJobBuilder extends ImageJobBuilder {
         prompt: this.input.prompt,
       }),
     });
-  };
+  }
+
+  async handleResponse(response: Response) {
+    const raw = await response.json();
+    //TODO: handle raw.images
+    return { raw, images: raw.images };
+  }
 }
