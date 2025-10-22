@@ -1,4 +1,4 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
 exports[`image 1`] = `
 {
@@ -20,7 +20,7 @@ exports[`image 2`] = `
     "content-type": "application/json",
   },
   "method": "POST",
-  "url": "https://api.openai.com/v1/image/generations",
+  "url": "https://api.openai.com/v1/images/generations",
 }
 `;
 

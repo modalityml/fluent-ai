@@ -1,4 +1,4 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
 exports[`chat 1`] = `
 {
@@ -58,7 +58,7 @@ exports[`stream 2`] = `
 
 exports[`stream 3`] = `
 {
-  "body": "{"messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}],"model":"gpt-4o-mini","stream":true}",
+  "body": "{"messages":[{"role":"system","content":"you are a helpful assistant"},{"role":"user","content":"hi"}],"model":"gpt-4o-mini"}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",
@@ -190,7 +190,7 @@ exports[`jsonSchema 2`] = `
 
 exports[`jsonSchema 3`] = `
 {
-  "body": "{"messages":[{"role":"user","content":"generate a person with name and age in json format"}],"model":"gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"person","schema":{"type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"]}}}}",
+  "body": "{"messages":[{"role":"user","content":"generate a person with name and age in json format"}],"model":"gpt-4o-mini","response_format":{"type":"json_schema","schema":{"name":"person","type":"object","properties":{"name":{"type":"string"},"age":{"type":"number"}},"required":["name","age"]}}}",
   "headers": {
     "authorization": "Bearer <key>",
     "content-type": "application/json",

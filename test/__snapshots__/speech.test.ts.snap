@@ -1,4 +1,22 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`speech 1`] = `
+{
+  "body": "",
+  "headers": {},
+  "method": "GET",
+  "url": "https://api.openai.com/v1",
+}
+`;
+
+exports[`speech 2`] = `
+{
+  "body": "",
+  "headers": {},
+  "method": "GET",
+  "url": "https://api.elevenlabs.io/v1/text-to-speech",
+}
+`;
 
 exports[`dump 1`] = `
 {
@@ -31,23 +49,5 @@ exports[`dump 2`] = `
   "provider": "elevenlabs",
   "type": "speech",
   "version": "0.3.0",
-}
-`;
-
-exports[`speech 1`] = `
-{
-  "body": "",
-  "headers": {},
-  "method": "GET",
-  "url": "https://api.openai.com/v1",
-}
-`;
-
-exports[`speech 2`] = `
-{
-  "body": "",
-  "headers": {},
-  "method": "GET",
-  "url": "https://api.elevenlabs.io/v1/text-to-speech",
 }
 `;
