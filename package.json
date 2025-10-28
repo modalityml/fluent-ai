@@ -1,6 +1,6 @@
 {
   "name": "fluent-ai",
-  "description": "A lightweight AI toolkit for multiple platforms",
+  "description": "A lightweight AI toolkit",
   "version": "0.3.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -29,7 +29,9 @@
     "bun",
     "ollama",
     "anthropic",
-    "zod"
+    "openrouter",
+    "zod",
+    "agent"
   ],
   "devDependencies": {
     "@types/bun": "1.3.0",

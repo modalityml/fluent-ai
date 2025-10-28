@@ -13,7 +13,7 @@ fluent-ai is a lightweight, type-safe AI toolkit that seamlessly integrates mult
 [Zod](https://zod.dev/) is a popular type of validation library for TypeScript and JavaScript that allows developers to define and validate data schemas in a concise and type-safe manner. fluent-ai is built upon zod.
 
 ```sh
-npm install fluent-ai zod@next
+npm install fluent-ai zod
 ```
 
 ## AI Service provider support
@@ -128,16 +128,16 @@ Function calling (or tool calling) is an advanced functionality in chat completi
 Here's how to create a tool:
 
 ```ts
-import { z } from "zod";
+import * as z from "zod";
 import { tool } from "fluent-ai";
 
 const weatherTool = tool("get_current_weather")
   .description("Get the current weather in a given location")
-  .parameters(
+  .input(
     z.object({
       location: z.string(),
       unit: z.enum(["celsius", "fahrenheit"]).optional(),
-    })
+    }),
   );
 ```
 
