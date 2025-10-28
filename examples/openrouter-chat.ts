@@ -1,6 +1,23 @@
-import * as z from "zod";
-import { tool } from "~/src/builder/chat";
-import { openrouter } from "~/src/builder/providers";
+import type { Job } from "../src";
+import { runner } from "~/src/job/runner";
+
+const job: Job = {
+  provider: "openrouter",
+  body: {
+    type: "chat",
+    input: {
+      model: "google/gemini-2.5-flash",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: "Hi" },
+      ],
+    },
+  },
+};
+
+const output = await runner.run(job);
+
+console.log(JSON.stringify(output, null, 2));
 
 // const job = openrouter()
 //   .chat()
@@ -17,24 +34,24 @@ import { openrouter } from "~/src/builder/providers";
 //   process.stdout.write(text(chunk));
 // }
 
-const weatherTool = tool("get_current_weather")
-  .description("Get the current weather in a given location")
-  .input(
-    z.object({
-      location: z.string(),
-      unit: z.enum(["celsius", "fahrenheit"]).optional(),
-    }),
-  );
+// const weatherTool = tool("get_current_weather")
+//   .description("Get the current weather in a given location")
+//   .input(
+//     z.object({
+//       location: z.string(),
+//       unit: z.enum(["celsius", "fahrenheit"]).optional(),
+//     }),
+//   );
 
-const job = openrouter()
-  .chat()
-  .model("google/gemini-2.5-flash")
-  .tool(weatherTool)
-  .messages([
-    {
-      role: "user",
-      content: "What's the weather like in Boston, Beijing, Tokyo today?",
-    },
-  ]);
-const result = await job.run();
-console.log(JSON.stringify(result, null, 2));
+// const job = openrouter()
+//   .chat()
+//   .model("google/gemini-2.5-flash")
+//   .tool(weatherTool)
+//   .messages([
+//     {
+//       role: "user",
+//       content: "What's the weather like in Boston, Beijing, Tokyo today?",
+//     },
+//   ]);
+// const result = await job.run();
+// console.log(JSON.stringify(result, null, 2));

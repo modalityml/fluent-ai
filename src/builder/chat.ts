@@ -1,129 +1,59 @@
 import * as z from "zod";
-import type {
-  ChatTool,
-  Job,
-  JobType,
-  Options,
-  ProviderName,
-} from "~/src/job/schema";
-import { registry, run } from "~/src/job/registry";
+import { jobSchema, type ChatInput, type ChatTool } from "~/src/job/schema";
 
-export interface ChatBuilder {
-  model(model: string): this;
-  messages(messages: any[]): this;
-  temperature(temp: number): this;
-  maxTokens(tokens: number): this;
-  stream(): this;
-  tool(tool: ChatTool): this;
-  tools(tools: ChatTool[]): this;
-  build(): Job;
-  run(): Promise<any> | AsyncIterable<any>;
-  dump(): string;
-}
+export class ChatBuilder<TProvider extends string = string> {
+  private provider: TProvider;
+  private options: any;
+  private runner: any;
+  private input: ChatInput = { model: "", messages: [] };
 
-export class BaseChatBuilder implements ChatBuilder {
-  private _model?: string;
-  private _messages?: any[];
-  private _temperature?: number;
-  private _maxTokens?: number;
-  private _streaming: boolean = false;
-  private _tools: ChatTool[] = [];
-
-  constructor(
-    private provider: ProviderName,
-    private options?: Options,
-    private version?: string,
-  ) {}
-
-  model(model: string): this {
-    this._model = model;
-    return this;
+  constructor(provider: TProvider, options: any, runner: any, model: string) {
+    this.provider = provider;
+    this.options = options;
+    this.runner = runner;
+    this.input.model = model;
   }
 
-  messages(messages: any[]): this {
-    this._messages = messages;
-    return this;
-  }
-
-  temperature(temp: number): this {
-    this._temperature = temp;
-    return this;
-  }
-
-  maxTokens(tokens: number): this {
-    this._maxTokens = tokens;
-    return this;
-  }
-
-  stream(): this {
-    this._streaming = true;
+  messages(messages: Array<{ role: string; content: string }>): this {
+    this.input.messages = messages;
     return this;
   }
 
   tool(tool: ChatTool): this {
-    this._tools.push(tool);
+    if (!this.input.tools) {
+      this.input.tools = [];
+    }
+    this.input.tools.push(tool);
     return this;
   }
 
   tools(tools: ChatTool[]): this {
-    this._tools.push(...tools);
+    if (!this.input.tools) {
+      this.input.tools = [];
+    }
+    this.input.tools = this.input.tools.concat(tools);
     return this;
   }
 
-  build(): Job {
-    if (!this._model || !this._messages) {
-      throw new Error("Model and messages are required");
-    }
+  stream() {
+    this.input.stream = true;
+    return this;
+  }
 
+  build() {
     return {
       provider: this.provider,
-      version: this.version,
       options: this.options,
       body: {
-        type: "chat",
-        input: {
-          model: this._model,
-          messages: this._messages,
-          temperature: this._temperature,
-          maxTokens: this._maxTokens,
-          tools: this._tools.length > 0 ? this._tools : undefined,
-        },
+        type: "chat" as const,
+        input: this.input,
       },
-    } as Job;
+    };
   }
 
-  dump(): string {
-    return JSON.stringify(this.build(), null, 2);
-  }
-
-  run(): Promise<any> | AsyncIterable<any> {
-    if (this._streaming) {
-      return this._runStream();
-    }
-    return run(this.build());
-  }
-
-  private async *_runStream(): AsyncIterable<any> {
+  run() {
     const job = this.build();
-    const { provider, body, options } = job;
-    const handler = registry.get(
-      provider as ProviderName,
-      body.type as JobType,
-    );
-
-    if (!handler) {
-      throw new Error(
-        `Provider '${provider}' does not support job type '${body.type}'`,
-      );
-    }
-
-    if (!handler.executeStream) {
-      throw new Error(
-        `Provider '${provider}' does not support streaming for job type '${body.type}'`,
-      );
-    }
-
-    yield* handler.executeStream(body, options);
+    return this.runner.chat(job.body.input, job.options);
   }
 }
 

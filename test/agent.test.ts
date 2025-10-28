@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { test, expect } from "bun:test";
-import { agentTool } from "~/src/agent/tool";
+import { agentTool } from "~/src/index";
 
 const getWeather = (input: { location: string }) => {
   return `The weather in ${input.location} is sunny with a high of 75°F.`;
