@@ -13,21 +13,22 @@ fluent-ai is a lightweight, type-safe AI toolkit that seamlessly integrates mult
 [Zod](https://zod.dev/) is a popular type of validation library for TypeScript and JavaScript that allows developers to define and validate data schemas in a concise and type-safe manner. fluent-ai is built upon zod.
 
 ```sh
-npm install fluent-ai zod@next
+npm install fluent-ai zod
 ```
 
 ## AI Service provider support
 
 fluent-ai includes support for multiple AI providers and modalities.
 
-| provider  | chat completion    | embedding          | image generation   | list models        |
-| --------- | ------------------ | ------------------ | ------------------ | ------------------ |
-| anthropic | :white_check_mark: |                    |                    | :white_check_mark: |
-| fal       |                    |                    | :white_check_mark: |                    |
-| google    | :white_check_mark: |                    |                    |                    |
-| ollama    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| openai    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| voyage    |                    | :white_check_mark: |                    |                    |
+| provider   | chat completion    | embedding          | image generation   | list models        | text to speech     |
+| ---------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ |
+| anthropic  | :white_check_mark: |                    |                    | :white_check_mark: |                    |
+| elevenlabs |                    |                    |                    |                    | :white_check_mark: |
+| fal        |                    |                    | :white_check_mark: |                    |                    |
+| google     | :white_check_mark: |                    |                    |                    |                    |
+| ollama     | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |                    |
+| openai     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| voyage     |                    | :white_check_mark: |                    |                    |                    |
 
 By default, API keys for providers are read from environment variable (`process.env`) following the format `<PROVIDER>_API_KEY` (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`).
 
@@ -127,16 +128,16 @@ Function calling (or tool calling) is an advanced functionality in chat completi
 Here's how to create a tool:
 
 ```ts
-import { z } from "zod";
+import * as z from "zod";
 import { tool } from "fluent-ai";
 
 const weatherTool = tool("get_current_weather")
   .description("Get the current weather in a given location")
-  .parameters(
+  .input(
     z.object({
       location: z.string(),
       unit: z.enum(["celsius", "fahrenheit"]).optional(),
-    })
+    }),
   );
 ```
 
@@ -191,6 +192,15 @@ fluent-ai provides an easy way to retrieve all available models from supported p
 import { openai } from "fluent-ai";
 
 const models = await openai().models().run();
+```
+
+## Text to Speech
+
+```ts
+import { openai } from "fluent-ai";
+
+const job = openai().model("tts-1").text("hi");
+const result = await job.run();
 ```
 
 ## Support
