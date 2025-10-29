@@ -23,7 +23,7 @@ async function getUserInput(): Promise<Message> {
   return newMessage;
 }
 
-export async function repl(agent: Agent) {
+export async function agentRepl(agent: Agent) {
   let allMessages: Message[] = [];
   while (true) {
     const userMessage = await getUserInput();
