@@ -64,10 +64,15 @@ const embeddingSchema = z.object({
   output: embeddingOutputSchema.optional(),
 });
 
+const imageSizeSchema = z.object({
+  width: z.number(),
+  height: z.number(),
+});
+
 const imageInputSchema = z.object({
   model: z.string(),
   prompt: z.string(),
-  size: z.string().optional(),
+  size: imageSizeSchema,
   n: z.number().optional(),
 });
 

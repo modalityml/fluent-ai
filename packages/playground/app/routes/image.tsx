@@ -14,6 +14,10 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
         name: "fal" as const,
         displayName: "Fal.ai",
         models: [
+          {
+            id: "fal-ai/bytedance/seedream/v4/text-to-image",
+            name: "Seedream v4",
+          },
           { id: "fal-ai/flux/dev", name: "FLUX.1 [dev]" },
           { id: "fal-ai/flux/schnell", name: "FLUX.1 [schnell]" },
           { id: "fal-ai/flux-pro", name: "FLUX.1 [pro]" },
@@ -55,7 +59,7 @@ export default function Image({
       input: {
         model: providers[0].models[0].id || "",
         prompt: "A serene landscape with mountains at sunset, digital art",
-        size: "1024x1024",
+        size: { width: 1024, height: 1024 },
         n: 1,
       },
     },

@@ -21,7 +21,7 @@ interface Provider {
 interface ImageInput {
   model: string;
   prompt: string;
-  size?: string;
+  size?: { width: number; height: number };
   n?: number;
 }
 
@@ -102,14 +102,15 @@ export const ImagePlayground = ({
     } as Job);
   }
 
-  function setSize(size: string) {
+  function setSize(sizeStr: string) {
+    const [width, height] = sizeStr.split("x").map(Number);
     onChange({
       ...job,
       body: {
         type: "image",
         input: {
           ...input,
-          size,
+          size: { width, height },
         },
       },
     } as Job);
@@ -152,7 +153,7 @@ export const ImagePlayground = ({
                   input: {
                     model: "",
                     prompt: "",
-                    size: "1024x1024",
+                    size: { width: 1024, height: 1024 },
                     n: 1,
                   },
                 },
@@ -230,7 +231,11 @@ export const ImagePlayground = ({
                   Image Size
                 </Label>
                 <Select
-                  value={input.size || "1024x1024"}
+                  value={
+                    input.size
+                      ? `${input.size.width}x${input.size.height}`
+                      : "1024x1024"
+                  }
                   onValueChange={setSize}
                 >
                   <SelectTrigger id="size" className="w-full">

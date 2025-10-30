@@ -1,5 +1,12 @@
 import { test, expect, mock } from "bun:test";
-import { jobSchema, openrouter, type Job, user, voyage } from "~/src/index";
+import {
+  jobSchema,
+  openrouter,
+  fal,
+  type Job,
+  user,
+  voyage,
+} from "~/src/index";
 import { Runner } from "~/src/job/runner";
 
 test("chat job", () => {
@@ -22,6 +29,31 @@ test("chat job", () => {
     openrouter()
       .chat("test-model")
       .messages([user("hello")])
+      .build(),
+  );
+});
+
+test("image job", () => {
+  const job: Job = {
+    provider: "fal",
+    body: {
+      type: "image",
+      input: {
+        model: "fal-ai/bytedance/seedream/v4/text-to-image",
+        prompt: "A beautiful sunset over the mountains",
+        size: { width: 1280, height: 1280 },
+      },
+    },
+  };
+  expect(() => {
+    jobSchema.parse(job);
+  }).not.toThrow();
+
+  expect(job).toEqual(
+    fal()
+      .image("fal-ai/bytedance/seedream/v4/text-to-image")
+      .prompt("A beautiful sunset over the mountains")
+      .size({ width: 1280, height: 1280 })
       .build(),
   );
 });
