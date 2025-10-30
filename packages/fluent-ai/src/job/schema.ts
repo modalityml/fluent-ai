@@ -137,6 +137,11 @@ export const jobSchema = z.discriminatedUnion("provider", [
     body: z.discriminatedUnion("type", [chatSchema]),
   }),
   z.object({
+    provider: z.literal("openai"),
+    options: optionsSchema,
+    body: z.discriminatedUnion("type", [chatSchema, modelsSchema]),
+  }),
+  z.object({
     provider: z.literal("fal"),
     options: optionsSchema,
     body: z.discriminatedUnion("type", [imageSchema]),

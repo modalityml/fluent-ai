@@ -2,6 +2,7 @@ import { test, expect, mock } from "bun:test";
 import {
   jobSchema,
   openrouter,
+  openai,
   fal,
   type Job,
   user,
@@ -77,6 +78,21 @@ test("embedding job", () => {
   expect(job).toEqual(
     voyage().embedding("voyage-3-lite").input("This is a test").build(),
   );
+});
+
+test("models job", () => {
+  const job: Job = {
+    provider: "openai",
+    body: {
+      type: "models",
+    },
+  };
+
+  expect(() => {
+    jobSchema.parse(job);
+  }).not.toThrow();
+
+  expect(job).toEqual(openai().models().build());
 });
 
 test("runner", () => {
