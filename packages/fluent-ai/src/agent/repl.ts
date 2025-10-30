@@ -1,8 +1,8 @@
-import type { Agent } from "~/src/agent/agent";
 import * as readline from "node:readline/promises";
+import type { Agent } from "~/src/agent/agent";
 import type { Message, MessagePart } from "~/src/job/schema";
 
-async function getUserInput(): Promise<Message> {
+export async function agentReplInput(): Promise<Message> {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -26,7 +26,7 @@ async function getUserInput(): Promise<Message> {
 export async function agentRepl(agent: Agent) {
   let allMessages: Message[] = [];
   while (true) {
-    const userMessage = await getUserInput();
+    const userMessage = await agentReplInput();
     allMessages = allMessages.concat([userMessage]);
     const stream = agent.generate(allMessages, { maxSteps: 8 });
     for await (const event of stream) {
