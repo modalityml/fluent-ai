@@ -1,4 +1,5 @@
 import * as openrouter from "~/src/job/openrouter";
+import * as voyage from "~/src/job/voyage";
 import type { Job } from "~/src/job/schema";
 
 export class Runner {
@@ -18,4 +19,5 @@ export class Runner {
 
 export const runner = new Runner({
   openrouter: openrouter.runner,
+  voyage: voyage.runner,
 });

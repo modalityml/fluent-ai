@@ -1,5 +1,7 @@
 {
-	"name": "fluent-ai",
-	"private": true,
-	"workspaces": ["packages/*"]
+  "name": "ai",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
 }

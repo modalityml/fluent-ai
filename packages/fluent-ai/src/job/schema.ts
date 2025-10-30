@@ -136,6 +136,11 @@ export const jobSchema = z.discriminatedUnion("provider", [
     options: optionsSchema,
     body: z.discriminatedUnion("type", [imageSchema]),
   }),
+  z.object({
+    provider: z.literal("voyage"),
+    options: optionsSchema,
+    body: z.discriminatedUnion("type", [embeddingSchema]),
+  }),
 ]);
 
 export type MessagePart = z.infer<typeof messagePartSchema>;

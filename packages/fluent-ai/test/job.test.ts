@@ -1,8 +1,8 @@
 import { test, expect, mock } from "bun:test";
-import { jobSchema, openrouter, type Job, user } from "~/src/index";
+import { jobSchema, openrouter, type Job, user, voyage } from "~/src/index";
 import { Runner } from "~/src/job/runner";
 
-test("job", () => {
+test("chat job", () => {
   const job: Job = {
     provider: "openrouter",
     body: {
@@ -23,6 +23,27 @@ test("job", () => {
       .chat("test-model")
       .messages([user("hello")])
       .build(),
+  );
+});
+
+test("embedding job", () => {
+  const job: Job = {
+    provider: "voyage",
+    body: {
+      type: "embedding",
+      input: {
+        model: "voyage-3-lite",
+        input: "This is a test",
+      },
+    },
+  };
+
+  expect(() => {
+    jobSchema.parse(job);
+  }).not.toThrow();
+
+  expect(job).toEqual(
+    voyage().embedding("voyage-3-lite").input("This is a test").build(),
   );
 });
 

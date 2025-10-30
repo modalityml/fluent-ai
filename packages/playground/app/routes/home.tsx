@@ -28,13 +28,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
-import {
-  PlusIcon,
-  MessageSquareIcon,
-  ImageIcon,
-  ListIcon,
-  LayoutGridIcon,
-} from "lucide-react";
+import { PlusIcon, ListIcon, LayoutGridIcon } from "lucide-react";
 
 // Sample job data following the job schema
 const sampleJobs = [
@@ -236,7 +230,6 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
 
   return (
     <div className="w-full h-full flex">
-      {/* Left Panel */}
       <div className="w-64 border-r bg-card shrink-0 overflow-y-auto">
         <div className="p-4 space-y-6">
           <div>
@@ -278,6 +271,7 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
                 <SelectItem value="all">All Providers</SelectItem>
                 <SelectItem value="openrouter">OpenRouter</SelectItem>
                 <SelectItem value="fal">Fal</SelectItem>
+                <SelectItem value="voyage">Voyage</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -294,13 +288,13 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
                 <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="chat">Chat</SelectItem>
                 <SelectItem value="image">Image</SelectItem>
+                <SelectItem value="embedding">Embedding</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="border-b bg-card shrink-0">
           <div className="px-4 py-3 flex items-center justify-between">
@@ -322,14 +316,17 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/chat" className="cursor-pointer">
-                    <MessageSquareIcon />
                     Chat Completion
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/image" className="cursor-pointer">
-                    <ImageIcon />
                     Image Generation
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/embedding" className="cursor-pointer">
+                    Embedding Generation
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
