@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { jobSchema, type ChatInput, type ChatTool } from "~/src/job/schema";
+import { type ChatInput, type ChatTool } from "~/src/job/schema";
 
 export class ChatBuilder<TProvider extends string = string> {
   private provider: TProvider;

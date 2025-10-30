@@ -33,11 +33,14 @@ jobs:
           bun install
       - id: tsc
         run: bunx tsc
+        working-directory: packages/fluent-ai
       - id: build
         name: Run build
         run: |
           bun run build
+        working-directory: packages/fluent-ai
       - id: test
         name: Run test
         run: |
           bun test
+        working-directory: packages/fluent-ai
