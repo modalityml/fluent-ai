@@ -11,12 +11,8 @@ import {
 import { Slider } from "~/components/ui/slider";
 import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import type {
-  ChatInput,
-  Job,
-  ChatTool,
-} from "../../../fluent-ai/src/job/schema";
-import { Copy, Plus, Trash2 } from "lucide-react";
+import type { ChatInput, Job, ChatTool } from "fluent-ai";
+import { Plus, Trash2 } from "lucide-react";
 
 interface Provider {
   name: string;
@@ -34,7 +30,7 @@ interface ChatProps {
   output?: any;
 }
 
-export const Chat = ({
+export const ChatPlayground = ({
   job,
   onChange,
   providers,

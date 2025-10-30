@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { Link } from "react-router";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -18,7 +19,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { PlusIcon, MessageSquareIcon, ImageIcon } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { Separator } from "~/components/ui/separator";
+import {
+  PlusIcon,
+  MessageSquareIcon,
+  ImageIcon,
+  ListIcon,
+  LayoutGridIcon,
+} from "lucide-react";
 
 // Sample job data following the job schema
 const sampleJobs = [
@@ -207,83 +223,223 @@ function calculateDuration(start: Date, end: Date | null) {
 }
 
 export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [selectedProvider, setSelectedProvider] = useState<string>("all");
+  const [selectedType, setSelectedType] = useState<string>("all");
+
+  const filteredJobs = jobs.filter((job) => {
+    const providerMatch =
+      selectedProvider === "all" || job.provider === selectedProvider;
+    const typeMatch = selectedType === "all" || job.body.type === selectedType;
+    return providerMatch && typeMatch;
+  });
+
   return (
-    <div className="w-full h-full">
-      <div className="border-b bg-card shrink-0">
-        <div className="px-4 py-3 flex items-center justify-between">
+    <div className="w-full h-full flex">
+      {/* Left Panel */}
+      <div className="w-64 border-r bg-card shrink-0 overflow-y-auto">
+        <div className="p-4 space-y-6">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">Dashboard</h1>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button>
-                <PlusIcon />
-                New Job
+            <h3 className="text-sm font-semibold mb-3">View Mode</h3>
+            <div className="flex gap-2">
+              <Button
+                variant={viewMode === "list" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("list")}
+                className="flex-1"
+              >
+                <ListIcon className="h-4 w-4" />
+                List
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Create New Job</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/chat" className="cursor-pointer">
-                  <MessageSquareIcon />
-                  Chat Completion
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/image" className="cursor-pointer">
-                  <ImageIcon />
-                  Image Generation
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <Button
+                variant={viewMode === "grid" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("grid")}
+                className="flex-1"
+              >
+                <LayoutGridIcon className="h-4 w-4" />
+                Grid
+              </Button>
+            </div>
+          </div>
+
+          <Separator />
+
+          <div>
+            <h3 className="text-sm font-semibold mb-3">Provider</h3>
+            <Select
+              value={selectedProvider}
+              onValueChange={setSelectedProvider}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select provider" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Providers</SelectItem>
+                <SelectItem value="openrouter">OpenRouter</SelectItem>
+                <SelectItem value="fal">Fal</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Separator />
+
+          <div>
+            <h3 className="text-sm font-semibold mb-3">Type</h3>
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="chat">Chat</SelectItem>
+                <SelectItem value="image">Image</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
-      <div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Job ID</TableHead>
-              <TableHead>Provider</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Model</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead className="text-right">Tokens</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {jobs.map((job) => (
-              <TableRow key={job.id}>
-                <TableCell className="font-mono text-xs">{job.id}</TableCell>
-                <TableCell className="capitalize">{job.provider}</TableCell>
-                <TableCell className="capitalize">{job.body.type}</TableCell>
-                <TableCell className="text-xs">
-                  {job.body.input.model}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={getStatusBadgeVariant(job.status)}>
-                    {job.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-xs">
-                  {formatDate(job.createdAt)}
-                </TableCell>
-                <TableCell>
-                  {calculateDuration(job.createdAt, job.completedAt)}
-                </TableCell>
-                <TableCell className="text-right">
-                  {job.body.output?.usage?.totalTokens
-                    ? job.body.output.usage.totalTokens.toLocaleString()
-                    : "—"}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="border-b bg-card shrink-0">
+          <div className="px-4 py-3 flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold tracking-tight">Dashboard</h1>
+              <p className="text-sm text-muted-foreground">
+                {filteredJobs.length} job{filteredJobs.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button>
+                  <PlusIcon />
+                  New Job
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Create New Job</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/chat" className="cursor-pointer">
+                    <MessageSquareIcon />
+                    Chat Completion
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/image" className="cursor-pointer">
+                    <ImageIcon />
+                    Image Generation
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-auto">
+          {viewMode === "list" ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Job ID</TableHead>
+                  <TableHead>Provider</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Model</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead>Duration</TableHead>
+                  <TableHead className="text-right">Tokens</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredJobs.map((job) => (
+                  <TableRow key={job.id}>
+                    <TableCell className="font-mono text-xs">
+                      {job.id}
+                    </TableCell>
+                    <TableCell className="capitalize">{job.provider}</TableCell>
+                    <TableCell className="capitalize">
+                      {job.body.type}
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      {job.body.input.model}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusBadgeVariant(job.status)}>
+                        {job.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      {formatDate(job.createdAt)}
+                    </TableCell>
+                    <TableCell>
+                      {calculateDuration(job.createdAt, job.completedAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {job.body.output?.usage?.totalTokens
+                        ? job.body.output.usage.totalTokens.toLocaleString()
+                        : "—"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+              {filteredJobs.map((job) => (
+                <Card key={job.id}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <CardTitle className="text-sm font-mono">
+                        {job.id}
+                      </CardTitle>
+                      <Badge variant={getStatusBadgeVariant(job.status)}>
+                        {job.status}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Provider:</span>
+                        <span className="capitalize">{job.provider}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Type:</span>
+                        <span className="capitalize">{job.body.type}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Model:</span>
+                        <span className="text-xs">{job.body.input.model}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Created:</span>
+                        <span className="text-xs">
+                          {formatDate(job.createdAt)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Duration:</span>
+                        <span>
+                          {calculateDuration(job.createdAt, job.completedAt)}
+                        </span>
+                      </div>
+                      {job.body.output?.usage?.totalTokens && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Tokens:</span>
+                          <span>
+                            {job.body.output.usage.totalTokens.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

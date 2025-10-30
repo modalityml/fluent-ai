@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/image";
 import { runner } from "../../../fluent-ai/src/job/runner";
 import type { Job } from "../../../fluent-ai/src/job/schema";
-import { ChatPlayground } from "~/components/chat";
+import { ImagePlayground } from "~/components/image";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Copy } from "lucide-react";
@@ -11,14 +11,17 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   return {
     providers: [
       {
-        name: "openrouter" as const,
-        displayName: "OpenRouter",
+        name: "fal" as const,
+        displayName: "Fal.ai",
         models: [
-          { id: "google/gemini-2.5-flash", name: "Gemini 2.5 Flash" },
-          { id: "anthropic/claude-3.5-sonnet", name: "Claude 3.5 Sonnet" },
-          { id: "openai/gpt-4-turbo", name: "GPT-4 Turbo" },
-          { id: "openai/gpt-3.5-turbo", name: "GPT-3.5 Turbo" },
-          { id: "meta-llama/llama-3.1-70b-instruct", name: "Llama 3.1 70B" },
+          { id: "fal-ai/flux/dev", name: "FLUX.1 [dev]" },
+          { id: "fal-ai/flux/schnell", name: "FLUX.1 [schnell]" },
+          { id: "fal-ai/flux-pro", name: "FLUX.1 [pro]" },
+          {
+            id: "fal-ai/stable-diffusion-v3-medium",
+            name: "Stable Diffusion v3",
+          },
+          { id: "fal-ai/fast-sdxl", name: "Fast SDXL" },
         ],
       },
     ],
@@ -39,7 +42,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
   }
 };
 
-export default function Home({
+export default function Image({
   loaderData: { providers },
 }: Route.ComponentProps) {
   const [job, setJob] = useState<Job>({
@@ -48,15 +51,12 @@ export default function Home({
       apiKey: "",
     },
     body: {
-      type: "chat",
+      type: "image",
       input: {
         model: providers[0].models[0].id || "",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: "Hi, tell me a short joke!" },
-        ],
-        temperature: 0.7,
-        maxTokens: 1000,
+        prompt: "A serene landscape with mountains at sunset, digital art",
+        size: "1024x1024",
+        n: 1,
       },
     },
   });
@@ -103,10 +103,10 @@ export default function Home({
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      <title>Chat</title>
+      <title>Image Generation</title>
       <div className="border-b bg-card shrink-0">
         <div className="px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl font-bold tracking-tight">Chat</h1>
+          <h1 className="text-xl font-bold tracking-tight">Image Generation</h1>
           <Button
             type="button"
             onClick={() => {
@@ -122,7 +122,7 @@ export default function Home({
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        <ChatPlayground
+        <ImagePlayground
           job={job}
           onChange={handleJobChange}
           providers={providers}
