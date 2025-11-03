@@ -1,6 +1,10 @@
 import * as z from "zod";
 import { convertMessagesForChatCompletion } from "~/src/agent/message";
-import { agentToolSchema, type AgentToolBuilder } from "~/src/agent/tool";
+import {
+  agentToolSchema,
+  type AgentToolBuilder,
+  type AgentTool,
+} from "~/src/agent/tool";
 import type { Message } from "~/src/job/schema";
 import type { ChatBuilder } from "~/src/builder/chat";
 
@@ -14,8 +18,10 @@ interface GenerateOptions {
   maxSteps: number;
 }
 
-export class Agent {
-  private body: z.infer<typeof agentSchema>;
+export class Agent<TContext = any> {
+  private body: Omit<z.infer<typeof agentSchema>, "tools"> & {
+    tools: AgentTool<TContext>[];
+  };
   private builder?: ChatBuilder;
 
   constructor(name: string) {
@@ -32,15 +38,16 @@ export class Agent {
     return this;
   }
 
-  tool(tool: AgentToolBuilder) {
+  tool(tool: AgentToolBuilder<any, any, TContext>) {
     this.body.tools.push(tool.build());
     return this;
   }
 
   generate = async function* (
-    this: Agent,
+    this: Agent<TContext>,
     initialMessages: Message[],
     options: GenerateOptions,
+    context?: TContext,
   ) {
     const body = agentSchema.parse(this.body);
 
@@ -102,7 +109,7 @@ export class Agent {
           let outputError = null; // TODO: save output error
 
           try {
-            output = await agentTool.execute(input);
+            output = await agentTool.execute(input, context!);
           } catch (err) {
             outputError = (err as Error).message;
           }
@@ -153,6 +160,6 @@ export class Agent {
   };
 }
 
-export function agent(name: string) {
-  return new Agent(name);
+export function agent<TContext = any>(name: string) {
+  return new Agent<TContext>(name);
 }
