@@ -584,7 +584,7 @@ export const ChatPlayground = ({
               Provider
             </Label>
             <Select value={job.provider} onValueChange={handleProviderChange}>
-              <SelectTrigger id="provider">
+              <SelectTrigger id="provider" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

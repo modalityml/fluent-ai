@@ -5,16 +5,22 @@ export const agentToolSchema = z.object({
   description: z.string(),
   input: z.instanceof(z.ZodObject),
   output: z.instanceof(z.ZodType).optional(),
-  execute: z.function({ input: [z.any()] }),
+  execute: z.function({ input: [z.any(), z.any()] }),
 });
 
-export type AgentTool = z.infer<typeof agentToolSchema>;
+export type AgentTool<TContext = any> = Omit<
+  z.infer<typeof agentToolSchema>,
+  "execute"
+> & {
+  execute: (input: any, context: TContext) => any | Promise<any>;
+};
 
 export class AgentToolBuilder<
   TInput extends z.ZodObject<any> = z.ZodObject<any>,
   TOutput extends z.ZodType = z.ZodType,
+  TContext = any,
 > {
-  private body: Partial<AgentTool> = {};
+  private body: Partial<AgentTool<TContext>> = {};
 
   constructor(name: string) {
     this.body.name = name;
@@ -27,25 +33,26 @@ export class AgentToolBuilder<
 
   input<T extends z.ZodObject<any>>(schema: T) {
     this.body.input = schema;
-    return this as unknown as AgentToolBuilder<T, TOutput>;
+    return this as unknown as AgentToolBuilder<T, TOutput, TContext>;
   }
 
   output<T extends z.ZodType>(schema: T) {
     this.body.output = schema;
-    return this as unknown as AgentToolBuilder<TInput, T>;
+    return this as unknown as AgentToolBuilder<TInput, T, TContext>;
   }
 
   execute(
     fn: (
       input: z.infer<TInput>,
+      context: TContext,
     ) => z.infer<TOutput> | Promise<z.infer<TOutput>>,
   ) {
-    this.body.execute = fn as any;
+    this.body.execute = fn;
     return this;
   }
 
   build() {
-    return agentToolSchema.parse(this.body) as AgentTool;
+    return agentToolSchema.parse(this.body) as AgentTool<TContext>;
   }
 }
 
