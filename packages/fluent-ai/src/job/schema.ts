@@ -32,15 +32,15 @@ const chatInputSchema = z.object({
   tools: z.array(chatToolSchema).optional(),
 });
 
+const chatUsageSchema = z.object({
+  promptTokens: z.number(),
+  completionTokens: z.number(),
+  totalTokens: z.number(),
+});
+
 const chatOutputSchema = z.object({
   messages: z.array(z.any()),
-  usage: z
-    .object({
-      promptTokens: z.number(),
-      completionTokens: z.number(),
-      totalTokens: z.number(),
-    })
-    .optional(),
+  usage: chatUsageSchema.optional(),
 });
 
 const chatSchema = z.object({
@@ -124,31 +124,29 @@ const speechSchema = z.object({
   output: speechOutputSchema.optional(),
 });
 
-const optionsSchema = z
-  .object({
-    apiKey: z.string().optional(),
-  })
-  .optional();
+const optionsSchema = z.object({
+  apiKey: z.string().optional(),
+});
 
 export const jobSchema = z.discriminatedUnion("provider", [
   z.object({
     provider: z.literal("openrouter"),
-    options: optionsSchema,
+    options: optionsSchema.optional(),
     body: z.discriminatedUnion("type", [chatSchema]),
   }),
   z.object({
     provider: z.literal("openai"),
-    options: optionsSchema,
+    options: optionsSchema.optional(),
     body: z.discriminatedUnion("type", [chatSchema, modelsSchema]),
   }),
   z.object({
     provider: z.literal("fal"),
-    options: optionsSchema,
+    options: optionsSchema.optional(),
     body: z.discriminatedUnion("type", [imageSchema]),
   }),
   z.object({
     provider: z.literal("voyage"),
-    options: optionsSchema,
+    options: optionsSchema.optional(),
     body: z.discriminatedUnion("type", [embeddingSchema]),
   }),
 ]);
