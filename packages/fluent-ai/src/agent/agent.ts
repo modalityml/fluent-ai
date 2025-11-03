@@ -52,7 +52,6 @@ export class Agent<TContext = any> {
     const body = agentSchema.parse(this.body);
 
     let shouldBreak = false;
-
     let newMessages: Message[] = [];
     for (let iteration = 0; iteration < options.maxSteps; iteration++) {
       if (shouldBreak) {
@@ -106,7 +105,7 @@ export class Agent<TContext = any> {
           yield { type: "tool-call-input", data: toolPart };
 
           let output = null;
-          let outputError = null; // TODO: save output error
+          let outputError = null;
 
           try {
             output = await agentTool.execute(input, context!);
