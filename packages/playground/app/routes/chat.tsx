@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import type { Route } from "./+types/home";
-import { chatJobSchema, runner } from "fluent-ai";
+import type { Route } from "./+types/chat";
+import { chatJobSchema, runner, type ChatJob } from "fluent-ai";
 import { ChatPlayground } from "~/components/chat";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
@@ -10,7 +10,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   return {
     providers: [
       {
-        name: "openrouter" as const,
+        name: "openrouter",
         displayName: "OpenRouter",
         models: [
           { id: "google/gemini-2.5-flash", name: "Gemini 2.5 Flash" },
@@ -41,22 +41,20 @@ export const action = async ({ request }: Route.ActionArgs) => {
 export default function Home({
   loaderData: { providers },
 }: Route.ComponentProps) {
-  const [job, setJob] = useState<Job>({
+  const [job, setJob] = useState<ChatJob>({
+    type: "chat",
     provider: providers[0].name,
     options: {
       apiKey: "",
     },
-    body: {
-      type: "chat",
-      input: {
-        model: providers[0].models[0].id || "",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: "Hi, tell me a short joke!" },
-        ],
-        temperature: 0.7,
-        maxTokens: 1000,
-      },
+    input: {
+      model: providers[0].models[0].id || "",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: "Hi, tell me a short joke!" },
+      ],
+      temperature: 0.7,
+      maxTokens: 1000,
     },
   });
   const [output, setOutput] = useState<any>(null);
