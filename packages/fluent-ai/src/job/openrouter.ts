@@ -4,12 +4,12 @@ import { createHTTPJob } from "~/src/job/http";
 
 type Options = Extract<Job, { provider: "openrouter" }>["options"];
 type Body = Extract<Job, { provider: "openrouter" }>["body"];
-type ChatInput = Extract<Body, { type: "chat" }>["input"];
+type Input = Extract<Body, { type: "chat" }>["input"];
 
 const BASE_URL = "https://openrouter.ai/api/v1";
 
 export const runner = {
-  chat: async (input: ChatInput, options?: Options) => {
+  chat: async (input: Input, options?: Options) => {
     const apiKey = options?.apiKey || process.env.OPENROUTER_API_KEY;
 
     const tools = input.tools?.map((tool: ChatTool) => ({

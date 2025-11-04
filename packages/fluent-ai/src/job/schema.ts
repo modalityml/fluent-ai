@@ -25,7 +25,7 @@ const messageSchema = z.object({
 
 const chatInputSchema = z.object({
   model: z.string(),
-  messages: z.array(z.any()), // TODO: fix type
+  messages: z.array(z.any()), // TODO: fix any
   temperature: z.number().optional(),
   maxTokens: z.number().optional(),
   stream: z.boolean().optional(),
@@ -64,6 +64,8 @@ const embeddingSchema = z.object({
   output: embeddingOutputSchema.optional(),
 });
 
+const downloadInputSchema = z.union([z.object({ local: z.string() })]);
+
 const imageSizeSchema = z.object({
   width: z.number(),
   height: z.number(),
@@ -73,14 +75,21 @@ const imageInputSchema = z.object({
   model: z.string(),
   prompt: z.string(),
   size: imageSizeSchema,
+  aspectRatio: z.string().optional(), // TODO: enum?
   n: z.number().optional(),
+  seed: z.number().optional(),
+  outputFormat: z.string().optional(),
+  guidanceScale: z.number().optional(),
+  download: downloadInputSchema.optional(),
 });
 
 const imageOutputSchema = z.object({
+  description: z.string().optional(),
   images: z.array(
     z.object({
       url: z.string().optional(),
-      b64_json: z.string().optional(),
+      contentType: z.string().optional(),
+      downloadPath: z.string().optional(),
     }),
   ),
 });
@@ -155,4 +164,5 @@ export type MessagePart = z.infer<typeof messagePartSchema>;
 export type Message = z.infer<typeof messageSchema>;
 export type ChatTool = z.infer<typeof chatToolSchema>;
 export type ChatInput = z.infer<typeof chatInputSchema>;
+export type DownloadInput = z.infer<typeof downloadInputSchema>;
 export type Job = z.infer<typeof jobSchema>;
