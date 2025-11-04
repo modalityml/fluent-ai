@@ -29,32 +29,37 @@ import {
 } from "~/components/ui/select";
 import { Separator } from "~/components/ui/separator";
 import { PlusIcon, ListIcon, LayoutGridIcon } from "lucide-react";
+import type { Job } from "fluent-ai";
+
+// Extended Job type with runtime metadata
+type JobWithMetadata = Job & {
+  id: string;
+  status: "completed" | "running" | "failed";
+  createdAt: Date;
+  completedAt: Date | null;
+};
 
 // Sample job data following the job schema
-const sampleJobs = [
+const sampleJobs: JobWithMetadata[] = [
   {
     id: "job-001",
+    type: "chat" as const,
     provider: "openrouter" as const,
     options: {
       apiKey: "sk-xxx",
     },
-    body: {
-      type: "chat" as const,
-      input: {
-        model: "anthropic/claude-3.5-sonnet",
-        messages: [{ role: "user", content: "Hello, how are you?" }],
-        temperature: 0.7,
-        maxTokens: 1000,
-      },
-      output: {
-        messages: [
-          { role: "assistant", content: "I'm doing well, thank you!" },
-        ],
-        usage: {
-          promptTokens: 450,
-          completionTokens: 800,
-          totalTokens: 1250,
-        },
+    input: {
+      model: "anthropic/claude-3.5-sonnet",
+      messages: [{ role: "user", content: "Hello, how are you?" }],
+      temperature: 0.7,
+      maxTokens: 1000,
+    },
+    output: {
+      messages: [{ role: "assistant", content: "I'm doing well, thank you!" }],
+      usage: {
+        promptTokens: 450,
+        completionTokens: 800,
+        totalTokens: 1250,
       },
     },
     status: "completed",
@@ -63,24 +68,22 @@ const sampleJobs = [
   },
   {
     id: "job-002",
+    type: "chat" as const,
     provider: "openrouter" as const,
     options: {
       apiKey: "sk-xxx",
     },
-    body: {
-      type: "chat" as const,
-      input: {
-        model: "openai/gpt-4-turbo",
-        messages: [{ role: "user", content: "Explain quantum computing" }],
-        temperature: 0.5,
-      },
-      output: {
-        messages: [{ role: "assistant", content: "Quantum computing is..." }],
-        usage: {
-          promptTokens: 320,
-          completionTokens: 570,
-          totalTokens: 890,
-        },
+    input: {
+      model: "openai/gpt-4-turbo",
+      messages: [{ role: "user", content: "Explain quantum computing" }],
+      temperature: 0.5,
+    },
+    output: {
+      messages: [{ role: "assistant", content: "Quantum computing is..." }],
+      usage: {
+        promptTokens: 320,
+        completionTokens: 570,
+        totalTokens: 890,
       },
     },
     status: "completed",
@@ -89,18 +92,16 @@ const sampleJobs = [
   },
   {
     id: "job-003",
+    type: "image" as const,
     provider: "fal" as const,
     options: {
       apiKey: "fal-xxx",
     },
-    body: {
-      type: "image" as const,
-      input: {
-        model: "fal-ai/flux/dev",
-        prompt: "A beautiful sunset over mountains",
-        size: "1024x1024",
-        n: 1,
-      },
+    input: {
+      model: "fal-ai/flux/dev",
+      prompt: "A beautiful sunset over mountains",
+      size: { width: 1024, height: 1024 },
+      n: 1,
     },
     status: "running",
     createdAt: new Date("2024-10-30T11:00:00"),
@@ -108,30 +109,28 @@ const sampleJobs = [
   },
   {
     id: "job-004",
+    type: "chat" as const,
     provider: "openrouter" as const,
     options: {
       apiKey: "sk-xxx",
     },
-    body: {
-      type: "chat" as const,
-      input: {
-        model: "meta-llama/llama-3.1-70b-instruct",
-        messages: [{ role: "user", content: "Write a poem about AI" }],
-        temperature: 0.9,
-        maxTokens: 2000,
-      },
-      output: {
-        messages: [
-          {
-            role: "assistant",
-            content: "In circuits deep and code so bright...",
-          },
-        ],
-        usage: {
-          promptTokens: 850,
-          completionTokens: 1250,
-          totalTokens: 2100,
+    input: {
+      model: "meta-llama/llama-3.1-70b-instruct",
+      messages: [{ role: "user", content: "Write a poem about AI" }],
+      temperature: 0.9,
+      maxTokens: 2000,
+    },
+    output: {
+      messages: [
+        {
+          role: "assistant",
+          content: "In circuits deep and code so bright...",
         },
+      ],
+      usage: {
+        promptTokens: 850,
+        completionTokens: 1250,
+        totalTokens: 2100,
       },
     },
     status: "completed",
@@ -140,16 +139,14 @@ const sampleJobs = [
   },
   {
     id: "job-005",
+    type: "chat" as const,
     provider: "openrouter" as const,
     options: {
       apiKey: "sk-xxx",
     },
-    body: {
-      type: "chat" as const,
-      input: {
-        model: "google/gemini-pro",
-        messages: [{ role: "user", content: "Translate to Spanish" }],
-      },
+    input: {
+      model: "google/gemini-pro",
+      messages: [{ role: "user", content: "Translate to Spanish" }],
     },
     status: "failed",
     createdAt: new Date("2024-10-30T07:30:00"),
@@ -157,21 +154,19 @@ const sampleJobs = [
   },
   {
     id: "job-006",
+    type: "image" as const,
     provider: "fal" as const,
     options: {
       apiKey: "fal-xxx",
     },
-    body: {
-      type: "image" as const,
-      input: {
-        model: "fal-ai/stable-diffusion-xl",
-        prompt: "A futuristic city with flying cars",
-        size: "1024x1024",
-        n: 1,
-      },
-      output: {
-        images: [{ url: "https://example.com/image.png" }],
-      },
+    input: {
+      model: "fal-ai/stable-diffusion-xl",
+      prompt: "A futuristic city with flying cars",
+      size: { width: 1024, height: 1024 },
+      n: 1,
+    },
+    output: {
+      images: [{ url: "https://example.com/image.png" }],
     },
     status: "completed",
     createdAt: new Date("2024-10-29T16:20:00"),
@@ -224,7 +219,7 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
   const filteredJobs = jobs.filter((job) => {
     const providerMatch =
       selectedProvider === "all" || job.provider === selectedProvider;
-    const typeMatch = selectedType === "all" || job.body.type === selectedType;
+    const typeMatch = selectedType === "all" || job.type === selectedType;
     return providerMatch && typeMatch;
   });
 
@@ -356,12 +351,8 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
                       {job.id}
                     </TableCell>
                     <TableCell className="capitalize">{job.provider}</TableCell>
-                    <TableCell className="capitalize">
-                      {job.body.type}
-                    </TableCell>
-                    <TableCell className="text-xs">
-                      {job.body.input.model}
-                    </TableCell>
+                    <TableCell className="capitalize">{job.type}</TableCell>
+                    <TableCell className="text-xs">{job.input.model}</TableCell>
                     <TableCell>
                       <Badge variant={getStatusBadgeVariant(job.status)}>
                         {job.status}
@@ -374,8 +365,8 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
                       {calculateDuration(job.createdAt, job.completedAt)}
                     </TableCell>
                     <TableCell className="text-right">
-                      {job.body.output?.usage?.totalTokens
-                        ? job.body.output.usage.totalTokens.toLocaleString()
+                      {job.output?.usage?.totalTokens
+                        ? job.output.usage.totalTokens.toLocaleString()
                         : "—"}
                     </TableCell>
                   </TableRow>
@@ -404,11 +395,11 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Type:</span>
-                        <span className="capitalize">{job.body.type}</span>
+                        <span className="capitalize">{job.type}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Model:</span>
-                        <span className="text-xs">{job.body.input.model}</span>
+                        <span className="text-xs">{job.input.model}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Created:</span>
@@ -422,11 +413,11 @@ export default function Page({ loaderData: { jobs } }: Route.ComponentProps) {
                           {calculateDuration(job.createdAt, job.completedAt)}
                         </span>
                       </div>
-                      {job.body.output?.usage?.totalTokens && (
+                      {job.output?.usage?.totalTokens && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Tokens:</span>
                           <span>
-                            {job.body.output.usage.totalTokens.toLocaleString()}
+                            {job.output.usage.totalTokens.toLocaleString()}
                           </span>
                         </div>
                       )}

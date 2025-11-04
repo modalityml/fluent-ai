@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import type { Job } from "fluent-ai";
+import type { EmbeddingJob } from "fluent-ai";
 import { Plus, Trash2 } from "lucide-react";
 
 interface Provider {
@@ -20,10 +20,10 @@ interface Provider {
 }
 
 interface EmbeddingProps {
-  job: Job;
-  onChange: (job: Job) => void;
+  job: EmbeddingJob;
+  onChange: (job: EmbeddingJob) => void;
   providers: Provider[];
-  onSubmit: (job: Job) => void;
+  onSubmit: (job: EmbeddingJob) => void;
   loading?: boolean;
   error?: string | null;
   output?: any;
@@ -43,7 +43,7 @@ export const EmbeddingPlayground = ({
     onSubmit(job);
   };
 
-  const input = job.body.input as any;
+  const input = job.input;
   const currentProvider = providers.find((p) => p.name === job.provider);
 
   function setApiKey(apiKey: string) {
@@ -59,34 +59,28 @@ export const EmbeddingPlayground = ({
   function setModel(model: string) {
     onChange({
       ...job,
-      body: {
-        type: "embedding",
-        input: {
-          ...input,
-          model,
-        },
+      input: {
+        ...input,
+        model,
       },
-    } as Job);
+    });
   }
 
   function handleProviderChange(provider: string) {
     onChange({
       ...job,
       provider,
-    } as Job);
+    } as EmbeddingJob);
   }
 
   function setInputText(text: string) {
     onChange({
       ...job,
-      body: {
-        type: "embedding",
-        input: {
-          ...input,
-          input: text,
-        },
+      input: {
+        ...input,
+        input: text,
       },
-    } as Job);
+    });
   }
 
   function addInput() {
@@ -97,14 +91,11 @@ export const EmbeddingPlayground = ({
       : [];
     onChange({
       ...job,
-      body: {
-        type: "embedding",
-        input: {
-          ...input,
-          input: [...currentInputs, ""],
-        },
+      input: {
+        ...input,
+        input: [...currentInputs, ""],
       },
-    } as Job);
+    });
   }
 
   function removeInput(index: number) {
@@ -114,15 +105,11 @@ export const EmbeddingPlayground = ({
       );
       onChange({
         ...job,
-        body: {
-          type: "embedding",
-          input: {
-            ...input,
-            input:
-              updatedInputs.length === 1 ? updatedInputs[0] : updatedInputs,
-          },
+        input: {
+          ...input,
+          input: updatedInputs.length === 1 ? updatedInputs[0] : updatedInputs,
         },
-      } as Job);
+      });
     }
   }
 
@@ -132,14 +119,11 @@ export const EmbeddingPlayground = ({
       updatedInputs[index] = text;
       onChange({
         ...job,
-        body: {
-          type: "embedding",
-          input: {
-            ...input,
-            input: updatedInputs,
-          },
+        input: {
+          ...input,
+          input: updatedInputs,
         },
-      } as Job);
+      });
     }
   }
 
@@ -370,14 +354,12 @@ export const EmbeddingPlayground = ({
               onChange({
                 provider: job.provider,
                 options: {},
-                body: {
-                  type: "embedding",
-                  input: {
-                    model: "",
-                    input: "",
-                  },
+                type: "embedding",
+                input: {
+                  model: "",
+                  input: "",
                 },
-              } as Job);
+              });
             }}
             size="sm"
             variant="outline"

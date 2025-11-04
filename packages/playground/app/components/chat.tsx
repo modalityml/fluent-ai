@@ -11,7 +11,7 @@ import {
 import { Slider } from "~/components/ui/slider";
 import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import type { ChatInput, Job, ChatTool } from "fluent-ai";
+import type { Job, ChatTool, ChatJob } from "fluent-ai";
 import { Plus, Trash2 } from "lucide-react";
 
 interface Provider {
@@ -21,10 +21,10 @@ interface Provider {
 }
 
 interface ChatProps {
-  job: Job;
-  onChange: (job: Job) => void;
+  job: ChatJob;
+  onChange: (job: ChatJob) => void;
   providers: Provider[];
-  onSubmit: (job: Job) => void;
+  onSubmit: (job: ChatJob) => void;
   loading?: boolean;
   error?: string | null;
   output?: any;
@@ -43,7 +43,7 @@ export const ChatPlayground = ({
     e.preventDefault();
     onSubmit(job);
   };
-  const input = job.body.input as ChatInput;
+  const input = job.input;
   const systemPrompt =
     input.messages[0]?.role === "system" ? input.messages[0].content : "";
   const messages = systemPrompt ? input.messages.slice(1) : input.messages;
@@ -56,14 +56,11 @@ export const ChatPlayground = ({
     ];
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          messages: updatedMessages,
-        },
+      input: {
+        ...input,
+        messages: updatedMessages,
       },
-    } as Job);
+    });
   }
 
   function updateMessageRole(index: number, role: "user" | "assistant") {
@@ -71,29 +68,25 @@ export const ChatPlayground = ({
     updatedMessages[index] = { ...updatedMessages[index], role };
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          messages: updatedMessages,
-        },
+      input: {
+        ...input,
+        messages: updatedMessages,
       },
-    } as Job);
+    });
   }
 
   function removeMessage(index: number) {
     const actualIndex = systemPrompt ? index + 1 : index;
-    const updatedMessages = input.messages.filter((_, i) => i !== actualIndex);
+    const updatedMessages = input.messages.filter(
+      (_: any, i: number) => i !== actualIndex
+    );
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          messages: updatedMessages,
-        },
+      input: {
+        ...input,
+        messages: updatedMessages,
       },
-    } as Job);
+    });
   }
 
   function updateMessage(index: number, content: string) {
@@ -105,21 +98,18 @@ export const ChatPlayground = ({
     };
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          messages: updatedMessages,
-        },
+      input: {
+        ...input,
+        messages: updatedMessages,
       },
-    } as Job);
+    });
   }
 
   function handleProviderChange(provider: string) {
     onChange({
       ...job,
       provider,
-    } as Job);
+    } as ChatJob);
   }
 
   function setApiKey(apiKey: string) {
@@ -135,40 +125,31 @@ export const ChatPlayground = ({
   function setModel(model: string) {
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          model,
-        },
+      input: {
+        ...input,
+        model,
       },
-    } as Job);
+    });
   }
 
   function setTemperature(temperature: number) {
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          temperature,
-        },
+      input: {
+        ...input,
+        temperature,
       },
-    } as Job);
+    });
   }
 
   function setMaxTokens(maxTokens: number) {
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          maxTokens,
-        },
+      input: {
+        ...input,
+        maxTokens,
       },
-    } as Job);
+    });
   }
 
   function updateSystemPrompt(content: string) {
@@ -182,14 +163,11 @@ export const ChatPlayground = ({
     }
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          messages: updatedMessages,
-        },
+      input: {
+        ...input,
+        messages: updatedMessages,
       },
-    } as Job);
+    });
   }
 
   function addTool() {
@@ -199,28 +177,24 @@ export const ChatPlayground = ({
     ];
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          tools: updatedTools,
-        },
+      input: {
+        ...input,
+        tools: updatedTools,
       },
-    } as Job);
+    });
   }
 
   function removeTool(index: number) {
-    const updatedTools = (input.tools || []).filter((_, i) => i !== index);
+    const updatedTools = (input.tools || []).filter(
+      (_: any, i: number) => i !== index
+    );
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          tools: updatedTools.length > 0 ? updatedTools : undefined,
-        },
+      input: {
+        ...input,
+        tools: updatedTools.length > 0 ? updatedTools : undefined,
       },
-    } as Job);
+    });
   }
 
   function updateTool(index: number, field: keyof ChatTool, value: any) {
@@ -228,14 +202,11 @@ export const ChatPlayground = ({
     updatedTools[index] = { ...updatedTools[index], [field]: value };
     onChange({
       ...job,
-      body: {
-        type: "chat",
-        input: {
-          ...input,
-          tools: updatedTools,
-        },
+      input: {
+        ...input,
+        tools: updatedTools,
       },
-    } as Job);
+    });
   }
 
   function updateToolInput(index: number, value: string) {
@@ -294,7 +265,7 @@ export const ChatPlayground = ({
                   No tools added yet
                 </p>
               )}
-              {input.tools?.map((tool, index) => (
+              {input.tools?.map((tool: any, index: number) => (
                 <div
                   key={index}
                   className="space-y-3 pb-4 border-b last:border-b-0"
@@ -384,7 +355,7 @@ export const ChatPlayground = ({
           <ScrollArea className="flex-1">
             <div className="p-4">
               <div className="space-y-4">
-                {messages.map((message, index) => (
+                {messages.map((message: any, index: number) => (
                   <div
                     key={index}
                     className="space-y-2 pb-4 border-b last:border-b-0"
@@ -435,7 +406,7 @@ export const ChatPlayground = ({
               disabled={
                 loading ||
                 input.messages.length === 0 ||
-                input.messages.every((m) => !m.content.trim())
+                input.messages.every((m: any) => !m.content.trim())
               }
               className="w-auto px-6"
               size="sm"
@@ -558,18 +529,16 @@ export const ChatPlayground = ({
             type="button"
             onClick={() => {
               onChange({
+                type: "chat",
                 provider: job.provider,
                 options: {},
-                body: {
-                  type: "chat",
-                  input: {
-                    messages: [],
-                    model: "",
-                    temperature: 0.7,
-                    maxTokens: 1000,
-                  },
+                input: {
+                  messages: [],
+                  model: "",
+                  temperature: 0.7,
+                  maxTokens: 1000,
                 },
-              } as Job);
+              });
             }}
             size="sm"
             variant="outline"

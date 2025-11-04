@@ -35,7 +35,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
   const job = imageJobSchema.parse(await request.json());
 
   try {
-    job.body.input.download = { local: "./public/local" };
+    job.input.download = { local: "./public/local" };
 
     const output = await runner.run(job);
     // TODO: save job with output
@@ -53,21 +53,20 @@ export const action = async ({ request }: Route.ActionArgs) => {
 export default function Image({
   loaderData: { providers },
 }: Route.ComponentProps) {
-  const [job, setJob] = useState<Job>({
+  const [job, setJob] = useState<ImageJob>({
+    type: "image",
     provider: providers[0].name,
     options: {
       apiKey: "",
     },
-    body: {
-      type: "image",
-      input: {
-        model: providers[0].models[0].id || "",
-        prompt: "A serene landscape with mountains at sunset, digital art",
-        size: { width: 1024, height: 1024 },
-        n: 1,
-      },
+    input: {
+      model: providers[0].models[0].id || "",
+      prompt: "A serene landscape with mountains at sunset, digital art",
+      size: { width: 1024, height: 1024 },
+      n: 1,
     },
   });
+
   const [output, setOutput] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,11 +88,11 @@ export default function Image({
     }
   }, [fetcher.state, fetcher.data]);
 
-  const handleJobChange = (updatedJob: Job) => {
+  const handleJobChange = (updatedJob: ImageJob) => {
     setJob(updatedJob);
   };
 
-  const handleSubmit = async (jobToSubmit: Job) => {
+  const handleSubmit = async (jobToSubmit: ImageJob) => {
     setLoading(true);
     setError(null);
     setOutput(null);

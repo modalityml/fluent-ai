@@ -57,6 +57,7 @@ export default function Home({
       maxTokens: 1000,
     },
   });
+
   const [output, setOutput] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,11 +79,11 @@ export default function Home({
     }
   }, [fetcher.state, fetcher.data]);
 
-  const handleJobChange = (updatedJob: Job) => {
+  const handleJobChange = (updatedJob: ChatJob) => {
     setJob(updatedJob);
   };
 
-  const handleSubmit = async (jobToSubmit: Job) => {
+  const handleSubmit = async (jobToSubmit: ChatJob) => {
     setLoading(true);
     setError(null);
     setOutput(null);

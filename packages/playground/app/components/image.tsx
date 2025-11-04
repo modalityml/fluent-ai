@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import type { Job } from "fluent-ai";
+import type { ImageJob } from "fluent-ai";
 
 interface Provider {
   name: string;
@@ -18,28 +18,14 @@ interface Provider {
   models: Array<{ id: string; name: string }>;
 }
 
-interface ImageInput {
-  model: string;
-  prompt: string;
-  size?: { width: number; height: number };
-  n?: number;
-}
-
-interface ImageOutput {
-  images: Array<{
-    url?: string;
-    b64_json?: string;
-  }>;
-}
-
 interface ImageProps {
-  job: Job;
-  onChange: (job: Job) => void;
+  job: ImageJob;
+  onChange: (job: ImageJob) => void;
   providers: Provider[];
-  onSubmit: (job: Job) => void;
+  onSubmit: (job: ImageJob) => void;
   loading?: boolean;
   error?: string | null;
-  output?: ImageOutput | null;
+  output?: ImageJob["output"] | null;
 }
 
 export const ImagePlayground = ({
@@ -56,7 +42,7 @@ export const ImagePlayground = ({
     onSubmit(job);
   };
 
-  const input = job.body.input as ImageInput;
+  const input = job.input;
   const currentProvider = providers.find((p) => p.name === job.provider);
 
   function setApiKey(apiKey: string) {
@@ -73,60 +59,48 @@ export const ImagePlayground = ({
     onChange({
       ...job,
       provider,
-    } as Job);
+    } as ImageJob);
   }
 
   function setModel(model: string) {
     onChange({
       ...job,
-      body: {
-        type: "image",
-        input: {
-          ...input,
-          model,
-        },
+      input: {
+        ...input,
+        model,
       },
-    } as Job);
+    });
   }
 
   function setPrompt(prompt: string) {
     onChange({
       ...job,
-      body: {
-        type: "image",
-        input: {
-          ...input,
-          prompt,
-        },
+      input: {
+        ...input,
+        prompt,
       },
-    } as Job);
+    });
   }
 
   function setSize(sizeStr: string) {
     const [width, height] = sizeStr.split("x").map(Number);
     onChange({
       ...job,
-      body: {
-        type: "image",
-        input: {
-          ...input,
-          size: { width, height },
-        },
+      input: {
+        ...input,
+        size: { width, height },
       },
-    } as Job);
+    });
   }
 
   function setN(n: number) {
     onChange({
       ...job,
-      body: {
-        type: "image",
-        input: {
-          ...input,
-          n,
-        },
+      input: {
+        ...input,
+        n,
       },
-    } as Job);
+    });
   }
 
   const imageSizes = [
@@ -148,16 +122,14 @@ export const ImagePlayground = ({
               onChange({
                 provider: job.provider,
                 options: {},
-                body: {
-                  type: "image",
-                  input: {
-                    model: "",
-                    prompt: "",
-                    size: { width: 1024, height: 1024 },
-                    n: 1,
-                  },
+                type: "image",
+                input: {
+                  model: "",
+                  prompt: "",
+                  size: { width: 1024, height: 1024 },
+                  n: 1,
                 },
-              } as Job);
+              });
             }}
             size="sm"
             variant="outline"
@@ -342,7 +314,7 @@ export const ImagePlayground = ({
             {output && !error && !loading && (
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {output.images.map((image, index) => (
+                  {output.images.map((image: any, index: number) => (
                     <div
                       key={index}
                       className="relative group rounded-lg overflow-hidden border bg-card hover:shadow-lg transition-shadow"

@@ -4,7 +4,7 @@ import { EmbeddingPlayground } from "~/components/embedding";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Copy } from "lucide-react";
-import { embeddingJobSchema, runner } from "fluent-ai";
+import { embeddingJobSchema, runner, type EmbeddingJob } from "fluent-ai";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
   return {
@@ -41,17 +41,15 @@ export const action = async ({ request }: Route.ActionArgs) => {
 
 export default function Embedding({ loaderData }: Route.ComponentProps) {
   const { providers } = loaderData;
-  const [job, setJob] = useState<Job>({
+  const [job, setJob] = useState<EmbeddingJob>({
     provider: providers[0].name,
     options: {
       apiKey: "",
     },
-    body: {
-      type: "embedding",
-      input: {
-        model: providers[0].models[0].id || "",
-        input: "The quick brown fox jumps over the lazy dog.",
-      },
+    type: "embedding",
+    input: {
+      model: providers[0].models[0].id || "",
+      input: "The quick brown fox jumps over the lazy dog.",
     },
   });
   const [output, setOutput] = useState<any>(null);
@@ -75,11 +73,11 @@ export default function Embedding({ loaderData }: Route.ComponentProps) {
     }
   }, [fetcher.state, fetcher.data]);
 
-  const handleJobChange = (updatedJob: Job) => {
+  const handleJobChange = (updatedJob: EmbeddingJob) => {
     setJob(updatedJob);
   };
 
-  const handleSubmit = async (jobToSubmit: Job) => {
+  const handleSubmit = async (jobToSubmit: EmbeddingJob) => {
     setLoading(true);
     setError(null);
     setOutput(null);
