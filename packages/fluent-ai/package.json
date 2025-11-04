@@ -6,13 +6,16 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "bun run build.ts",
-    "prepublishOnly": "bun run build"
+  "exports": {
+    ".": "./src/index.ts"
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "bun run build.ts",
+    "prepublishOnly": "bun run build"
+  },
   "dependencies": {
     "eventsource-parser": "^3.0.6",
     "partial-json": "^0.1.7"

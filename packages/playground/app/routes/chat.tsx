@@ -43,7 +43,7 @@ export default function Home({
 }: Route.ComponentProps) {
   const [job, setJob] = useState<ChatJob>({
     type: "chat",
-    provider: providers[0].name,
+    provider: providers[0].name as "openrouter" | "openai",
     options: {
       apiKey: "",
     },
