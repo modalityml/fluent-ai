@@ -1,15 +1,10 @@
-import type { Job } from "~/src/job/schema";
-
-type EmbeddingInput = Extract<
-  Extract<Job, { provider: "voyage" }>["body"],
-  { type: "embedding" }
->["input"];
+import type { EmbeddingJob } from "~/src/job/schema";
 
 export class EmbeddingBuilder<TProvider extends string = string> {
   private provider: TProvider;
   private options: any;
   private runner: any;
-  private inputData: EmbeddingInput = { model: "", input: "" };
+  private inputData: EmbeddingJob["input"] = { model: "", input: "" };
 
   constructor(provider: TProvider, options: any, runner: any, model: string) {
     this.provider = provider;
@@ -25,17 +20,15 @@ export class EmbeddingBuilder<TProvider extends string = string> {
 
   build() {
     return {
+      type: "embedding" as const,
       provider: this.provider,
       options: this.options,
-      body: {
-        type: "embedding" as const,
-        input: this.inputData,
-      },
+      input: this.inputData,
     };
   }
 
   run() {
     const job = this.build();
-    return this.runner.embedding(job.body.input, job.options);
+    return this.runner.embedding(job.input, job.options);
   }
 }

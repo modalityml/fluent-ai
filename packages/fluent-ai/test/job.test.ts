@@ -13,12 +13,10 @@ import { Runner } from "~/src/job/runner";
 test("chat job", () => {
   const job: Job = {
     provider: "openrouter",
-    body: {
-      type: "chat",
-      input: {
-        model: "test-model",
-        messages: [{ role: "user", content: "hello" }],
-      },
+    type: "chat",
+    input: {
+      model: "test-model",
+      messages: [{ role: "user", content: "hello" }],
     },
   };
 
@@ -37,13 +35,11 @@ test("chat job", () => {
 test("image job", () => {
   const job: Job = {
     provider: "fal",
-    body: {
-      type: "image",
-      input: {
-        model: "fal-ai/bytedance/seedream/v4/text-to-image",
-        prompt: "A beautiful sunset over the mountains",
-        size: { width: 1280, height: 1280 },
-      },
+    type: "image",
+    input: {
+      model: "fal-ai/bytedance/seedream/v4/text-to-image",
+      prompt: "A beautiful sunset over the mountains",
+      size: { width: 1280, height: 1280 },
     },
   };
   expect(() => {
@@ -62,12 +58,10 @@ test("image job", () => {
 test("embedding job", () => {
   const job: Job = {
     provider: "voyage",
-    body: {
-      type: "embedding",
-      input: {
-        model: "voyage-3-lite",
-        input: "This is a test",
-      },
+    type: "embedding",
+    input: {
+      model: "voyage-3-lite",
+      input: "This is a test",
     },
   };
 
@@ -82,10 +76,8 @@ test("embedding job", () => {
 
 test("models job", () => {
   const job: Job = {
+    type: "models",
     provider: "openai",
-    body: {
-      type: "models",
-    },
   };
 
   expect(() => {
@@ -101,15 +93,13 @@ test("runner", () => {
 
   const job: Job = {
     provider: "openrouter",
-    body: {
-      type: "chat",
-      input: {
-        model: "test-model",
-        messages: [{ role: "user", content: "hello" }],
-      },
+    type: "chat",
+    input: {
+      model: "test-model",
+      messages: [{ role: "user", content: "hello" }],
     },
   };
 
   expect(runner.run(job)).toBe("test");
-  expect(chatRunner).toHaveBeenCalledWith(job.body.input, undefined);
+  expect(chatRunner).toHaveBeenCalledWith(job.input, undefined);
 });

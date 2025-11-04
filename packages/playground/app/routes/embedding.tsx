@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import type { Route } from "./+types/embedding";
-import { runner } from "fluent-ai/src/job/runner";
-import type { Job } from "fluent-ai/src/job/schema";
 import { EmbeddingPlayground } from "~/components/embedding";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Copy } from "lucide-react";
+import { embeddingJobSchema, runner } from "fluent-ai";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
   return {
@@ -27,7 +26,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 };
 
 export const action = async ({ request }: Route.ActionArgs) => {
-  const job: Job = await request.json();
+  const job = embeddingJobSchema.parse(await request.json());
 
   try {
     const output = await runner.run(job);

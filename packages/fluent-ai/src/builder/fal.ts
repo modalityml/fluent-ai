@@ -1,8 +1,6 @@
-import type { Job } from "~/src/job/schema";
-import { ImageBuilder } from "./image";
+import type { Options } from "~/src/job/schema";
+import { ImageBuilder } from "~/src/builder/image";
 import { runner } from "~/src/job/fal";
-
-type Options = Extract<Job, { provider: "fal" }>["options"];
 
 export function fal(options?: Options) {
   return {

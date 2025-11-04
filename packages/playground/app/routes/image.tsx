@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import type { Route } from "./+types/image";
-import { runner } from "../../../fluent-ai/src/job/runner";
-import type { Job } from "../../../fluent-ai/src/job/schema";
 import { ImagePlayground } from "~/components/image";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Copy } from "lucide-react";
+import { imageJobSchema, type ImageJob, runner } from "fluent-ai";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
   return {
@@ -33,10 +32,15 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 };
 
 export const action = async ({ request }: Route.ActionArgs) => {
-  const job: Job = await request.json();
+  const job = imageJobSchema.parse(await request.json());
 
   try {
+    job.body.input.download = { local: "./public/local" };
+
     const output = await runner.run(job);
+    // TODO: save job with output
+    console.log("Image generation output:", output);
+
     return { success: true, output };
   } catch (error) {
     return {

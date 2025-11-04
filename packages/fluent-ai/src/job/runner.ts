@@ -12,13 +12,10 @@ export class Runner {
   }
 
   run(job: Job) {
-    if (job.body.type === "models") {
-      return this.runners[job.provider][job.body.type](job.options);
+    if (job.type === "models") {
+      return this.runners[job.provider][job.type](job.options);
     }
-    return this.runners[job.provider][job.body.type](
-      job.body.input,
-      job.options,
-    );
+    return this.runners[job.provider][job.type](job.input, job.options);
   }
 }
 

@@ -1,15 +1,11 @@
 import { EventSourceParserStream } from "eventsource-parser/stream";
-import type { ChatTool, Job } from "~/src/job/schema";
+import type { ChatJob, ChatTool, ModelsJob } from "~/src/job/schema";
 import { createHTTPJob } from "~/src/job/http";
-
-type Options = Extract<Job, { provider: "openai" }>["options"];
-type Body = Extract<Job, { provider: "openai" }>["body"];
-type ChatInput = Extract<Body, { type: "chat" }>["input"];
 
 const BASE_URL = "https://api.openai.com/v1";
 
 export const runner = {
-  chat: async (input: ChatInput, options?: Options) => {
+  chat: async (input: ChatJob["input"], options?: ChatJob["options"]) => {
     const apiKey = options?.apiKey || process.env.OPENAI_API_KEY;
 
     const tools = input.tools?.map((tool: ChatTool) => ({
@@ -81,7 +77,10 @@ export const runner = {
     });
   },
 
-  models: async (options?: Options) => {
+  models: async (
+    input?: ModelsJob["input"],
+    options?: ModelsJob["options"],
+  ) => {
     const apiKey = options?.apiKey || process.env.OPENAI_API_KEY;
 
     const request = new Request(`${BASE_URL}/models`, {

@@ -3,15 +3,13 @@ import { runner } from "~/src/job/runner";
 
 const job: Job = {
   provider: "openrouter",
-  body: {
-    type: "chat",
-    input: {
-      model: "google/gemini-2.5-flash",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: "Hi" },
-      ],
-    },
+  type: "chat",
+  input: {
+    model: "google/gemini-2.5-flash",
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+      { role: "user", content: "Hi" },
+    ],
   },
 };
 

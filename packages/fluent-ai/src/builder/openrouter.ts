@@ -1,8 +1,6 @@
-import type { Job } from "~/src/job/schema";
-import { ChatBuilder } from "./chat";
+import type { Options } from "~/src/job/schema";
+import { ChatBuilder } from "~/src/builder/chat";
 import { runner } from "~/src/job/openrouter";
-
-type Options = Extract<Job, { provider: "openrouter" }>["options"];
 
 export function openrouter(options?: Options) {
   return {

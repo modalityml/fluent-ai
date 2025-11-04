@@ -1,15 +1,11 @@
-import type { Job } from "~/src/job/schema";
+import type { ImageJob } from "~/src/job/schema";
 import { createHTTPJob, downloadImages } from "~/src/job/http";
-
-type Options = Extract<Job, { provider: "fal" }>["options"];
-type Body = Extract<Job, { provider: "fal" }>["body"];
-type Input = Extract<Body, { type: "image" }>["input"];
 
 // TODO: switch to fal queue api
 const BASE_URL = "https://fal.run";
 
 export const runner = {
-  image: async (input: Input, options?: Options) => {
+  image: async (input: ImageJob["input"], options?: ImageJob["options"]) => {
     const apiKey = options?.apiKey || process.env.FAL_API_KEY;
 
     const request = new Request(`${BASE_URL}/${input.model}`, {

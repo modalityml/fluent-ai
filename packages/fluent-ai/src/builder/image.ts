@@ -1,16 +1,10 @@
-import type { Job } from "~/src/job/schema";
-
-type ImageInput = Extract<
-  Extract<Job, { provider: "fal" }>["body"],
-  { type: "image" }
->["input"];
-type DownloadInput = ImageInput["download"];
+import type { ImageJob } from "~/src/job/schema";
 
 export class ImageBuilder<TProvider extends string = string> {
   private provider: TProvider;
   private options: any;
   private runner: any;
-  private input: Partial<ImageInput> & { model: string } = {
+  private input: Partial<ImageJob["input"]> & { model: string } = {
     model: "",
     prompt: "",
   };
@@ -41,24 +35,22 @@ export class ImageBuilder<TProvider extends string = string> {
     return this.n(n);
   }
 
-  download(options: DownloadInput) {
+  download(options: ImageJob["input"]["download"]) {
     this.input.download = options;
     return this;
   }
 
   build() {
     return {
+      type: "image" as const,
       provider: this.provider,
       options: this.options,
-      body: {
-        type: "image" as const,
-        input: this.input as ImageInput,
-      },
+      input: this.input as ImageJob["input"],
     };
   }
 
   run() {
     const job = this.build();
-    return this.runner.image(job.body.input, job.options);
+    return this.runner.image(job.input, job.options);
   }
 }

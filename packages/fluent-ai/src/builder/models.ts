@@ -11,11 +11,9 @@ export class ModelsBuilder<TProvider extends string = string> {
 
   build() {
     return {
+      type: "models" as const,
       provider: this.provider,
       options: this.options,
-      body: {
-        type: "models" as const,
-      },
     };
   }
 

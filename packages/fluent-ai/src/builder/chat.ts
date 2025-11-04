@@ -1,11 +1,11 @@
 import * as z from "zod";
-import { type ChatInput, type ChatTool } from "~/src/job/schema";
+import { type ChatJob, type ChatTool } from "~/src/job/schema";
 
 export class ChatBuilder<TProvider extends string = string> {
   private provider: TProvider;
   private options: any;
   private runner: any;
-  private input: ChatInput = { model: "", messages: [] };
+  private input: ChatJob["input"] = { model: "", messages: [] };
 
   constructor(provider: TProvider, options: any, runner: any, model: string) {
     this.provider = provider;
@@ -42,18 +42,16 @@ export class ChatBuilder<TProvider extends string = string> {
 
   build() {
     return {
+      type: "chat" as const,
       provider: this.provider,
       options: this.options,
-      body: {
-        type: "chat" as const,
-        input: this.input,
-      },
+      input: this.input,
     };
   }
 
   run() {
     const job = this.build();
-    return this.runner.chat(job.body.input, job.options);
+    return this.runner.chat(job.input, job.options);
   }
 }
 

@@ -1,8 +1,6 @@
-import type { Job } from "~/src/job/schema";
-import { EmbeddingBuilder } from "./embedding";
+import type { Options } from "~/src/job/schema";
+import { EmbeddingBuilder } from "~/src/builder/embedding";
 import { runner } from "~/src/job/voyage";
-
-type Options = Extract<Job, { provider: "voyage" }>["options"];
 
 export function voyage(options?: Options) {
   return {

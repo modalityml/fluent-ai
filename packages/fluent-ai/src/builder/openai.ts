@@ -1,9 +1,7 @@
-import type { Job } from "~/src/job/schema";
-import { ChatBuilder } from "./chat";
-import { ModelsBuilder } from "./models";
+import type { Options } from "~/src/job/schema";
+import { ChatBuilder } from "~/src/builder/chat";
+import { ModelsBuilder } from "~/src/builder/models";
 import { runner } from "~/src/job/openai";
-
-type Options = Extract<Job, { provider: "openai" }>["options"];
 
 export function openai(options?: Options) {
   return {

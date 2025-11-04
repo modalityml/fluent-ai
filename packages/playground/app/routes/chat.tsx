@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Route } from "./+types/home";
-import { runner } from "../../../fluent-ai/src/job/runner";
-import type { Job } from "../../../fluent-ai/src/job/schema";
+import { chatJobSchema, runner } from "fluent-ai";
 import { ChatPlayground } from "~/components/chat";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
@@ -26,7 +25,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 };
 
 export const action = async ({ request }: Route.ActionArgs) => {
-  const job: Job = await request.json();
+  const job = chatJobSchema.parse(await request.json());
 
   try {
     const output = await runner.run(job);
