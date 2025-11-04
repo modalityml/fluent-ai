@@ -4,6 +4,7 @@ type ImageInput = Extract<
   Extract<Job, { provider: "fal" }>["body"],
   { type: "image" }
 >["input"];
+type DownloadInput = ImageInput["download"];
 
 export class ImageBuilder<TProvider extends string = string> {
   private provider: TProvider;
@@ -21,18 +22,27 @@ export class ImageBuilder<TProvider extends string = string> {
     this.input.model = model;
   }
 
-  prompt(prompt: string): this {
+  prompt(prompt: string) {
     this.input.prompt = prompt;
     return this;
   }
 
-  size(size: { width: number; height: number }): this {
+  size(size: { width: number; height: number }) {
     this.input.size = size;
     return this;
   }
 
-  n(n: number): this {
+  n(n: number) {
     this.input.n = n;
+    return this;
+  }
+
+  num(n: number) {
+    return this.n(n);
+  }
+
+  download(options: DownloadInput) {
+    this.input.download = options;
     return this;
   }
 
