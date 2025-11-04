@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { DownloadInput } from "~/src/job/schema";
+import type { ImageJob } from "./schema";
 
 export async function createHTTPJob<T>(
   request: RequestInfo | URL,
@@ -19,10 +19,10 @@ export async function createHTTPJob<T>(
 
 export async function downloadImages(
   images: Array<{ url: string; [key: string]: any }>,
-  options: DownloadInput,
+  options: ImageJob["input"]["download"],
   jobId?: string,
 ): Promise<Array<{ url: string; downloadPath?: string; [key: string]: any }>> {
-  const localDir = options.local;
+  const localDir = options!.local;
 
   if (!fs.existsSync(localDir)) {
     fs.mkdirSync(localDir, { recursive: true });

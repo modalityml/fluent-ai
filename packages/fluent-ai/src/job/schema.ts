@@ -52,7 +52,7 @@ const embeddingOutputSchema = z.object({
   embeddings: z.array(z.array(z.number())),
 });
 
-const downloadInputSchema = z.union([z.object({ local: z.string() })]);
+const downloadOptionsSchema = z.union([z.object({ local: z.string() })]);
 
 const imageSizeSchema = z.object({
   width: z.number(),
@@ -68,7 +68,7 @@ const imageInputSchema = z.object({
   seed: z.number().optional(),
   outputFormat: z.string().optional(),
   guidanceScale: z.number().optional(),
-  download: downloadInputSchema.optional(),
+  download: downloadOptionsSchema.optional(),
 });
 
 const imageOutputSchema = z.object({
@@ -140,7 +140,6 @@ export const jobSchema = z.union([
 export type MessagePart = z.infer<typeof messagePartSchema>;
 export type Message = z.infer<typeof messageSchema>;
 export type ChatTool = z.infer<typeof chatToolSchema>;
-export type DownloadInput = z.infer<typeof downloadInputSchema>;
 export type Job = z.infer<typeof jobSchema>;
 export type ImageJob = z.infer<typeof imageJobSchema>;
 export type EmbeddingJob = z.infer<typeof embeddingJobSchema>;
