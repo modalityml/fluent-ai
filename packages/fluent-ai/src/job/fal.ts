@@ -1,5 +1,9 @@
 import type { ImageJob } from "~/src/job/schema";
-import { createHTTPJob, downloadImages } from "~/src/job/http";
+import {
+  createHTTPJob,
+  downloadImages,
+  uploadLocalImages,
+} from "~/src/job/http";
 
 // TODO: switch to fal queue api
 const BASE_URL = "https://fal.run";
@@ -8,17 +12,28 @@ export const runner = {
   image: async (input: ImageJob["input"], options?: ImageJob["options"]) => {
     const apiKey = options?.apiKey || process.env.FAL_API_KEY;
 
+    let editImages = input.edit;
+    if (editImages && input.upload) {
+      editImages = await uploadLocalImages(editImages, input.upload);
+    }
+
+    const body: any = {
+      prompt: input.prompt,
+      image_size: input.size,
+      num_images: input.n,
+    };
+
+    if (editImages && editImages.length > 0) {
+      body.image_urls = editImages;
+    }
+
     const request = new Request(`${BASE_URL}/${input.model}`, {
       method: "POST",
       headers: {
         Authorization: `Key ${apiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        prompt: input.prompt,
-        image_size: input.size,
-        num_images: input.n,
-      }),
+      body: JSON.stringify(body),
     });
 
     return createHTTPJob(request, async (response: Response) => {

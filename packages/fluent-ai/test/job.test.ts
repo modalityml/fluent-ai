@@ -7,6 +7,7 @@ import {
   type Job,
   user,
   voyage,
+  type ImageJob,
 } from "~/src/index";
 import { Runner } from "~/src/job/runner";
 
@@ -51,6 +52,42 @@ test("image job", () => {
       .image("fal-ai/bytedance/seedream/v4/text-to-image")
       .prompt("A beautiful sunset over the mountains")
       .size({ width: 1280, height: 1280 })
+      .build(),
+  );
+});
+
+test("image edit job", () => {
+  const job: ImageJob = {
+    provider: "fal",
+    type: "image",
+    input: {
+      model: "fal-ai/bytedance/seedream/v4/edit",
+      prompt:
+        "Dress the model in the clothes and hat. Add a cat to the scene and change the background to a Victorian era building.",
+      edit: [
+        "./input1.png",
+        "https://storage.googleapis.com/falserverless/example_inputs/seedream4_edit_input_2.png",
+      ],
+      size: {
+        width: 3840,
+        height: 2160,
+      },
+      upload: "base64",
+    },
+  };
+
+  expect(job).toEqual(
+    fal()
+      .image("fal-ai/bytedance/seedream/v4/edit")
+      .prompt(
+        "Dress the model in the clothes and hat. Add a cat to the scene and change the background to a Victorian era building.",
+      )
+      .edit([
+        "./input1.png",
+        "https://storage.googleapis.com/falserverless/example_inputs/seedream4_edit_input_2.png",
+      ])
+      .size({ width: 3840, height: 2160 })
+      .upload("base64")
       .build(),
   );
 });

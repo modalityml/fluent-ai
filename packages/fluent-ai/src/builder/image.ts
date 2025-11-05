@@ -40,6 +40,16 @@ export class ImageBuilder<TProvider extends string = string> {
     return this;
   }
 
+  edit(images: string[]) {
+    this.input.edit = images;
+    return this;
+  }
+
+  upload(options: ImageJob["input"]["upload"]) {
+    this.input.upload = options;
+    return this;
+  }
+
   build() {
     return {
       type: "image" as const,

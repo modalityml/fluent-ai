@@ -11,6 +11,16 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import type { ImageJob } from "fluent-ai";
+import { useRef } from "react";
+import {
+  Paperclip,
+  Loader2,
+  Palette,
+  Image as ImageIcon,
+  X,
+  Download,
+  ExternalLink,
+} from "lucide-react";
 
 interface Provider {
   name: string;
@@ -18,7 +28,7 @@ interface Provider {
   models: Array<{ id: string; name: string }>;
 }
 
-interface ImageProps {
+interface ImagePlaygroundProps {
   job: ImageJob;
   onChange: (job: ImageJob) => void;
   providers: Provider[];
@@ -36,7 +46,9 @@ export const ImagePlayground = ({
   loading = false,
   error = null,
   output = null,
-}: ImageProps) => {
+}: ImagePlaygroundProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(job);
@@ -78,6 +90,37 @@ export const ImagePlayground = ({
       input: {
         ...input,
         prompt,
+      },
+    });
+  }
+
+  function setEditImages(files: FileList | null) {
+    if (!files || files.length === 0) return;
+
+    const imagePaths = Array.from(files).map((file) => {
+      return URL.createObjectURL(file);
+    });
+
+    const existingImages = input.edit || [];
+
+    onChange({
+      ...job,
+      input: {
+        ...input,
+        edit: [...existingImages, ...imagePaths],
+      },
+    });
+  }
+
+  function removeEditImage(index: number) {
+    const newEdit = [...(input.edit || [])];
+    URL.revokeObjectURL(newEdit[index]);
+    newEdit.splice(index, 1);
+    onChange({
+      ...job,
+      input: {
+        ...input,
+        edit: newEdit.length > 0 ? newEdit : undefined,
       },
     });
   }
@@ -258,6 +301,75 @@ export const ImagePlayground = ({
                   Describe the image you want to generate
                 </p>
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editImages" className="text-sm font-medium">
+                  Edit Images (Optional)
+                </Label>
+                <Input
+                  ref={fileInputRef}
+                  type="file"
+                  id="editImages"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => {
+                    setEditImages(e.target.files);
+                    e.target.value = "";
+                  }}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Paperclip className="mr-2 h-4 w-4" />
+                  Add Images
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Upload images to edit or modify (supports multiple files)
+                </p>
+                {input.edit && input.edit.length > 0 && (
+                  <div className="mt-2 space-y-2">
+                    <p className="text-xs font-medium">
+                      {input.edit.length} image
+                      {input.edit.length > 1 ? "s" : ""} uploaded
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {input.edit.map((imagePath, index) => (
+                        <div
+                          key={index}
+                          className="relative group rounded-md overflow-hidden border bg-muted"
+                        >
+                          <div className="aspect-square relative">
+                            <img
+                              src={imagePath}
+                              alt={`Edit image ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="destructive"
+                              className="absolute top-1 right-1 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeEditImage(index)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="p-1 bg-background/80 backdrop-blur-sm">
+                            <span className="text-xs text-center block truncate">
+                              Image {index + 1}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </ScrollArea>
         </div>
@@ -271,12 +383,12 @@ export const ImagePlayground = ({
           >
             {loading ? (
               <>
-                <span className="mr-2">⏳</span>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Generating...
               </>
             ) : (
               <>
-                <span className="mr-2">🎨</span>
+                <Palette className="mr-2 h-4 w-4" />
                 Generate Images
               </>
             )}
@@ -294,7 +406,7 @@ export const ImagePlayground = ({
             {loading && (
               <div className="flex items-center justify-center min-h-[400px]">
                 <div className="text-center space-y-3">
-                  <div className="text-4xl animate-pulse">🎨</div>
+                  <Loader2 className="h-10 w-10 animate-spin mx-auto text-muted-foreground" />
                   <p className="text-sm text-muted-foreground">
                     Generating your images...
                   </p>
@@ -360,6 +472,7 @@ export const ImagePlayground = ({
                                 link.click();
                               }}
                             >
+                              <Download className="mr-1 h-3 w-3" />
                               Download
                             </Button>
                             <Button
@@ -374,6 +487,7 @@ export const ImagePlayground = ({
                                 window.open(url, "_blank");
                               }}
                             >
+                              <ExternalLink className="mr-1 h-3 w-3" />
                               Open
                             </Button>
                           </div>
@@ -397,7 +511,7 @@ export const ImagePlayground = ({
             {!output && !error && !loading && (
               <div className="flex items-center justify-center min-h-[400px] text-muted-foreground text-sm">
                 <div className="text-center space-y-2">
-                  <div className="text-3xl opacity-50">🖼️</div>
+                  <ImageIcon className="h-12 w-12 mx-auto opacity-50" />
                   <p>No images generated yet.</p>
                   <p className="text-xs">
                     Enter a prompt and click "Generate Images" to get started.

@@ -53,6 +53,7 @@ const embeddingOutputSchema = z.object({
 });
 
 const downloadOptionsSchema = z.union([z.object({ local: z.string() })]);
+const uploadOptionsSchema = z.union([z.literal("base64")]);
 
 const imageSizeSchema = z.object({
   width: z.number(),
@@ -69,6 +70,8 @@ const imageInputSchema = z.object({
   outputFormat: z.string().optional(),
   guidanceScale: z.number().optional(),
   download: downloadOptionsSchema.optional(),
+  edit: z.array(z.string()).optional(),
+  upload: uploadOptionsSchema.optional(),
 });
 
 const imageOutputSchema = z.object({
