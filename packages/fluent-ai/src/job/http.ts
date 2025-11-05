@@ -1,6 +1,54 @@
-import * as fs from "node:fs";
+import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import type { ImageJob } from "./schema";
+import type { ImageJob } from "~/src/job/schema";
+
+const MIME_TYPES: Record<string, string> = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+};
+
+function isRemoteUrl(url: string) {
+  return url.startsWith("http://") || url.startsWith("https://");
+}
+
+async function convertToBase64(filePath: string) {
+  try {
+    const fileBuffer = await fs.readFile(filePath);
+    const base64Data = fileBuffer.toString("base64");
+
+    const ext = path.extname(filePath).toLowerCase();
+    const mimeType = MIME_TYPES[ext] || "image/png";
+
+    return `data:${mimeType};base64,${base64Data}`;
+  } catch (error) {
+    console.error(`Failed to read local file ${filePath}:`, error);
+    throw new Error(`Failed to upload local image: ${filePath}`);
+  }
+}
+
+export async function uploadLocalImages(
+  images: string[],
+  uploadOption: ImageJob["input"]["upload"],
+) {
+  if (!uploadOption) {
+    return images;
+  }
+
+  return Promise.all(
+    images.map(async (img) => {
+      if (isRemoteUrl(img)) return img;
+
+      if (uploadOption === "base64") {
+        return await convertToBase64(img);
+      }
+
+      return img;
+    }),
+  );
+}
 
 export async function createHTTPJob<T>(
   request: RequestInfo | URL,
@@ -24,8 +72,10 @@ export async function downloadImages(
 ): Promise<Array<{ url: string; downloadPath?: string; [key: string]: any }>> {
   const localDir = options!.local;
 
-  if (!fs.existsSync(localDir)) {
-    fs.mkdirSync(localDir, { recursive: true });
+  try {
+    await fs.access(localDir);
+  } catch {
+    await fs.mkdir(localDir, { recursive: true });
   }
 
   const downloadedImages = await Promise.all(
@@ -47,7 +97,7 @@ export async function downloadImages(
         const filePath = path.join(localDir, filename);
 
         const buffer = await response.arrayBuffer();
-        fs.writeFileSync(filePath, Buffer.from(buffer));
+        await fs.writeFile(filePath, Buffer.from(buffer));
 
         return {
           ...img,
