@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "bun run build.ts",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "rm -rf dist && bun run build"
   },
   "dependencies": {
     "eventsource-parser": "^3.0.6",
