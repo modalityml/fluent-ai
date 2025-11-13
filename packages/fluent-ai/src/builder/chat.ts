@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z } from "zod";
 import { type ChatJob, type ChatTool } from "~/src/job/schema";
 
 export class ChatBuilder<TProvider extends string = string> {

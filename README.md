@@ -128,7 +128,7 @@ Function calling (or tool calling) is an advanced functionality in chat completi
 Here's how to create a tool:
 
 ```ts
-import * as z from "zod";
+import { z } from "zod";
 import { tool } from "fluent-ai";
 
 const weatherTool = tool("get_current_weather")
@@ -137,7 +137,7 @@ const weatherTool = tool("get_current_weather")
     z.object({
       location: z.string(),
       unit: z.enum(["celsius", "fahrenheit"]).optional(),
-    }),
+    })
   );
 ```
 

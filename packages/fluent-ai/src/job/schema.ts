@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z } from "zod";
 
 const chatToolSchema = z.object({
   name: z.string(),

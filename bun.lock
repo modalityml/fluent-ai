@@ -6,7 +6,7 @@
     },
     "packages/fluent-ai": {
       "name": "fluent-ai",
-      "version": "0.4.2",
+      "version": "0.4.4",
       "dependencies": {
         "eventsource-parser": "^3.0.6",
         "partial-json": "^0.1.7",

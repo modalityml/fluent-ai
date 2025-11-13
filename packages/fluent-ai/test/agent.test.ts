@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z } from "zod";
 import { test, expect } from "bun:test";
 import { agent, agentTool, openrouter } from "~/src/index";
 

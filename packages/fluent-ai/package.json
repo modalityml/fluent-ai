@@ -3,13 +3,10 @@
   "description": "A lightweight AI toolkit",
   "version": "0.4.4",
   "type": "module",
-  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./src/index.ts"
-  },
   "files": [
+    "src",
     "dist"
   ],
   "scripts": {
@@ -46,6 +43,11 @@
     "type": "git",
     "url": "git+https://github.com/modalityml/fluent-ai.git"
   },
+  "bugs": {
+    "url": "https://github.com/modalityml/fluent-ai/issues"
+  },
+  "homepage": "https://github.com/modalityml/fluent-ai#readme",
+  "author": "modality",
   "prettier": {
     "trailingComma": "all"
   }
