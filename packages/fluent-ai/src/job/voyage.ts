@@ -1,5 +1,6 @@
 import type { EmbeddingJob } from "~/src/job/schema";
 import { createHTTPJob } from "~/src/job/http";
+import { getApiKey } from "~/src/job/utils";
 
 const BASE_URL = "https://api.voyageai.com/v1";
 
@@ -8,7 +9,7 @@ export const runner = {
     input: EmbeddingJob["input"],
     options?: EmbeddingJob["options"],
   ) => {
-    const apiKey = options?.apiKey || process.env.VOYAGE_API_KEY;
+    const apiKey = getApiKey(options, "VOYAGE_API_KEY");
 
     const request = new Request(`${BASE_URL}/embeddings`, {
       method: "POST",
