@@ -7,7 +7,7 @@ test("createHTTPJob passes timeout parameter correctly", async () => {
   
   // Mock fetch to return a successful response
   const originalFetch = global.fetch;
-  global.fetch = mock(async () => new Response(JSON.stringify({ test: "data" })));
+  global.fetch = mock(async () => new Response(JSON.stringify({ test: "data" }))) as unknown as typeof fetch;
   
   try {
     const result = await createHTTPJob(
@@ -28,7 +28,7 @@ test("createHTTPJob works without timeout parameter", async () => {
   
   // Mock fetch to return a successful response
   const originalFetch = global.fetch;
-  global.fetch = mock(async () => new Response(JSON.stringify({ test: "data" })));
+  global.fetch = mock(async () => new Response(JSON.stringify({ test: "data" }))) as unknown as typeof fetch;
   
   try {
     const result = await createHTTPJob(
@@ -53,7 +53,7 @@ test("createHTTPJob throws timeout error on AbortError", async () => {
     const error = new Error("The operation was aborted");
     error.name = "AbortError";
     throw error;
-  });
+  }) as unknown as typeof fetch;
   
   try {
     await createHTTPJob(
@@ -78,7 +78,7 @@ test("createHTTPJob propagates non-abort errors", async () => {
   const originalFetch = global.fetch;
   global.fetch = mock(async () => {
     throw new Error("Network error");
-  });
+  }) as unknown as typeof fetch;
   
   try {
     await createHTTPJob(
