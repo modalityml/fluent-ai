@@ -33,10 +33,10 @@ export const runner = {
       });
 
       if (input.download) {
-        images = await downloadImages(images, input.download);
+        images = await downloadImages(images, input.download, undefined, options?.timeout);
       }
 
       return { images };
-    });
+    }, options?.timeout);
   },
 };

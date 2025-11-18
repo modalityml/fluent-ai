@@ -74,6 +74,6 @@ export const runner = {
             }
           : undefined,
       };
-    });
+    }, options?.timeout);
   },
 };

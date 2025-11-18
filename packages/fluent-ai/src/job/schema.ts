@@ -96,6 +96,7 @@ const modelsOutputSchema = z.object({
 // TODO: options schema per provider/job type
 const optionsSchema = z.object({
   apiKey: z.string().optional(),
+  timeout: z.number().optional(),
 });
 
 export const chatJobSchema = z.object({

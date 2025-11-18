@@ -74,7 +74,7 @@ export const runner = {
             }
           : undefined,
       };
-    });
+    }, options?.timeout);
   },
 
   models: async (
@@ -100,6 +100,6 @@ export const runner = {
           name: model.id,
         })),
       };
-    });
+    }, options?.timeout);
   },
 };
