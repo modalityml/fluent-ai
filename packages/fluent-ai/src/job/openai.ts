@@ -48,7 +48,7 @@ export const runner = {
         ],
         usage: transformUsageData(data.usage),
       };
-    });
+    }, options?.timeout);
   },
 
   models: async (
@@ -74,6 +74,6 @@ export const runner = {
           name: model.id,
         })),
       };
-    });
+    }, options?.timeout);
   },
 };

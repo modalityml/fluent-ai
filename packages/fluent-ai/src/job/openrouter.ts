@@ -48,6 +48,6 @@ export const runner = {
         ],
         usage: transformUsageData(data.usage),
       };
-    });
+    }, options?.timeout);
   },
 };

@@ -29,6 +29,6 @@ export const runner = {
       return {
         embeddings: data.data.map((item: any) => item.embedding),
       };
-    });
+    }, options?.timeout);
   },
 };
