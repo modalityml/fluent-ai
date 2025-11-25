@@ -1,9 +1,6 @@
 import { EventSourceParserStream } from "eventsource-parser/stream";
 import type { ChatTool } from "~/src/job/schema";
 
-/**
- * Gets API key from options or environment variable
- */
 export function getApiKey(
   options: { apiKey?: string } | undefined,
   envVarName: string,
@@ -11,9 +8,6 @@ export function getApiKey(
   return options?.apiKey || process.env[envVarName];
 }
 
-/**
- * Transforms internal ChatTool format to OpenAI-compatible function calling format
- */
 export function transformToolsToFunctions(tools?: ChatTool[]) {
   return tools?.map((tool: ChatTool) => ({
     type: "function",
@@ -25,9 +19,6 @@ export function transformToolsToFunctions(tools?: ChatTool[]) {
   }));
 }
 
-/**
- * Transforms OpenAI-style usage data to internal format
- */
 export function transformUsageData(usage?: any) {
   return usage
     ? {
@@ -38,9 +29,6 @@ export function transformUsageData(usage?: any) {
     : undefined;
 }
 
-/**
- * Creates an async generator for OpenAI-compatible streaming responses
- */
 export async function* createStreamingGenerator(response: Response) {
   const eventStream = response
     .body!.pipeThrough(new TextDecoderStream())
@@ -48,7 +36,7 @@ export async function* createStreamingGenerator(response: Response) {
   const reader = eventStream.getReader();
 
   try {
-    for (;;) {
+    while (true) {
       const { done, value } = await reader.read();
       if (done || value.data === "[DONE]") {
         break;
