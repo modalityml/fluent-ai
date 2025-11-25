@@ -1,7 +1,7 @@
 {
   "name": "fluent-ai",
   "description": "A lightweight AI toolkit",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
