@@ -96,11 +96,12 @@ const modelsOutputSchema = z.object({
 // TODO: options schema per provider/job type
 const optionsSchema = z.object({
   apiKey: z.string().optional(),
+  baseUrl: z.string().optional(),
 });
 
 export const chatJobSchema = z.object({
   type: z.literal("chat"),
-  provider: z.enum(["openrouter", "openai"]),
+  provider: z.enum(["openrouter", "openai", "ollama"]),
   options: optionsSchema.optional(),
   input: chatInputSchema,
   output: chatOutputSchema.optional(),
@@ -116,7 +117,7 @@ export const imageJobSchema = z.object({
 
 export const modelsJobSchema = z.object({
   type: z.literal("models"),
-  provider: z.enum(["openai"]),
+  provider: z.enum(["openai", "ollama"]),
   options: optionsSchema.optional(),
   input: modelsInputSchema.optional(),
   output: modelsOutputSchema.optional(),

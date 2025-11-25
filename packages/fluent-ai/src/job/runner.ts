@@ -1,5 +1,6 @@
 import * as openrouter from "~/src/job/openrouter";
 import * as openai from "~/src/job/openai";
+import * as ollama from "~/src/job/ollama";
 import * as voyage from "~/src/job/voyage";
 import * as fal from "~/src/job/fal";
 import type { Job } from "~/src/job/schema";
@@ -22,6 +23,7 @@ export class Runner {
 export const runner = new Runner({
   openrouter: openrouter.runner,
   openai: openai.runner,
+  ollama: ollama.runner,
   voyage: voyage.runner,
   fal: fal.runner,
 });
