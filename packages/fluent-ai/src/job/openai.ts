@@ -1,21 +1,19 @@
-import { EventSourceParserStream } from "eventsource-parser/stream";
-import type { ChatJob, ChatTool, ModelsJob } from "~/src/job/schema";
+import type { ChatJob, ModelsJob } from "~/src/job/schema";
 import { createHTTPJob } from "~/src/job/http";
+import {
+  getApiKey,
+  transformToolsToFunctions,
+  transformUsageData,
+  createStreamingGenerator,
+} from "~/src/job/utils";
 
 const BASE_URL = "https://api.openai.com/v1";
 
 export const runner = {
   chat: async (input: ChatJob["input"], options?: ChatJob["options"]) => {
-    const apiKey = options?.apiKey || process.env.OPENAI_API_KEY;
+    const apiKey = getApiKey(options, "OPENAI_API_KEY");
 
-    const tools = input.tools?.map((tool: ChatTool) => ({
-      type: "function",
-      function: {
-        name: tool.name,
-        description: tool.description,
-        parameters: tool.input,
-      },
-    }));
+    const tools = transformToolsToFunctions(input.tools);
 
     const request = new Request(`${BASE_URL}/chat/completions`, {
       method: "POST",
@@ -35,25 +33,7 @@ export const runner = {
 
     return createHTTPJob(request, async (response: Response) => {
       if (input.stream) {
-        return (async function* () {
-          const eventStream = response
-            .body!.pipeThrough(new TextDecoderStream())
-            .pipeThrough(new EventSourceParserStream());
-          const reader = eventStream.getReader();
-
-          try {
-            for (;;) {
-              const { done, value } = await reader.read();
-              if (done || value.data === "[DONE]") {
-                break;
-              }
-              const chunk = JSON.parse(value.data);
-              yield { raw: chunk };
-            }
-          } finally {
-            reader.releaseLock();
-          }
-        })();
+        return createStreamingGenerator(response);
       }
 
       const data = await response.json();
@@ -66,13 +46,7 @@ export const runner = {
             tool_calls: data.choices[0].message.tool_calls,
           },
         ],
-        usage: data.usage
-          ? {
-              promptTokens: data.usage.prompt_tokens,
-              completionTokens: data.usage.completion_tokens,
-              totalTokens: data.usage.total_tokens,
-            }
-          : undefined,
+        usage: transformUsageData(data.usage),
       };
     });
   },
@@ -81,7 +55,7 @@ export const runner = {
     input?: ModelsJob["input"],
     options?: ModelsJob["options"],
   ) => {
-    const apiKey = options?.apiKey || process.env.OPENAI_API_KEY;
+    const apiKey = getApiKey(options, "OPENAI_API_KEY");
 
     const request = new Request(`${BASE_URL}/models`, {
       method: "GET",

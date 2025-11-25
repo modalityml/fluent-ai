@@ -1,12 +1,13 @@
 import type { ImageJob } from "~/src/job/schema";
 import { createHTTPJob, downloadImages } from "~/src/job/http";
+import { getApiKey } from "~/src/job/utils";
 
 // TODO: switch to fal queue api
 const BASE_URL = "https://fal.run";
 
 export const runner = {
   image: async (input: ImageJob["input"], options?: ImageJob["options"]) => {
-    const apiKey = options?.apiKey || process.env.FAL_API_KEY;
+    const apiKey = getApiKey(options, "FAL_API_KEY");
 
     const request = new Request(`${BASE_URL}/${input.model}`, {
       method: "POST",
