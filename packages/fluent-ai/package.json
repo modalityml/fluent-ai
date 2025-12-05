@@ -19,10 +19,6 @@
     "build": "bun run build.ts",
     "prepublishOnly": "rm -rf dist && bun run build"
   },
-  "dependencies": {
-    "eventsource-parser": "^3.0.6",
-    "partial-json": "^0.1.7"
-  },
   "keywords": [
     "ai",
     "openai",
