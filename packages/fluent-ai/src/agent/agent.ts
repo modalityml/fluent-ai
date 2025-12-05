@@ -90,10 +90,10 @@ export class Agent<TContext = any> {
           ? body.instructions()
           : body.instructions;
       const systemMessage = { role: "system", text: instructions };
-      const messages = [systemMessage].concat(
+      const messages = ([systemMessage] as Message[]).concat(
         initialMessages,
         newMessages,
-      ) as Message[];
+      );
       const tools = body.tools.map((tool) => ({
         name: tool.name,
         description: tool.description,

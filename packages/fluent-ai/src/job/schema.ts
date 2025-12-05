@@ -70,7 +70,7 @@ const chatToolSchema = z.object({
 
 const chatInputSchema = z.object({
   model: z.string(),
-  messages: z.array(z.any()), // TODO: fix any
+  messages: z.array(messagesSchema),
   temperature: z.number().optional(),
   maxTokens: z.number().optional(),
   stream: z.boolean().optional(),
