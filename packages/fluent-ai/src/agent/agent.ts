@@ -1,11 +1,15 @@
 import { z } from "zod";
-import { convertMessagesForChatCompletion } from "~/src/agent/message";
 import {
   agentToolSchema,
   type AgentToolBuilder,
   type AgentTool,
 } from "~/src/agent/tool";
-import type { Message } from "~/src/job/schema";
+import type {
+  Message,
+  ToolMessage,
+  MessageChunk,
+  AssistantMessage,
+} from "~/src/job/schema";
 import type { ChatBuilder } from "~/src/builder/chat";
 
 export const agentSchema = z.object({
@@ -14,7 +18,30 @@ export const agentSchema = z.object({
   tools: z.array(agentToolSchema),
 });
 
-interface GenerateOptions {
+interface ChunkEvent {
+  type: "chunk";
+  chunk: {
+    text?: string;
+    reasoning?: string;
+  };
+}
+
+interface ToolEvent {
+  type: "tool";
+  tool: {
+    name: string;
+    args: any;
+    result?: any;
+    error?: any;
+  };
+}
+
+interface MessageEvent {
+  type: "message";
+  message: Message;
+}
+
+export interface AgentGenerateOptions {
   maxSteps: number;
 }
 
@@ -46,7 +73,7 @@ export class Agent<TContext = any> {
   generate = async function* (
     this: Agent<TContext>,
     initialMessages: Message[],
-    options: GenerateOptions,
+    options: AgentGenerateOptions,
     context?: TContext,
   ) {
     const body = agentSchema.parse(this.body);
@@ -62,12 +89,11 @@ export class Agent<TContext = any> {
         typeof body.instructions === "function"
           ? body.instructions()
           : body.instructions;
-      const allMessages = initialMessages.concat(newMessages);
-      const convertedMessages = convertMessagesForChatCompletion(allMessages);
-      const messages = [{ role: "system", content: instructions }].concat(
-        convertedMessages as any,
+      const systemMessage = { role: "system", text: instructions };
+      const messages = ([systemMessage] as Message[]).concat(
+        initialMessages,
+        newMessages,
       );
-      // TODO: agent tool vs chat tool
       const tools = body.tools.map((tool) => ({
         name: tool.name,
         description: tool.description,
@@ -79,79 +105,67 @@ export class Agent<TContext = any> {
         .run();
 
       let totalText = "";
-      for await (const chunk of result) {
-        const delta = chunk.raw.choices[0].delta;
-
-        // TODO: tool calls with content??
-        if (delta.tool_calls) {
-          // TODO: tool call with content
-          // TODO: tool call with input streaming
-          // TODO: support multiple tool calls
-          const toolCall = delta.tool_calls[0];
-          const toolName = toolCall.function.name;
-          const input = JSON.parse(toolCall.function.arguments); // TODO: parsing error handling
-
-          const agentTool = body.tools.find((t) => t.name === toolName);
+      for await (const chunk of result as AsyncIterable<MessageChunk>) {
+        if (chunk.toolCalls) {
+          const toolCall = chunk.toolCalls[0];
+          const { name, arguments: args } = toolCall.function;
+          const agentTool = body.tools.find((t) => t.name === name);
           if (!agentTool) {
-            throw new Error(`Unknown tool: ${toolName}`);
+            throw new Error(`Unknown tool: ${name}`);
           }
 
-          const toolPart = {
-            type: "tool-" + toolName,
-            toolCallId: toolCall.id,
-            input: input,
-          };
+          yield { type: "tool", tool: { name, args } };
 
-          yield { type: "tool-call-input", data: toolPart };
-
-          let output = null;
-          let outputError = null;
-
+          let result = null;
+          let error = null;
           try {
-            output = await agentTool.execute(input, context!);
+            result = await agentTool.execute(args, context!);
           } catch (err) {
-            outputError = (err as Error).message;
+            error = (err as Error).message;
           }
 
-          if (outputError) {
-            yield {
-              type: "tool-call-output",
-              data: { ...toolPart, outputError },
-            };
-          } else {
-            yield { type: "tool-call-output", data: { ...toolPart, output } };
-          }
+          yield {
+            type: "tool",
+            tool: { name, args, result, error },
+          } as ToolEvent;
 
-          const newMessage: Message = {
+          const newMessage: ToolMessage = {
             role: "tool",
-            parts: [
-              {
-                type: `tool-${toolName}`,
-                toolCallId: toolCall.id,
-                input: input,
-                output: output,
-                outputError: outputError,
-              },
-            ],
+            text: "",
+            content: {
+              callId: toolCall.id,
+              name: name,
+              args: args,
+              result: result,
+              error: error,
+            },
           };
 
-          yield { type: "message-created", data: newMessage };
           newMessages.push(newMessage);
-        } else if (delta.content) {
-          const text = delta.content as string;
-          yield { type: "text-delta", data: { text } };
-          totalText += text;
+          shouldBreak = false;
+        } else if (chunk.text || chunk.reasoning) {
+          yield {
+            type: "chunk",
+            chunk: {
+              text: chunk.text,
+              reasoning: chunk.reasoning,
+            },
+          } as ChunkEvent;
+
+          if (chunk.text) {
+            totalText += chunk.text;
+          }
           shouldBreak = true;
         }
       }
 
       if (totalText.trim()) {
-        const newMessage: Message = {
+        const newMessage: AssistantMessage = {
           role: "assistant",
-          parts: [{ type: "text", text: totalText.trim() }],
+          text: totalText,
         };
 
-        yield { type: "message-created", data: newMessage };
+        yield { type: "message", message: newMessage } as MessageEvent;
         newMessages.push(newMessage);
         shouldBreak = true;
       }
